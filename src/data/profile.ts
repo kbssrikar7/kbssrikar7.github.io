@@ -8,12 +8,26 @@ export const profile = {
   bio: "i build things that have to actually work - kubernetes for ships at sea, retrieval systems that cite their sources, and audio code that protects your hearing. b.tech cse from vit vellore, class of 2026.",
   email: 'kbsivasrikar@gmail.com',
   github: 'https://github.com/kbssrikar7',
-  // Intentional: the GitHub handle migrated kbss0000 -> kbssrikar7, LinkedIn did not.
-  // This is not a typo. Do not "fix" it.
+  // Intentional: the GitHub handle migrated kbss0000 -> kbssrikar7, but LinkedIn,
+  // X and Hugging Face did not. These are not typos. Do not "fix" them.
   linkedin: 'https://linkedin.com/in/kbss0000',
+  x: 'https://x.com/kbss0000',
+  huggingface: 'https://huggingface.co/kbsss',
+  monkeytype: 'https://monkeytype.com/profile/kbss',
   siteUrl: 'https://kbssrikar7.github.io',
   resume: '/kbs-srikar-resume.pdf',
 } as const;
+
+/** Single source for every outbound profile link. */
+export const socials = [
+  { key: 'github', label: 'github', href: profile.github, handle: 'kbssrikar7' },
+  { key: 'linkedin', label: 'linkedin', href: profile.linkedin, handle: 'kbss0000' },
+  { key: 'x', label: 'x', href: profile.x, handle: 'kbss0000' },
+  { key: 'huggingface', label: 'hugging face', href: profile.huggingface, handle: 'kbsss' },
+  { key: 'monkeytype', label: 'monkeytype', href: profile.monkeytype, handle: 'kbss' },
+] as const;
+
+export type SocialKey = (typeof socials)[number]['key'];
 
 export const education = {
   school: 'Vellore Institute of Technology',

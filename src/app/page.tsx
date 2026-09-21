@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { Mail } from 'lucide-react';
-import { GithubIcon, LinkedinIcon } from '@/components/site/icons';
+import { SOCIAL_ICONS } from '@/components/site/social-links';
 import { Hero } from '@/components/sections/hero';
 import { Section } from '@/components/sections/section';
 import { ExperienceList } from '@/components/sections/experience-list';
 import { ProjectCard } from '@/components/project/project-card';
 import { featuredProjects } from '@/lib/projects';
-import { profile, stack } from '@/data/profile';
+import { profile, socials, stack } from '@/data/profile';
 
 export default function Home() {
   return (
@@ -66,24 +66,21 @@ export default function Home() {
             <Mail className="size-4" />
             {profile.email}
           </a>
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm transition-colors hover:border-signal/40 hover:text-signal"
-          >
-            <GithubIcon className="size-4" />
-            github
-          </a>
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm transition-colors hover:border-signal/40 hover:text-signal"
-          >
-            <LinkedinIcon className="size-4" />
-            linkedin
-          </a>
+          {socials.map((s) => {
+            const Icon = SOCIAL_ICONS[s.key];
+            return (
+              <a
+                key={s.key}
+                href={s.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm transition-colors hover:border-signal/40 hover:text-signal"
+              >
+                <Icon className="size-4" />
+                {s.label}
+              </a>
+            );
+          })}
         </div>
 
         <p className="mt-8 font-mono text-[11px] text-muted-foreground/50">

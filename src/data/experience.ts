@@ -1,8 +1,16 @@
 export type Experience = {
   company: string;
+  companyUrl?: string;
   role: string;
   period: string;
   location: string;
+  /** The product worked on, shown as a linked preview. */
+  product?: {
+    name: string;
+    url: string;
+    tagline: string;
+    preview: string;
+  };
   summary: string;
   metrics: { value: string; label: string }[];
   bullets: string[];
@@ -11,11 +19,18 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     company: 'Volteo Maritime',
+    companyUrl: 'https://volteomaritime.com',
     role: 'Cloud, DevOps & Software Development Engineer Intern',
     period: 'April 2025 - June 2025',
     location: 'Kakinada, Andhra Pradesh (Hybrid)',
+    product: {
+      name: 'Wayship',
+      url: 'https://volteomaritime.com/wayship',
+      tagline: 'Operational intelligence for the modern fleet.',
+      preview: '/previews/wayship.webp',
+    },
     summary:
-      'Wayship, a maritime SaaS platform, runs telemetry off vessels in the middle of the ocean. Connectivity is intermittent by definition, so the platform has to stay correct when the network is not.',
+      'Wayship turns vessel operations data into structured, searchable intelligence. The platform runs telemetry off ships in the middle of the ocean, where connectivity is intermittent by definition, so it has to stay correct when the network is not.',
     metrics: [
       { value: '200+', label: 'vessels' },
       { value: '2000+', label: 'seafarers' },

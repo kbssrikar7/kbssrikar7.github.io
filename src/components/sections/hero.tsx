@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Mail } from 'lucide-react';
-import { GithubIcon, LinkedinIcon } from '@/components/site/icons';
+import { SocialLinks } from '@/components/site/social-links';
 import { Spotlight } from '@/components/ui/spotlight-new';
 import { profile, education } from '@/data/profile';
 
@@ -55,26 +55,7 @@ export function Hero() {
             get in touch
           </a>
 
-          <div className="ml-1 flex items-center gap-1">
-            <a
-              href={profile.github}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
-              className="rounded-md p-2 text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <GithubIcon className="size-[18px]" />
-            </a>
-            <a
-              href={profile.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn"
-              className="rounded-md p-2 text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <LinkedinIcon className="size-[18px]" />
-            </a>
-          </div>
+          <SocialLinks className="ml-1" />
         </div>
 
         <p className="mt-10 font-mono text-[11px] text-muted-foreground/55">

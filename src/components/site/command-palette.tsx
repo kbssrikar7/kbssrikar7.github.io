@@ -10,7 +10,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { profile } from '@/data/profile';
+import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
 
 type Entry = { slug: string; title: string };
@@ -75,17 +75,24 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
           ))}
         </CommandGroup>
         <CommandGroup heading="Elsewhere">
-          <CommandItem value="GitHub" onSelect={() => window.open(profile.github, '_blank')}>
-            GitHub
-          </CommandItem>
-          <CommandItem value="LinkedIn" onSelect={() => window.open(profile.linkedin, '_blank')}>
-            LinkedIn
-          </CommandItem>
+          {socials.map((s) => (
+            <CommandItem
+              key={s.key}
+              value={`${s.label} ${s.handle}`}
+              onSelect={() => window.open(s.href, '_blank')}
+            >
+              {s.label}
+              <span className="ml-auto font-mono text-xs text-muted-foreground">@{s.handle}</span>
+            </CommandItem>
+          ))}
           <CommandItem
             value="Email"
             onSelect={() => window.open(`mailto:${profile.email}`, '_blank')}
           >
-            Email
+            email
+            <span className="ml-auto font-mono text-xs text-muted-foreground">
+              {profile.email}
+            </span>
           </CommandItem>
         </CommandGroup>
       </CommandList>

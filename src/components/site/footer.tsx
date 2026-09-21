@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import { profile } from '@/data/profile';
+import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
 
 const ELSEWHERE = [
-  { label: 'github', href: profile.github },
-  { label: 'linkedin', href: profile.linkedin },
+  ...socials.map((s) => ({ label: s.label, href: s.href })),
   { label: 'email', href: `mailto:${profile.email}` },
 ];
 

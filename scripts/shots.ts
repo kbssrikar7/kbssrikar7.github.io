@@ -125,7 +125,12 @@ async function fromReadme(
   }
 }
 
-const live = manualProjects.filter((p) => p.liveUrl);
+/** Non-project captures: products worked on, shown in the experience section. */
+const EXTRA: { slug: string; liveUrl: string }[] = [
+  { slug: 'wayship', liveUrl: 'https://volteomaritime.com/wayship' },
+];
+
+const live = [...manualProjects.filter((p) => p.liveUrl), ...EXTRA];
 const readme = manualProjects.filter((p) => !p.liveUrl && p.readmeImage);
 const generated = manualProjects.filter((p) => !p.liveUrl && !p.readmeImage);
 

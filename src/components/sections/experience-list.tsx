@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import { ArrowUpRight } from 'lucide-react';
 import { experience } from '@/data/experience';
 
 export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
@@ -16,7 +18,20 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
           />
 
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h3 className="text-lg tracking-tight">{job.company}</h3>
+            <h3 className="text-lg tracking-tight">
+              {job.companyUrl ? (
+                <a
+                  href={job.companyUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-signal"
+                >
+                  {job.company}
+                </a>
+              ) : (
+                job.company
+              )}
+            </h3>
             <p className="font-mono text-[11px] text-muted-foreground/70">{job.period}</p>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">{job.role}</p>
@@ -32,6 +47,39 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
               </div>
             ))}
           </div>
+
+          {job.product && (
+            <a
+              href={job.product.url}
+              target="_blank"
+              rel="noreferrer"
+              className="group/product mt-7 block max-w-3xl overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-signal/30 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              <div className="relative aspect-[1200/750] w-full">
+                <Image
+                  src={job.product.preview}
+                  alt={`${job.product.name} product page`}
+                  fill
+                  sizes="(min-width: 640px) 42rem, 100vw"
+                  className="object-cover object-top transition-transform duration-500 group-hover/product:scale-[1.02]"
+                />
+              </div>
+              <div className="flex items-center justify-between gap-4 border-t border-border/60 px-4 py-3">
+                <div className="min-w-0">
+                  <p className="text-sm">
+                    {job.product.name}
+                    <span className="ml-2 font-mono text-[11px] text-muted-foreground/60">
+                      the product I worked on
+                    </span>
+                  </p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                    {job.product.tagline}
+                  </p>
+                </div>
+                <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition-colors group-hover/product:text-signal" />
+              </div>
+            </a>
+          )}
 
           {detailed && (
             <>

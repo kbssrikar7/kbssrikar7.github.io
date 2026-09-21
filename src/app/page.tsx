@@ -51,11 +51,9 @@ export default function Home() {
         </dl>
       </Section>
 
-      <Section id="contact" label="contact" title="Open to full-time roles.">
+      <Section id="contact" label="contact">
         <p className="max-w-xl leading-relaxed text-muted-foreground">
-          I&apos;m looking for software engineering roles across full-stack, applied ML, and
-          infrastructure. If you&apos;re hiring, or just want to talk about any of the work above,
-          my inbox is open.
+          If you want to talk about any of the work above, my inbox is open.
         </p>
 
         <div className="mt-7 flex flex-wrap items-center gap-3">

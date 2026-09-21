@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 type SpotlightProps = {
   gradientFirst?: string;
@@ -25,29 +25,39 @@ export const Spotlight = ({
   duration = 7,
   xOffset = 100,
 }: SpotlightProps = {}) => {
+  // DIVERGES FROM THE ACETERNITY REGISTRY - do not overwrite with `shadcn add`.
+  // These sweeps run through `motion` (JS/WAAPI), so the prefers-reduced-motion
+  // block in globals.css cannot stop them. Without this the gradients oscillate
+  // forever for vestibular-sensitive users.
+  const reduceMotion = useReducedMotion();
+  const sweep = (offset: number) =>
+    reduceMotion
+      ? {}
+      : {
+          animate: { x: [0, offset, 0] },
+          transition: {
+            duration,
+            repeat: Infinity,
+            repeatType: "reverse" as const,
+            ease: "easeInOut" as const,
+          },
+        };
+
   return (
     <motion.div
       initial={{
-        opacity: 0,
+        opacity: reduceMotion ? 1 : 0,
       }}
       animate={{
         opacity: 1,
       }}
       transition={{
-        duration: 1.5,
+        duration: reduceMotion ? 0 : 1.5,
       }}
       className="pointer-events-none absolute inset-0 h-full w-full"
     >
       <motion.div
-        animate={{
-          x: [0, xOffset, 0],
-        }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut",
-        }}
+        {...sweep(xOffset)}
         className="absolute top-0 left-0 w-screen h-screen z-40 pointer-events-none"
       >
         <div
@@ -82,15 +92,7 @@ export const Spotlight = ({
       </motion.div>
 
       <motion.div
-        animate={{
-          x: [0, -xOffset, 0],
-        }}
-        transition={{
-          duration,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut",
-        }}
+        {...sweep(-xOffset)}
         className="absolute top-0 right-0 w-screen h-screen z-40 pointer-events-none"
       >
         <div

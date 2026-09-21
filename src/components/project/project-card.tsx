@@ -8,18 +8,17 @@ import type { Project } from '@/lib/projects';
 export function ProjectCard({ project, priority = false }: { project: Project; priority?: boolean }) {
   return (
     <article className="group relative flex flex-col">
-      <Link
-        href={`/projects/${project.slug}`}
-        className="relative block overflow-hidden rounded-xl border border-border bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        aria-label={project.title}
-      >
+      {/* Not a link: the title below carries the single card-wide link, stretched
+          over this with ::after. Two anchors to the same slug meant every card
+          was announced twice and took two tab stops. */}
+      <div className="relative overflow-hidden rounded-xl border border-border bg-card">
         {/* The full-width preview rectangle. Uniform 16:10 whether it is a real
             screenshot or a generated cover, so the grid never looks ragged. */}
         <div className="relative aspect-[1200/750] w-full">
           {project.preview ? (
             <Image
               src={project.preview}
-              alt={`${project.title} interface`}
+              alt=""
               fill
               priority={priority}
               sizes="(min-width: 1024px) 45vw, 100vw"
@@ -39,16 +38,20 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
             live
           </span>
         )}
-      </Link>
+      </div>
 
       <div className="mt-4 flex flex-col gap-2">
         <div className="flex items-start justify-between gap-4">
           <h3 className="text-base font-medium tracking-tight">
-            <Link href={`/projects/${project.slug}`} className="hover:text-signal">
+            <Link
+              href={`/projects/${project.slug}`}
+              className="rounded-sm hover:text-signal focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none after:absolute after:inset-0 after:content-['']"
+            >
               {project.title}
             </Link>
           </h3>
-          <div className="flex shrink-0 items-center gap-2 pt-0.5">
+          {/* z-10 lifts these above the title link's stretched ::after overlay. */}
+          <div className="relative z-10 flex shrink-0 items-center gap-2 pt-0.5">
             <a
               href={project.repoUrl}
               target="_blank"

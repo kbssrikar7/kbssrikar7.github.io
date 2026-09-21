@@ -5,17 +5,10 @@ import { BUCKET_LABELS, type Project } from '@/lib/projects';
  * PCB, a retired demo. Rendered in the DOM rather than generated as a PNG, so
  * it stays sharp at any size and costs no bytes.
  *
- * Hue is derived from the slug: the set is distinguishable but obviously a
- * family, and it never shifts between builds.
+ * `project.hue` is assigned once in lib/projects.ts and shared with the OG card.
  */
-function hueFor(slug: string): number {
-  let h = 0;
-  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) % 360;
-  return h;
-}
-
 export function GeneratedCover({ project }: { project: Project }) {
-  const hue = hueFor(project.slug);
+  const hue = project.hue;
   const tint = `oklch(0.62 0.13 ${hue})`;
 
   return (

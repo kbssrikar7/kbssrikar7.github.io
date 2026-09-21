@@ -12,6 +12,8 @@ export type Project = ManualProject & {
   featured: boolean;
   /** Captured screenshot, or null when the card renders a generated cover. */
   preview: string | null;
+  /** Decorative hue for the generated cover and the OG card. See assignHues. */
+  hue: number;
 };
 
 export const BUCKET_LABELS: Record<Bucket, string> = {
@@ -47,21 +49,46 @@ function previewFor(slug: string): string | null {
   return file ? `/previews/${file}` : null;
 }
 
+/**
+ * projects.curated.json is model-written, so an unrecognised bucket is possible.
+ * A bare cast would let one through and render an empty category label.
+ */
+function toBucket(value: string | undefined): Bucket {
+  return value && value in BUCKET_LABELS ? (value as Bucket) : 'full-stack';
+}
+
 const merged: Project[] = manualProjects.map((m) => {
   const s = signals[m.slug];
   return {
     ...m,
     repoUrl: `https://github.com/kbssrikar7/${m.slug}`,
     score: s?.score ?? 0,
-    bucket: (s?.bucket as Bucket) ?? 'full-stack',
+    bucket: toBucket(s?.bucket),
     // A dead hosted demo is still not demoable, whatever the model thinks.
     demoable: Boolean(m.liveUrl) && (s?.demoable ?? false),
     featured: false,
     preview: previewFor(m.slug),
+    hue: 0,
   };
 });
 
 const ranked = [...merged].sort((a, b) => b.score - a.score);
+
+/**
+ * Hue comes from rank position, not from hashing the slug. A slug hash collided
+ * outright (n8n-upi-payment-gateway-django and ytdlp-gui both landed on 147) and
+ * left three covers within 11 degrees of each other. Golden-angle stepping gives
+ * an even spread with no collisions, and because consecutive indices land ~137
+ * degrees apart, cards sitting next to each other in the grid look maximally
+ * different.
+ *
+ * Assigning it here means the DOM cover and the OG image read the same value
+ * rather than each recomputing it, so the two cannot drift apart.
+ */
+const GOLDEN_ANGLE = 137.508;
+ranked.forEach((p, i) => {
+  p.hue = Math.round((i * GOLDEN_ANGLE) % 360);
+});
 
 const featuredSlugs = new Set<string>(FEATURED_PINS);
 for (const p of ranked) {

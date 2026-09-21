@@ -11,9 +11,11 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://kbssrikar7.github.io'),
+  // The name carries the title rather than the tagline: this page needs to be
+  // the top hit for someone searching "K.B.S Srikar" after reading a CV.
   title: {
-    default: 'kbs - Full-stack engineering, applied ML, and embedded IoT',
-    template: '%s - kbs',
+    default: 'K.B.S Srikar - Software Engineer',
+    template: '%s - K.B.S Srikar',
   },
   description:
     'K.B.S Srikar. Full-stack engineering, applied ML, and embedded IoT. Kubernetes for maritime fleets, RAG systems, CNNs, and cross-platform audio tooling.',

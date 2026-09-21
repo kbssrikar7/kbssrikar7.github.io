@@ -9,7 +9,7 @@ import { readdir, readFile, writeFile, rename, stat } from 'node:fs/promises';
 import { join, extname, basename } from 'node:path';
 
 const OUT = 'out';
-const NAMES = ['opengraph-image', 'twitter-image'];
+const NAMES = ['opengraph-image', 'twitter-image', 'icon', 'apple-icon'];
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -38,10 +38,13 @@ for (const file of files) {
 let patched = 0;
 for (const file of files.filter((f) => f.endsWith('.html'))) {
   const html = await readFile(file, 'utf8');
-  // `/opengraph-image?deadbeef` and bare `/opengraph-image` -> `/opengraph-image.png`
+  // `/opengraph-image?deadbeef` and bare `/icon` -> `.../opengraph-image.png`.
+  // The leading slash and trailing boundary keep this inside URL paths: without
+  // them the same names appear in attribute values like rel="icon", which this
+  // would happily rewrite to rel="icon.png".
   const next = html.replace(
-    new RegExp(`(${NAMES.join('|')})(\\?[0-9a-f]+)?(?!\\.png)`, 'g'),
-    '$1.png'
+    new RegExp(`/(${NAMES.join('|')})(\\?[0-9a-f]+)?(?![\\w.-])`, 'g'),
+    '/$1.png'
   );
   if (next !== html) {
     await writeFile(file, next);

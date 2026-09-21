@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# kbssrikar7.github.io
 
-## Getting Started
+Personal site for K.B.S Srikar. Next.js static export, deployed to GitHub Pages.
 
-First, run the development server:
+## Stack
+
+Next.js 16 (App Router, `output: 'export'`) · React 19 · Tailwind v4 · shadcn/ui ·
+[Aceternity UI](https://ui.aceternity.com) · `motion` · Geist Sans / Mono / Pixel
+
+## Local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build     # -> out/ , then fixes OG image extensions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Content pipeline
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Three things are generated ahead of time and **committed**, so CI needs no secrets
+and no network access to third-party demo sites.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Project ranking - `npm run curate`
 
-## Learn More
+Sends each public repo to the [TypeSafe](https://typesafe.ai) System One API and asks
+three questions in one request:
 
-To learn more about Next.js, take a look at the following resources:
+| Question | Type | Used for |
+| --- | --- | --- |
+| `worthiness` | Score | Ordering, and which projects are featured |
+| `bucket` | Choice | The category filter chips |
+| `demoable` | Noul | Whether a card shows the "live" badge |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Output lands in `src/data/projects.curated.json`. Run `npm run curate -- --dry-run`
+to see the ranking without writing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The model ranks; it never writes copy. All prose lives in `src/data/projects.manual.ts`
+and always wins on merge (`src/lib/projects.ts`). Two projects are pinned to featured
+by hand where the ranking under-rated them - see `FEATURED_PINS`.
 
-## Deploy on Vercel
+Requires `TYPESAFE_API_KEY` in `.env.local` (gitignored).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 2. Preview images - `npm run shots`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Uses `puppeteer-core` against the system Chrome (no bundled browser download).
+Three tiers:
+
+1. **Live capture** for projects with a working demo. Handles Streamlit's
+   "app has gone to sleep" interstitial by clicking through and waiting.
+2. **README pull** for repos that ship their own screenshots, letterboxed onto the
+   same canvas so the grid stays uniform.
+3. **Generated cover** for everything else - rendered in the DOM
+   (`components/project/generated-cover.tsx`), not as a file.
+
+Writes `public/previews/*.webp` plus a `manifest.json`. Anything missing from the
+manifest falls back to tier 3 automatically.
+
+### 3. OG images - automatic at build
+
+`opengraph-image.tsx` per route, rendered by Satori via `next/og`, giving every
+project its own social card. Two constraints worth knowing:
+
+- Every `opengraph-image.tsx` **must** `export const dynamic = 'force-static'`, or the
+  static export refuses to prerender it.
+- Satori cannot read variable fonts or woff2. Geist Sans/Mono ship static `.ttf`, so
+  those load from `node_modules`. **Geist Pixel ships woff2 only**, so it was decompressed
+  once and committed to `assets/GeistPixel-Square.ttf`:
+
+  ```bash
+  .venv/bin/fonttools ttLib.woff2 decompress <geist-pixel woff2>
+  ```
+
+Next emits metadata images as extensionless files, which GitHub Pages would serve as
+`application/octet-stream` and every crawler would reject. `scripts/fix-og.mjs` runs
+after each build to add `.png` and repoint the HTML.
+
+## Deploying
+
+Pushing to `main` triggers `.github/workflows/deploy.yml`.
+
+**One-time manual step:** repo Settings → Pages → Source → **GitHub Actions**.
+Without it the deploy fails with an unhelpful error.

@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       </Link>
 
       <header className="mt-8">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+        <p className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
           {BUCKET_LABELS[project.bucket]}
         </p>
         <h1 className="mt-3 text-3xl tracking-tight sm:text-4xl">{project.title}</h1>
@@ -95,7 +95,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <div className="mt-12 grid gap-10 sm:grid-cols-3">
         <div className="sm:col-span-2">
-          <h2 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h2 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
             about
           </h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">{project.detail}</p>
@@ -115,7 +115,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <div>
-          <h2 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h2 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
             stack
           </h2>
           <ul className="mt-4 flex flex-wrap gap-1.5">

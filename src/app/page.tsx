@@ -33,7 +33,7 @@ export default function Home() {
         <dl className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
           {stack.map((group) => (
             <div key={group.label}>
-              <dt className="font-mono text-[11px] tracking-[0.16em] text-muted-foreground/55 uppercase">
+              <dt className="font-mono text-[12px] tracking-[0.16em] text-muted-foreground/55 uppercase">
                 {group.label}
               </dt>
               <dd className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1.5">

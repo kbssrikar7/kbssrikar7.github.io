@@ -34,7 +34,7 @@ export function GeneratedCover({ project }: { project: Project }) {
       />
 
       <div className="relative flex items-center justify-between">
-        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/45">
+        <span className="font-mono text-[12px] uppercase tracking-[0.18em] text-white/45">
           {BUCKET_LABELS[project.bucket]}
         </span>
         <span className="font-pixel text-sm text-white/35">kbs</span>

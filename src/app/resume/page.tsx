@@ -50,7 +50,7 @@ export default function ResumePage() {
 
       <div className="mt-14 space-y-12">
         <div>
-          <h3 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
             experience
           </h3>
           {experience.map((job) => (
@@ -76,7 +76,7 @@ export default function ResumePage() {
         </div>
 
         <div>
-          <h3 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
             education
           </h3>
           <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-4">
@@ -91,7 +91,7 @@ export default function ResumePage() {
         </div>
 
         <div>
-          <h3 className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
             skills
           </h3>
           <dl className="mt-5 space-y-3">

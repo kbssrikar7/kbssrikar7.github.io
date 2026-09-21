@@ -13,7 +13,7 @@ export function Footer() {
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
         <div className="grid grid-cols-2 gap-8 py-14 sm:grid-cols-3">
           <div className="col-span-2 sm:col-span-1">
-            <p className="font-mono text-[11px] tracking-[0.18em] text-muted-foreground/60 uppercase">
+            <p className="font-mono text-[12px] tracking-[0.18em] text-muted-foreground/60 uppercase">
               {profile.name}
             </p>
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
@@ -22,7 +22,7 @@ export function Footer() {
           </div>
 
           <nav aria-label="Footer">
-            <p className="font-mono text-[11px] tracking-[0.18em] text-muted-foreground/60 uppercase">
+            <p className="font-mono text-[12px] tracking-[0.18em] text-muted-foreground/60 uppercase">
               navigate
             </p>
             <ul className="mt-3 space-y-1.5">
@@ -40,7 +40,7 @@ export function Footer() {
           </nav>
 
           <div>
-            <p className="font-mono text-[11px] tracking-[0.18em] text-muted-foreground/60 uppercase">
+            <p className="font-mono text-[12px] tracking-[0.18em] text-muted-foreground/60 uppercase">
               elsewhere
             </p>
             <ul className="mt-3 space-y-1.5">

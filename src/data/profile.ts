@@ -22,7 +22,9 @@ export const profile = {
 export const socials = [
   { key: 'github', label: 'github', href: profile.github, handle: 'kbssrikar7' },
   { key: 'linkedin', label: 'linkedin', href: profile.linkedin, handle: 'kbss0000' },
-  { key: 'x', label: 'x', href: profile.x, handle: 'kbss0000' },
+  // "x" as a label reads as a stray letter beside the X mark; "twitter" is still
+  // what most people scanning a portfolio are looking for.
+  { key: 'x', label: 'twitter', href: profile.x, handle: 'kbss0000' },
   { key: 'huggingface', label: 'hugging face', href: profile.huggingface, handle: 'kbsss' },
   { key: 'monkeytype', label: 'monkeytype', href: profile.monkeytype, handle: 'kbss' },
 ] as const;

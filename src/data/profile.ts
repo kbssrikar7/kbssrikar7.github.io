@@ -14,6 +14,12 @@ export const profile = {
   huggingface: 'https://huggingface.co/kbsss',
   monkeytype: 'https://monkeytype.com/profile/kbss',
   siteUrl: 'https://kbssrikar7.github.io',
+  // Where THIS build is served from. GitHub Pages is the canonical home, but the
+  // Vercel mirror has to advertise its own URLs or its OG images resolve to
+  // github.io paths that do not exist there.
+  deployedUrl: process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'https://kbssrikar7.github.io',
   resume: '/kbs-srikar-resume.pdf',
 } as const;
 

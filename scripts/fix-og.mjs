@@ -6,6 +6,7 @@
  * emitted HTML at it.
  */
 import { readdir, readFile, writeFile, rename, stat } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 
 const OUT = 'out';
@@ -23,6 +24,13 @@ async function walk(dir) {
 }
 
 const PNG_MAGIC = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+// Only static exports produce out/. On Vercel the app builds as a normal Next
+// app and serves metadata routes itself, so there is nothing to rewrite.
+if (!existsSync(OUT)) {
+  console.log('fix-og: no out/ directory (not a static export) - skipping');
+  process.exit(0);
+}
 
 const files = await walk(OUT);
 let renamed = 0;

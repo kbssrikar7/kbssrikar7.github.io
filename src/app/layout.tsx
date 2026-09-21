@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { GeistPixelSquare } from 'geist/font/pixel';
+import { profile } from '@/data/profile';
 import { cn } from '@/lib/utils';
 import { Nav } from '@/components/site/nav';
 import { Footer } from '@/components/site/footer';
@@ -10,7 +11,7 @@ import { allProjects } from '@/lib/projects';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://kbssrikar7.github.io'),
+  metadataBase: new URL(profile.deployedUrl),
   // The name carries the title rather than the tagline: this page needs to be
   // the top hit for someone searching "K.B.S Srikar" after reading a CV.
   title: {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'kbs',
     locale: 'en_US',
-    url: 'https://kbssrikar7.github.io',
+    url: profile.deployedUrl,
   },
   twitter: { card: 'summary_large_image', creator: '@kbss0000' },
 };

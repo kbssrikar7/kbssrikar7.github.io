@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "curate": ".venv/bin/python scripts/curate.py",
-    "shots": "node scripts/shots.ts"
+    "shots": "node scripts/shots.ts",
+    "favicon": ".venv/bin/python scripts/make-favicon.py"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

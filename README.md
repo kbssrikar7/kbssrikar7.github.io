@@ -72,7 +72,18 @@ project its own social card. Two constraints worth knowing:
 
 Next emits metadata images as extensionless files, which GitHub Pages would serve as
 `application/octet-stream` and every crawler would reject. `scripts/fix-og.mjs` runs
-after each build to add `.png` and repoint the HTML.
+after each build to add `.png` and repoint the HTML. It anchors its rewrite to URL
+paths - matching the bare names anywhere in the HTML would turn `rel="icon"` into
+`rel="icon.png"`.
+
+### 4. Favicon - `npm run favicon`
+
+`app/icon.tsx` covers modern browsers via `<link rel="icon">`. Some older crawlers
+request `/favicon.ico` regardless, so `scripts/make-favicon.py` converts the rendered
+icon into a real multi-size `.ico` at `public/favicon.ico`.
+
+Needs a build first (it reads `out/icon.png`) and is committed, since CI has no Python.
+Nothing detects drift, so re-run it if the mark in `app/icon.tsx` changes.
 
 ## Deploying
 

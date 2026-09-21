@@ -14,7 +14,6 @@ export default async function Image() {
   return new ImageResponse(
     (
       <OgCard
-        eyebrow={profile.availability}
         title={profile.fullName}
         description={profile.tagline}
         tags={['Python', 'TypeScript', 'Rust', 'Kubernetes']}

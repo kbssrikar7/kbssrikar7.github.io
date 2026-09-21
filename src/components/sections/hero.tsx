@@ -19,15 +19,7 @@ export function Hero() {
       <Spotlight {...SIGNAL_GRADIENT} />
 
       <div className="relative mx-auto w-full max-w-5xl px-4 sm:px-6">
-        <span className="inline-flex items-center gap-2 rounded-full border border-signal/25 bg-signal/[0.06] px-3 py-1 font-mono text-[11px] tracking-wide text-signal">
-          <span className="relative flex size-1.5">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-signal opacity-60" />
-            <span className="relative inline-flex size-1.5 rounded-full bg-signal" />
-          </span>
-          {profile.availability}
-        </span>
-
-        <h1 className="font-pixel mt-7 text-[clamp(3.5rem,14vw,8rem)] leading-[0.85] tracking-tight">
+        <h1 className="font-pixel text-[clamp(3.5rem,14vw,8rem)] leading-[0.85] tracking-tight">
           kbs
         </h1>
 

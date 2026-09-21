@@ -58,7 +58,7 @@ export function Hero() {
           <SocialLinks className="ml-1" />
         </div>
 
-        <p className="mt-10 font-mono text-[11px] text-muted-foreground/55">
+        <p className="mt-10 font-mono text-[13px] text-muted-foreground/75">
           {education.degree} · {education.school} · {education.period.split(' - ')[1]}
         </p>
       </div>

@@ -8,11 +8,20 @@ import type { NextConfig } from 'next';
 const isVercel = Boolean(process.env.VERCEL);
 
 const nextConfig: NextConfig = {
-  ...(isVercel ? {} : { output: 'export' as const }),
-  // GitHub Pages has no clean-URL rewrite: without this, /projects 404s in
-  // production while working fine in dev, because the export emits
-  // projects.html rather than projects/index.html.
-  trailingSlash: true,
+  ...(isVercel
+    ? {}
+    : {
+        output: 'export' as const,
+        // GitHub Pages has no clean-URL rewrite: without this, /projects 404s
+        // in production while working fine in dev, because the export emits
+        // projects.html rather than projects/index.html.
+        //
+        // Vercel must NOT get this. It routes cleanly on its own, and with
+        // trailingSlash on it 308-redirects /opengraph-image to
+        // /opengraph-image/ - social crawlers do not follow redirects for
+        // og:image, so link previews silently break.
+        trailingSlash: true,
+      }),
   basePath: process.env.PAGES_BASE_PATH,
   images: { unoptimized: true },
 };

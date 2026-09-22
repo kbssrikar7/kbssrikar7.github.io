@@ -34,8 +34,8 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
             </h3>
             <p className="font-mono text-[13px] text-muted-foreground">{job.period}</p>
           </div>
-          <p className="mt-1 text-base text-muted-foreground">{job.role}</p>
-          <p className="mt-1 font-mono text-[13px] text-muted-foreground">{job.location}</p>
+          <p className="mt-2 text-base text-muted-foreground">{job.role}</p>
+          <p className="mt-2 font-mono text-[13px] text-muted-foreground">{job.location}</p>
 
           <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4">
             {job.metrics.map((m) => (

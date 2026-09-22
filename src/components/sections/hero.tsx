@@ -23,7 +23,7 @@ export function Hero() {
           kbs
         </h1>
 
-        <p className="mt-6 font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
+        <p className="mt-4 font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
           {profile.fullName}
         </p>
 

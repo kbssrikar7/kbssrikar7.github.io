@@ -77,7 +77,7 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
 
         <p className="text-sm leading-relaxed text-muted-foreground">{project.blurb}</p>
 
-        <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+        <div className="flex flex-wrap gap-x-3 gap-y-1">
           {project.tech.slice(0, 5).map((t) => (
             <span key={t} className="font-mono text-[13px] text-muted-foreground">
               {t}

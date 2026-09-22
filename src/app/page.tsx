@@ -36,7 +36,7 @@ export default function Home() {
               <dt className="font-mono text-[13px] tracking-[0.16em] text-muted-foreground uppercase">
                 {group.label}
               </dt>
-              <dd className="mt-2 flex flex-wrap gap-x-2 gap-y-1.5">
+              <dd className="mt-4 flex flex-wrap gap-x-2 gap-y-1.5">
                 {group.items.map((item) => (
                   <span
                     key={item}

@@ -26,11 +26,11 @@ export function Footer() {
                 actually want out of a footer. */}
             <a
               href={`mailto:${profile.email}`}
-              className="mt-3 inline-block text-base text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
+              className="mt-4 inline-block text-base text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
             >
               {profile.email}
             </a>
-            <p className="mt-3 font-mono text-[13px] text-muted-foreground">
+            <p className="mt-2 font-mono text-[13px] text-muted-foreground">
               {profile.location}
             </p>
           </div>

@@ -54,14 +54,14 @@ export default function ResumePage() {
             experience
           </h3>
           {experience.map((job) => (
-            <div key={job.company} className="mt-6">
+            <div key={job.company} className="mt-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                 <p className="tracking-tight">
                   {job.role}, {job.company}
                 </p>
                 <p className="font-mono text-[13px] text-muted-foreground">{job.period}</p>
               </div>
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-4 space-y-2">
                 {job.bullets.map((b) => (
                   <li
                     key={b}
@@ -79,13 +79,13 @@ export default function ResumePage() {
           <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             education
           </h3>
-          <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-4">
+          <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-4">
             <p className="tracking-tight">
               {education.degree}, {education.school}
             </p>
             <p className="font-mono text-[13px] text-muted-foreground">{education.period}</p>
           </div>
-          <p className="mt-1 font-mono text-[13px] text-muted-foreground">
+          <p className="mt-2 font-mono text-[13px] text-muted-foreground">
             CGPA {education.cgpa}
           </p>
         </div>
@@ -94,7 +94,7 @@ export default function ResumePage() {
           <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             skills
           </h3>
-          <dl className="mt-6 space-y-3">
+          <dl className="mt-4 space-y-3">
             {stack.map((g) => (
               <div key={g.label} className="flex flex-wrap gap-x-3 text-sm">
                 <dt className="w-32 shrink-0 font-mono text-[13px] text-muted-foreground">

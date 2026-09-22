@@ -45,7 +45,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <p className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
           {BUCKET_LABELS[project.bucket]}
         </p>
-        <h1 className="mt-3 text-3xl tracking-tight sm:text-4xl">{project.title}</h1>
+        <h1 className="mt-4 text-3xl tracking-tight sm:text-4xl">{project.title}</h1>
         <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
           {project.blurb}
         </p>

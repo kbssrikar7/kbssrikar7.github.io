@@ -35,7 +35,7 @@ export function Nav() {
                 >
                   <span
                     aria-hidden
-                    className="hidden text-muted-foreground/45 transition-colors group-hover:text-signal sm:inline"
+                    className="hidden text-muted-foreground transition-colors group-hover:text-signal sm:inline"
                   >
                     [{item.key}]
                   </span>

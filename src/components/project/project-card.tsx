@@ -30,7 +30,7 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
         </div>
 
         {project.demoable && (
-          <span className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full border border-signal/30 bg-background/80 px-2.5 py-1 font-mono text-[10px] tracking-wide text-signal backdrop-blur">
+          <span className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full border border-signal/30 bg-background/80 px-2.5 py-1 font-mono text-[13px] tracking-wide text-signal backdrop-blur">
             <span className="relative flex size-1.5">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-signal opacity-60" />
               <span className="relative inline-flex size-1.5 rounded-full bg-signal" />
@@ -79,7 +79,7 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
 
         <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
           {project.tech.slice(0, 5).map((t) => (
-            <span key={t} className="font-mono text-[11px] text-muted-foreground/70">
+            <span key={t} className="font-mono text-[13px] text-muted-foreground">
               {t}
             </span>
           ))}

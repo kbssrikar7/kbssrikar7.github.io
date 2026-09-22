@@ -14,7 +14,7 @@ export default function ProjectsPage() {
     <Section label="projects" title="Things I've built.">
       <ProjectGrid projects={allProjects} />
 
-      <p className="mt-16 max-w-xl text-xs leading-relaxed text-muted-foreground/60">
+      <p className="mt-12 max-w-xl text-sm leading-relaxed text-muted-foreground">
         Ordering is scored at build time by a{' '}
         <a
           href="https://typesafe.ai"

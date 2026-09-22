@@ -48,18 +48,18 @@ export default function ResumePage() {
         </p>
       </object>
 
-      <div className="mt-14 space-y-12">
+      <div className="mt-12 space-y-12">
         <div>
-          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             experience
           </h3>
           {experience.map((job) => (
-            <div key={job.company} className="mt-5">
+            <div key={job.company} className="mt-6">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                 <p className="tracking-tight">
                   {job.role}, {job.company}
                 </p>
-                <p className="font-mono text-[11px] text-muted-foreground/70">{job.period}</p>
+                <p className="font-mono text-[13px] text-muted-foreground">{job.period}</p>
               </div>
               <ul className="mt-3 space-y-2">
                 {job.bullets.map((b) => (
@@ -76,28 +76,28 @@ export default function ResumePage() {
         </div>
 
         <div>
-          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             education
           </h3>
-          <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-4">
+          <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-4">
             <p className="tracking-tight">
               {education.degree}, {education.school}
             </p>
-            <p className="font-mono text-[11px] text-muted-foreground/70">{education.period}</p>
+            <p className="font-mono text-[13px] text-muted-foreground">{education.period}</p>
           </div>
-          <p className="mt-1 font-mono text-[11px] text-muted-foreground/55">
+          <p className="mt-1 font-mono text-[13px] text-muted-foreground">
             CGPA {education.cgpa}
           </p>
         </div>
 
         <div>
-          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground/60 uppercase">
+          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             skills
           </h3>
-          <dl className="mt-5 space-y-3">
+          <dl className="mt-6 space-y-3">
             {stack.map((g) => (
               <div key={g.label} className="flex flex-wrap gap-x-3 text-sm">
-                <dt className="w-32 shrink-0 font-mono text-xs text-muted-foreground/60">
+                <dt className="w-32 shrink-0 font-mono text-[13px] text-muted-foreground">
                   {g.label}
                 </dt>
                 <dd className="flex-1 text-muted-foreground">{g.items.join(', ')}</dd>

@@ -30,17 +30,17 @@ export default function Home() {
       </Section>
 
       <Section id="stack" label="stack">
-        <dl className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
+        <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
           {stack.map((group) => (
             <div key={group.label}>
-              <dt className="font-mono text-[12px] tracking-[0.16em] text-muted-foreground/55 uppercase">
+              <dt className="font-mono text-[13px] tracking-[0.16em] text-muted-foreground uppercase">
                 {group.label}
               </dt>
-              <dd className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1.5">
+              <dd className="mt-2 flex flex-wrap gap-x-2 gap-y-1.5">
                 {group.items.map((item) => (
                   <span
                     key={item}
-                    className="rounded-md border border-border/70 px-2 py-0.5 font-mono text-xs text-muted-foreground"
+                    className="rounded-md border border-border/70 px-2 py-0.5 font-mono text-[13px] text-muted-foreground"
                   >
                     {item}
                   </span>
@@ -56,7 +56,7 @@ export default function Home() {
           If you want to talk about any of the work above, my inbox is open.
         </p>
 
-        <div className="mt-7 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           <a
             href={`mailto:${profile.email}`}
             className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
@@ -81,9 +81,9 @@ export default function Home() {
           })}
         </div>
 
-        <p className="mt-8 font-mono text-[11px] text-muted-foreground/50">
+        <p className="mt-8 font-mono text-[13px] text-muted-foreground">
           press{' '}
-          <kbd className="rounded border border-border px-1 py-px text-foreground/70">⌘K</kbd> to
+          <kbd className="rounded border border-border px-1 py-px text-foreground">⌘K</kbd> to
           search, or{' '}
           <Link href="/projects" className="underline underline-offset-2 hover:text-signal">
             browse everything

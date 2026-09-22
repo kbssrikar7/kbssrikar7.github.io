@@ -23,7 +23,7 @@ export function Hero() {
           kbs
         </h1>
 
-        <p className="mt-5 font-mono text-[13px] tracking-[0.2em] text-muted-foreground/70 uppercase">
+        <p className="mt-6 font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
           {profile.fullName}
         </p>
 
@@ -31,7 +31,7 @@ export function Hero() {
           {profile.bio}
         </p>
 
-        <div className="mt-9 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             href="/resume"
             className="group inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
@@ -50,7 +50,7 @@ export function Hero() {
           <SocialLinks className="ml-1" />
         </div>
 
-        <p className="mt-10 font-mono text-[13px] text-muted-foreground/75">
+        <p className="mt-12 font-mono text-[13px] text-muted-foreground">
           {education.degree} · {education.school} · {education.period.split(' - ')[1]}
         </p>
       </div>

@@ -7,7 +7,7 @@ export default function NotFound() {
       <h1 className="mt-6 text-2xl tracking-tight">This page doesn&apos;t exist.</h1>
       <p className="mt-3 max-w-md leading-relaxed text-muted-foreground">
         The link may be stale, or I may have moved something. Try the projects index, or press{' '}
-        <kbd className="rounded border border-border px-1 py-px font-mono text-xs">⌘K</kbd>.
+        <kbd className="rounded border border-border px-1 py-px font-mono text-[13px]">⌘K</kbd>.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link

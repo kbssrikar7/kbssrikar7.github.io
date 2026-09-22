@@ -19,10 +19,10 @@ export default function WorkPage() {
       <Section label="education">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <h3 className="text-lg tracking-tight">{education.school}</h3>
-          <p className="font-mono text-[11px] text-muted-foreground/70">{education.period}</p>
+          <p className="font-mono text-[13px] text-muted-foreground">{education.period}</p>
         </div>
         <p className="mt-1 text-sm text-muted-foreground">{education.degree}</p>
-        <p className="mt-0.5 font-mono text-[11px] text-muted-foreground/55">
+        <p className="mt-1 font-mono text-[13px] text-muted-foreground">
           {education.campus} · CGPA {education.cgpa}
         </p>
       </Section>

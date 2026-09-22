@@ -59,7 +59,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
           {NAV.map((n) => (
             <CommandItem key={n.href} value={n.label} onSelect={() => go(n.href)}>
               {n.label}
-              <span className="ml-auto font-mono text-xs text-muted-foreground">{n.key}</span>
+              <span className="ml-auto font-mono text-[13px] text-muted-foreground">{n.key}</span>
             </CommandItem>
           ))}
         </CommandGroup>
@@ -82,7 +82,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
               onSelect={() => window.open(s.href, '_blank')}
             >
               {s.label}
-              <span className="ml-auto font-mono text-xs text-muted-foreground">@{s.handle}</span>
+              <span className="ml-auto font-mono text-[13px] text-muted-foreground">@{s.handle}</span>
             </CommandItem>
           ))}
           <CommandItem
@@ -90,7 +90,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
             onSelect={() => window.open(`mailto:${profile.email}`, '_blank')}
           >
             email
-            <span className="ml-auto font-mono text-xs text-muted-foreground">
+            <span className="ml-auto font-mono text-[13px] text-muted-foreground">
               {profile.email}
             </span>
           </CommandItem>

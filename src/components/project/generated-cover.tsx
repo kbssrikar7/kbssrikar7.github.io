@@ -34,10 +34,10 @@ export function GeneratedCover({ project }: { project: Project }) {
       />
 
       <div className="relative flex items-center justify-between">
-        <span className="font-mono text-[12px] uppercase tracking-[0.18em] text-white/45">
+        <span className="font-mono text-[13px] uppercase tracking-[0.18em] text-white/80">
           {BUCKET_LABELS[project.bucket]}
         </span>
-        <span className="font-pixel text-sm text-white/35">kbs</span>
+        <span className="font-pixel text-sm text-white/60">kbs</span>
       </div>
 
       <div className="relative">
@@ -51,7 +51,7 @@ export function GeneratedCover({ project }: { project: Project }) {
           {project.tech.slice(0, 4).map((t) => (
             <span
               key={t}
-              className="rounded-full border border-white/12 bg-white/[0.04] px-2 py-0.5 font-mono text-[10px] text-white/60"
+              className="rounded-full border border-white/12 bg-white/[0.04] px-2 py-0.5 font-mono text-[13px] text-white/60"
             >
               {t}
             </span>

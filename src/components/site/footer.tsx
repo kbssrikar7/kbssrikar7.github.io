@@ -64,12 +64,9 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-border/60 py-6">
+        <div className="border-t border-border/60 py-6">
           <p className="font-mono text-[13px] text-muted-foreground">
             © {YEAR} {profile.name}
-          </p>
-          <p className="font-mono text-[13px] text-muted-foreground">
-            built with next.js · deployed on github pages
           </p>
         </div>
       </div>

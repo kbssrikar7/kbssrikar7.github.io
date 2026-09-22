@@ -82,9 +82,12 @@ export default function Home() {
         </div>
 
         <p className="mt-8 font-mono text-[13px] text-muted-foreground">
-          press{' '}
-          <kbd className="rounded border border-border px-1 py-px text-foreground">⌘K</kbd> to
-          search, or{' '}
+          {/* The shortcut hint is meaningless on a phone - there is no keyboard. */}
+          <span className="hidden sm:inline">
+            press{' '}
+            <kbd className="rounded border border-border px-1 py-px text-foreground">⌘K</kbd> to
+            search, or{' '}
+          </span>
           <Link href="/projects" className="underline underline-offset-2 hover:text-signal">
             browse everything
           </Link>

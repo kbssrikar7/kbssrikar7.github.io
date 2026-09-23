@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { GithubIcon } from '@/components/site/icons';
 import { GeneratedCover } from '@/components/project/generated-cover';
 import { allProjects, getProject, BUCKET_LABELS } from '@/lib/projects';
+import { profile } from '@/data/profile';
 
 export function generateStaticParams() {
   return allProjects.map((p) => ({ slug: p.slug }));
@@ -19,10 +20,19 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
+  const url = `${profile.siteUrl}/projects/${slug}/`;
   return {
     title: project.title,
     description: project.blurb,
-    openGraph: { title: project.title, description: project.blurb },
+    alternates: { canonical: url },
+    openGraph: {
+      title: project.title,
+      description: project.blurb,
+      url,
+      siteName: 'kbs',
+      type: 'website',
+      locale: 'en_US',
+    },
   };
 }
 

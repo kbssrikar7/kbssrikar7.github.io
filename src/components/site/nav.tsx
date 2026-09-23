@@ -26,6 +26,7 @@ export function Nav() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  aria-current={active ? 'page' : undefined}
                   className={cn(
                     'group flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-mono text-[13px] transition-colors',
                     active

@@ -29,16 +29,29 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
       # No secrets needed: the TypeSafe ranking and the preview screenshots are
       # generated locally and committed, so CI only ever builds static output.
+      # The Umami vars are public analytics IDs, not secrets - set as repo
+      # variables (Settings > Secrets and variables > Actions > Variables).
       - name: Build
         run: npm run build
         env:
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_UMAMI_SRC: ${{ vars.NEXT_PUBLIC_UMAMI_SRC }}
+          NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.NEXT_PUBLIC_UMAMI_WEBSITE_ID }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

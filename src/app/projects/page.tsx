@@ -2,11 +2,25 @@ import type { Metadata } from 'next';
 import { Section } from '@/components/sections/section';
 import { ProjectGrid } from '@/components/project/project-grid';
 import { allProjects, curatedMeta } from '@/lib/projects';
+import { profile } from '@/data/profile';
+
+const title = 'Projects';
+const description =
+  'RAG systems, cardiac MRI pipelines, cross-platform audio tooling, ESP32 fleets, and a self-hosted UPI gateway.';
+const url = `${profile.siteUrl}/projects/`;
 
 export const metadata: Metadata = {
-  title: 'Projects',
-  description:
-    'RAG systems, cardiac MRI pipelines, cross-platform audio tooling, ESP32 fleets, and a self-hosted UPI gateway.',
+  title,
+  description,
+  alternates: { canonical: url },
+  openGraph: {
+    title,
+    description,
+    url,
+    siteName: 'kbs',
+    type: 'website',
+    locale: 'en_US',
+  },
 };
 
 export default function ProjectsPage() {

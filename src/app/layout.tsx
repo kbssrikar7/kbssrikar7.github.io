@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { GeistPixelSquare } from 'geist/font/pixel';
@@ -20,6 +21,9 @@ export const metadata: Metadata = {
   },
   description:
     'K.B.S Srikar. Full-stack engineering, applied ML, and embedded IoT. Kubernetes for maritime fleets, RAG systems, CNNs, and cross-platform audio tooling.',
+  // GitHub Pages is canonical (see profile.siteUrl) - the Vercel mirror must
+  // point back at it, or search engines see two copies of the same site.
+  alternates: { canonical: profile.siteUrl },
   openGraph: {
     type: 'website',
     siteName: 'kbs',
@@ -56,6 +60,14 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <CommandPalette
           projects={allProjects.map((p) => ({ slug: p.slug, title: p.title }))}
         />
+        {/* No-op until NEXT_PUBLIC_UMAMI_SRC/WEBSITE_ID are set - see README. */}
+        {process.env.NEXT_PUBLIC_UMAMI_SRC && process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
+          <Script
+            src={process.env.NEXT_PUBLIC_UMAMI_SRC}
+            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );

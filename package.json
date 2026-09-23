@@ -7,6 +7,8 @@
     "build": "next build && node scripts/fix-og.mjs",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
     "curate": ".venv/bin/python scripts/curate.py",
     "shots": "node scripts/shots.ts",
     "favicon": ".venv/bin/python scripts/make-favicon.py"
@@ -29,12 +31,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.186.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "puppeteer-core": "^25.11.0",
     "shadcn": "^4.21.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3"
   }
 }

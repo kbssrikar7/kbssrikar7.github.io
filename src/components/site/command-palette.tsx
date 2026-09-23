@@ -15,9 +15,38 @@ import { NAV } from './nav-items';
 
 type Entry = { slug: string; title: string };
 
+const SHORTCUTS_KEY = 'kbs:single-key-nav';
+
 export function CommandPalette({ projects }: { projects: Entry[] }) {
   const [open, setOpen] = useState(false);
+  // WCAG 2.1.4: a single letter with no modifier must be possible to turn off,
+  // for anyone on speech-input or switch-access software. Cmd/Ctrl+K keeps a
+  // modifier, so it is exempt and stays on regardless.
+  //
+  // Read via a lazy initializer, not an effect: this only ever renders once the
+  // dialog is opened by the user (well after hydration), so there is no SSR
+  // value to mismatch against.
+  const [singleKeyNav, setSingleKeyNav] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    try {
+      return localStorage.getItem(SHORTCUTS_KEY) !== 'off';
+    } catch {
+      return true;
+    }
+  });
   const router = useRouter();
+
+  function toggleSingleKeyNav() {
+    setSingleKeyNav((was) => {
+      const next = !was;
+      try {
+        localStorage.setItem(SHORTCUTS_KEY, next ? 'on' : 'off');
+      } catch {
+        // Nothing persists, but the in-session toggle still works.
+      }
+      return next;
+    });
+  }
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -32,7 +61,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
         setOpen((v) => !v);
         return;
       }
-      if (typing || open || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (!singleKeyNav || typing || open || e.metaKey || e.ctrlKey || e.altKey) return;
 
       // Single-key navigation, the pawann.dev move - but routing, not scrolling.
       const hit = NAV.find((n) => n.key === e.key.toLowerCase());
@@ -43,7 +72,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open, router]);
+  }, [open, router, singleKeyNav]);
 
   function go(href: string) {
     setOpen(false);
@@ -87,11 +116,23 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
           ))}
           <CommandItem
             value="Email"
-            onSelect={() => window.open(`mailto:${profile.email}`, '_blank')}
+            onSelect={() => {
+              // mailto: must not go through window.open('_blank') - it leaves a
+              // stray empty tab behind. See the same fix in footer.tsx.
+              window.location.href = `mailto:${profile.email}`;
+            }}
           >
             email
             <span className="ml-auto font-mono text-[13px] text-muted-foreground">
               {profile.email}
+            </span>
+          </CommandItem>
+        </CommandGroup>
+        <CommandGroup heading="Preferences">
+          <CommandItem value="Toggle single-key shortcuts" onSelect={toggleSingleKeyNav}>
+            {singleKeyNav ? 'disable' : 'enable'} single-key shortcuts
+            <span className="ml-auto font-mono text-[13px] text-muted-foreground">
+              h w p r
             </span>
           </CommandItem>
         </CommandGroup>

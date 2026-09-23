@@ -30,7 +30,7 @@ export const experience: Experience[] = [
       preview: '/previews/wayship.webp',
     },
     summary:
-      'Wayship turns vessel operations data into structured, searchable intelligence. The platform runs telemetry off ships in the middle of the ocean, where connectivity is intermittent by definition, so it has to stay correct when the network is not.',
+      'Wayship turns vessel operations data into structured, searchable intelligence. The platform pulls telemetry off ships in the middle of the ocean, where connectivity is intermittent by definition, so it has to stay correct when the network is not.',
     metrics: [
       { value: '200+', label: 'vessels' },
       { value: '2000+', label: 'seafarers' },
@@ -39,7 +39,7 @@ export const experience: Experience[] = [
     ],
     bullets: [
       'Architected and managed Kubernetes clusters for Wayship, sustaining 99.9% uptime for real-time IoT telemetry processing across 200+ vessels and 10M+ data points daily.',
-      'Automated CI/CD pipelines with Jenkins and Terraform for containerized maritime systems, cutting deployment time by 40% and eliminating manual configuration drift.',
+      'Automated CI/CD pipelines with Jenkins and Terraform for deploying containerized maritime systems, cutting deployment time by 40% and eliminating manual configuration drift.',
     ],
   },
 ];

@@ -13,6 +13,9 @@ Next.js 16 (App Router, `output: 'export'`) · React 19 · Tailwind v4 · shadcn
 npm install
 npm run dev
 npm run build     # -> out/ , then fixes OG image extensions
+npm run lint
+npm run typecheck
+npm run test
 ```
 
 ## Content pipeline
@@ -87,7 +90,33 @@ Nothing detects drift, so re-run it if the mark in `app/icon.tsx` changes.
 
 ## Deploying
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`.
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which lints, typechecks,
+tests, then builds and publishes the static export to GitHub Pages. **This is the
+canonical deployment** - `profile.siteUrl` and every `alternates.canonical` tag point
+at it.
 
 **One-time manual step:** repo Settings → Pages → Source → **GitHub Actions**.
 Without it the deploy fails with an unhelpful error.
+
+### Vercel mirror
+
+The same repo is also connected to Vercel (auto-deploys on push via its GitHub
+integration - no `vercel.json` needed). `next.config.ts` branches on `process.env.VERCEL`
+so each host gets the mode it needs: GitHub Pages gets `output: 'export'` plus
+`trailingSlash: true` and unoptimized images; Vercel gets Next's normal SSR/ISR build
+with real image optimization. `profile.deployedUrl` resolves to whichever host actually
+served the current build, so OG images and metadata are always self-consistent - but
+`alternates.canonical` always points back at the GitHub Pages URL regardless of which
+host is serving, since that's the one URL meant to be indexed.
+
+## Analytics
+
+Optional, via [Umami](https://umami.is). The `<Script>` tag in `layout.tsx` no-ops
+until `NEXT_PUBLIC_UMAMI_SRC` and `NEXT_PUBLIC_UMAMI_WEBSITE_ID` are set (see
+`.env.example`). To turn it on:
+
+1. Create a website in your Umami instance (self-hosted or umami.is cloud) and copy
+   its tracking script URL and website ID.
+2. GitHub Pages build: repo Settings → Secrets and variables → Actions → **Variables**
+   → add both as repo variables (they're public analytics IDs, not secrets).
+3. Vercel build: add both as a Project → Settings → Environment Variables.

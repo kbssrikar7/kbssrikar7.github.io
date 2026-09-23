@@ -23,7 +23,10 @@ const nextConfig: NextConfig = {
         trailingSlash: true,
       }),
   basePath: process.env.PAGES_BASE_PATH,
-  images: { unoptimized: true },
+  // GitHub Pages serves no image optimization endpoint, so its export must ship
+  // raw images. Vercel runs Next's own image optimizer - only force it off on
+  // the host that actually needs that.
+  images: { unoptimized: !isVercel },
 };
 
 export default nextConfig;

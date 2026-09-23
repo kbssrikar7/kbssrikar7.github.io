@@ -4,9 +4,22 @@ import { Section } from '@/components/sections/section';
 import { profile, education, stack } from '@/data/profile';
 import { experience } from '@/data/experience';
 
+const title = 'Resume';
+const description = `Resume for ${profile.fullName} - ${profile.tagline}.`;
+const url = `${profile.siteUrl}/resume/`;
+
 export const metadata: Metadata = {
-  title: 'Resume',
-  description: `Resume for ${profile.fullName} - ${profile.tagline}.`,
+  title,
+  description,
+  alternates: { canonical: url },
+  openGraph: {
+    title,
+    description,
+    url,
+    siteName: 'kbs',
+    type: 'website',
+    locale: 'en_US',
+  },
 };
 
 export default function ResumePage() {

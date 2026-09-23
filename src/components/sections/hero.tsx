@@ -27,7 +27,11 @@ export function Hero() {
           {profile.fullName}
         </p>
 
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+        {/* The bio is one short line now, not a paragraph - max-w-2xl was
+            sized for the old two-sentence version and forced an artificial
+            wrap. Locking to one line only from lg: up - below that there
+            isn't enough width to keep it on one line without overflowing. */}
+        <p className="mt-6 max-w-full text-lg leading-relaxed text-muted-foreground sm:text-xl lg:whitespace-nowrap">
           {profile.bio}
         </p>
 

@@ -101,7 +101,8 @@ Without it the deploy fails with an unhelpful error.
 ### Vercel mirror
 
 The same repo is also connected to Vercel (auto-deploys on push via its GitHub
-integration - no `vercel.json` needed). `next.config.ts` branches on `process.env.VERCEL`
+integration; `vercel.json` just pins the build command and framework).
+`next.config.ts` branches on `process.env.VERCEL`
 so each host gets the mode it needs: GitHub Pages gets `output: 'export'` plus
 `trailingSlash: true` and unoptimized images; Vercel gets Next's normal SSR/ISR build
 with real image optimization. `profile.deployedUrl` resolves to whichever host actually
@@ -120,3 +121,12 @@ until `NEXT_PUBLIC_UMAMI_SRC` and `NEXT_PUBLIC_UMAMI_WEBSITE_ID` are set (see
 2. GitHub Pages build: repo Settings → Secrets and variables → Actions → **Variables**
    → add both as repo variables (they're public analytics IDs, not secrets).
 3. Vercel build: add both as a Project → Settings → Environment Variables.
+
+### Visible stats link
+
+An eye icon in the nav (`nav.tsx`) links out to the site's public Umami dashboard.
+No-ops until `NEXT_PUBLIC_UMAMI_SHARE_URL` is set. To turn it on: in Umami, open this
+website's settings and enable **Share URL** - this makes the dashboard viewable
+read-only with no login, so it's safe to link publicly (unlike an API key, which
+would let anyone query your whole account). Copy the generated link into the same
+three places as the analytics vars above.

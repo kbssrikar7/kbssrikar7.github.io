@@ -122,12 +122,18 @@ until `NEXT_PUBLIC_UMAMI_SRC` and `NEXT_PUBLIC_UMAMI_WEBSITE_ID` are set (see
    → add both as repo variables (they're public analytics IDs, not secrets).
 3. Vercel build: add both as a Project → Settings → Environment Variables.
 
-### Visible stats link
+### Visitor count
 
-An eye icon in the nav (`nav.tsx`) links out to the site's public Umami dashboard.
-No-ops until `NEXT_PUBLIC_UMAMI_SHARE_URL` is set. To turn it on: in Umami, open this
-website's settings and enable **Share URL** - this makes the dashboard viewable
-read-only with no login, so it's safe to link publicly (unlike an API key, which
-would let anyone query your whole account, and which Umami Cloud's free tier doesn't
-grant anyway - that path needs Pro). Copy the generated link into the same three
-places as the analytics vars above.
+The nav bar shows a live visitor count (`components/site/visitor-count.tsx`), via
+[countapi.mileshilliard.com](https://countapi.mileshilliard.com) - a free, no-signup,
+no-API-key hit counter. There's nothing secret involved (unlike Umami's stats API,
+which needs a paid Pro plan to expose even one number), so this is a plain
+client-side fetch with no server route behind it. It counts page loads, not unique
+visitors, and ad blockers sometimes flag counter services as trackers and block the
+request - both accepted tradeoffs of the free option, same as any GitHub-README
+visitor badge.
+
+Clicking the count opens the site's public Umami dashboard, if configured: in Umami,
+open this website's settings and enable **Share URL**, then set
+`NEXT_PUBLIC_UMAMI_SHARE_URL` (same three places as the analytics vars above). Without
+it, the count still shows, just isn't a link.

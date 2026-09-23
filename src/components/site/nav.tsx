@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NAV } from './nav-items';
+import { VisitorCount } from './visitor-count';
 
 export function Nav() {
   const pathname = usePathname();
@@ -48,19 +48,7 @@ export function Nav() {
               );
             })}
           </ul>
-          {/* No-op until NEXT_PUBLIC_UMAMI_SHARE_URL is set - see README. */}
-          {process.env.NEXT_PUBLIC_UMAMI_SHARE_URL && (
-            <a
-              href={process.env.NEXT_PUBLIC_UMAMI_SHARE_URL}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Site visitor stats"
-              title="Site visitor stats"
-              className="ml-1 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <Eye className="size-4" />
-            </a>
-          )}
+          <VisitorCount href={process.env.NEXT_PUBLIC_UMAMI_SHARE_URL} />
         </div>
       </nav>
     </header>

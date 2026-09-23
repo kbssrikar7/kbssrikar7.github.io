@@ -20,10 +20,6 @@ export const profile = {
   deployedUrl: process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : 'https://kbssrikar7.github.io',
-  // Fixed, not derived like deployedUrl: the visitor-count API route only
-  // runs on Vercel (GitHub Pages has no server for it), so both hosts' pages
-  // always call this same known URL rather than "wherever this build landed".
-  vercelUrl: 'https://kbs-portfolio.vercel.app',
   resume: '/kbs-srikar-resume.pdf',
 } as const;
 

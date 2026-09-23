@@ -122,11 +122,22 @@ until `NEXT_PUBLIC_UMAMI_SRC` and `NEXT_PUBLIC_UMAMI_WEBSITE_ID` are set (see
    → add both as repo variables (they're public analytics IDs, not secrets).
 3. Vercel build: add both as a Project → Settings → Environment Variables.
 
-### Visible stats link
+### Visitor count
 
-An eye icon in the nav (`nav.tsx`) links out to the site's public Umami dashboard.
-No-ops until `NEXT_PUBLIC_UMAMI_SHARE_URL` is set. To turn it on: in Umami, open this
-website's settings and enable **Share URL** - this makes the dashboard viewable
-read-only with no login, so it's safe to link publicly (unlike an API key, which
-would let anyone query your whole account). Copy the generated link into the same
-three places as the analytics vars above.
+The nav bar shows a live visitor count (`components/site/visitor-count.tsx`), fetched
+from `src/app/api/visitor-count/route.ts` - a Vercel-only API route, since GitHub Pages
+has no server to run it on. **Both hosts' pages call the same Vercel URL**
+(`profile.vercelUrl`), so the count shows up identically whichever domain someone is
+on. It no-ops (renders nothing) until configured:
+
+1. In Umami: profile icon → Settings → API keys → Create key. This is a real secret,
+   unlike the tracking IDs above - it can read your whole Umami account.
+2. Set it as `UMAMI_API_KEY` in Vercel → Project → Settings → Environment Variables,
+   type **Sensitive**. Do not add it to GitHub Actions - the static export never runs
+   this route, so it never needs the key.
+3. Optionally, enable **Share URL** for this website in Umami settings and set
+   `NEXT_PUBLIC_UMAMI_SHARE_URL` (same three places as the analytics vars above) to
+   make the count clickable through to the dashboard.
+
+Revalidates hourly (`export const revalidate = 3600` in the route) rather than fetching
+Umami on every page load.

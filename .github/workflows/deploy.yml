@@ -52,6 +52,7 @@ jobs:
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_UMAMI_SRC: ${{ vars.NEXT_PUBLIC_UMAMI_SRC }}
           NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.NEXT_PUBLIC_UMAMI_WEBSITE_ID }}
+          NEXT_PUBLIC_UMAMI_SHARE_URL: ${{ vars.NEXT_PUBLIC_UMAMI_SHARE_URL }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

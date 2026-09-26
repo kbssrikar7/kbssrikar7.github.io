@@ -43,8 +43,14 @@ for (const file of files) {
   renamed++;
 }
 
+// Not just the HTML: the RSC payloads (.txt) carry the same <head> links and
+// replace them on every client-side navigation, and the web manifest lists the
+// icon too. Patching only .html left the favicon and og:image pointing at
+// extensionless 404s as soon as someone clicked through to a second page.
+const PATCHABLE = ['.html', '.txt', '.webmanifest'];
+
 let patched = 0;
-for (const file of files.filter((f) => f.endsWith('.html'))) {
+for (const file of files.filter((f) => PATCHABLE.includes(extname(f)))) {
   const html = await readFile(file, 'utf8');
   // `/opengraph-image?deadbeef` and bare `/icon` -> `.../opengraph-image.png`.
   // The leading slash and trailing boundary keep this inside URL paths: without
@@ -67,6 +73,6 @@ const sizes = await Promise.all(
 );
 
 console.log(
-  `fix-og: renamed ${renamed} image(s), patched ${patched} html file(s)` +
+  `fix-og: renamed ${renamed} image(s), patched ${patched} file(s)` +
     (sizes.length ? ` [${sizes.map((s) => `${Math.round(s / 1024)}KB`).join(', ')}]` : '')
 );

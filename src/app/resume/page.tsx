@@ -29,7 +29,7 @@ export default function ResumePage() {
         <a
           href={profile.resume}
           download
-          className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+          className="inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-base font-medium text-background transition-opacity hover:opacity-90"
         >
           <Download className="size-4" />
           download pdf
@@ -38,7 +38,7 @@ export default function ResumePage() {
           href={profile.resume}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm transition-colors hover:border-signal/40 hover:text-signal"
+          className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-base transition-colors hover:border-signal/40 hover:text-signal"
         >
           open in new tab
         </a>
@@ -69,7 +69,7 @@ export default function ResumePage() {
           {experience.map((job) => (
             <div key={job.company} className="mt-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                <p className="tracking-tight">
+                <p className="text-lg tracking-tight">
                   {job.role}, {job.company}
                 </p>
                 <p className="font-mono text-[13px] text-muted-foreground">{job.period}</p>
@@ -78,7 +78,7 @@ export default function ResumePage() {
                 {job.bullets.map((b) => (
                   <li
                     key={b}
-                    className="relative max-w-2xl pl-4 text-sm leading-relaxed text-muted-foreground before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-muted-foreground/40"
+                    className="relative max-w-2xl pl-4 text-base leading-relaxed text-muted-foreground before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-muted-foreground/40"
                   >
                     {b}
                   </li>
@@ -93,7 +93,7 @@ export default function ResumePage() {
             education
           </h3>
           <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-4">
-            <p className="tracking-tight">
+            <p className="text-lg tracking-tight">
               {education.degree}, {education.school}
             </p>
             <p className="font-mono text-[13px] text-muted-foreground">{education.period}</p>
@@ -109,7 +109,7 @@ export default function ResumePage() {
           </h3>
           <dl className="mt-4 space-y-3">
             {stack.map((g) => (
-              <div key={g.label} className="flex flex-wrap gap-x-3 text-sm">
+              <div key={g.label} className="flex flex-wrap gap-x-3 text-base">
                 <dt className="w-32 shrink-0 font-mono text-[13px] text-muted-foreground">
                   {g.label}
                 </dt>

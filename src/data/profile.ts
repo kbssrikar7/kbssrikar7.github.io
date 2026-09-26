@@ -4,7 +4,7 @@ export const profile = {
   fullName: 'Kasilanka Bhoopesh Siva Srikar',
   tagline: 'Full-stack engineering, applied ML, and embedded IoT',
   location: 'India',
-  bio: 'software engineer working across full-stack, applied ml, and embedded iot.',
+  bio: 'Software engineer working across full-stack development, applied ML, and embedded IoT.',
   email: 'kbsivasrikar@gmail.com',
   github: 'https://github.com/kbssrikar7',
   // Intentional: the GitHub handle migrated kbss0000 -> kbssrikar7, but LinkedIn,

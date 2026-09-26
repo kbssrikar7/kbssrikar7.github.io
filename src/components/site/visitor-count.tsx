@@ -96,7 +96,10 @@ export function VisitorCount({ href }: { href?: string }) {
     >
       <Eye className="size-4 shrink-0" aria-hidden />
       {count === 'loading' ? (
-        <span aria-hidden className="h-3.5 w-7 animate-pulse rounded bg-muted" />
+        // Sized in ch of the same mono font, so it is exactly as wide as a
+        // 3-digit count: a fixed w-7 was 3px wider than "115", and the swap
+        // slid every nav link sideways (a layout shift) when the count landed.
+        <span aria-hidden className="h-3.5 w-[3ch] animate-pulse rounded bg-muted" />
       ) : (
         count.toLocaleString('en-US')
       )}

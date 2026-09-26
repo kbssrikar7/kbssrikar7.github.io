@@ -26,6 +26,9 @@ export const Spotlight = ({
   xOffset = 100,
 }: SpotlightProps = {}) => {
   // DIVERGES FROM THE ACETERNITY REGISTRY - do not overwrite with `shadcn add`.
+  // The registry puts z-40 on the beams, which lays them OVER the page
+  // content and tints anything white (the hero's resume button went cyan).
+  //
   // These sweeps run through `motion` (JS/WAAPI), so the prefers-reduced-motion
   // block in globals.css cannot stop them. Without this the gradients oscillate
   // forever for vestibular-sensitive users.
@@ -58,7 +61,7 @@ export const Spotlight = ({
     >
       <motion.div
         {...sweep(xOffset)}
-        className="absolute top-0 left-0 w-screen h-screen z-40 pointer-events-none"
+        className="absolute top-0 left-0 w-screen h-screen pointer-events-none"
       >
         <div
           style={{
@@ -93,7 +96,7 @@ export const Spotlight = ({
 
       <motion.div
         {...sweep(-xOffset)}
-        className="absolute top-0 right-0 w-screen h-screen z-40 pointer-events-none"
+        className="absolute top-0 right-0 w-screen h-screen pointer-events-none"
       >
         <div
           style={{

@@ -28,8 +28,8 @@ export default function ProjectsPage() {
     <Section label="projects" title="Things I've built.">
       <ProjectGrid projects={allProjects} />
 
-      <p className="mt-12 max-w-xl text-sm leading-relaxed text-muted-foreground">
-        Ordering is scored at build time by a{' '}
+      <p className="mt-12 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+        Projects are ranked at build time by a{' '}
         <a
           href="https://typesafe.ai"
           target="_blank"
@@ -38,7 +38,7 @@ export default function ProjectsPage() {
         >
           TypeSafe
         </a>{' '}
-        System One model, then reviewed by hand. Ranked{' '}
+        System One model, then reviewed by hand. Last ranked on{' '}
         {curatedMeta.generatedAt.slice(0, 10)} with {curatedMeta.model}.
       </p>
     </Section>

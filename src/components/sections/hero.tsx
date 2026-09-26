@@ -23,29 +23,27 @@ export function Hero() {
           kbs
         </h1>
 
-        <p className="mt-4 font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
+        <p className="mt-5 font-mono text-sm tracking-[0.2em] text-muted-foreground uppercase">
           {profile.fullName}
         </p>
 
-        {/* The bio is one short line now, not a paragraph - max-w-2xl was
-            sized for the old two-sentence version and forced an artificial
-            wrap. Locking to one line only from lg: up - below that there
-            isn't enough width to keep it on one line without overflowing. */}
-        <p className="mt-6 max-w-full text-lg leading-relaxed text-muted-foreground sm:text-xl lg:whitespace-nowrap">
+        {/* text-balance rather than whitespace-nowrap: at the larger size a
+            forced single line overflowed the container between lg and xl. */}
+        <p className="mt-6 max-w-3xl text-xl leading-relaxed text-balance text-muted-foreground sm:text-2xl">
           {profile.bio}
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             href="/resume"
-            className="group inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+            className="group inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-base font-medium text-background transition-opacity hover:opacity-90"
           >
             resume
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
           <a
             href={`mailto:${profile.email}`}
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm transition-colors hover:border-signal/40 hover:text-signal"
+            className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-base transition-colors hover:border-signal/40 hover:text-signal"
           >
             <Mail className="size-4" />
             get in touch
@@ -54,7 +52,7 @@ export function Hero() {
           <SocialLinks className="ml-1" />
         </div>
 
-        <p className="mt-12 font-mono text-[13px] text-muted-foreground">
+        <p className="mt-12 font-mono text-sm text-muted-foreground">
           {education.degree} · {education.school} · {education.period.split(' - ')[1]}
         </p>
       </div>

@@ -33,14 +33,14 @@ export default function Home() {
         <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
           {stack.map((group) => (
             <div key={group.label}>
-              <dt className="font-mono text-[13px] tracking-[0.16em] text-muted-foreground uppercase">
+              <dt className="font-mono text-sm tracking-[0.16em] text-muted-foreground uppercase">
                 {group.label}
               </dt>
               <dd className="mt-4 flex flex-wrap gap-x-2 gap-y-1.5">
                 {group.items.map((item) => (
                   <span
                     key={item}
-                    className="rounded-md border border-border/70 px-2 py-0.5 font-mono text-[13px] text-muted-foreground"
+                    className="rounded-md border border-border/70 px-2.5 py-1 font-mono text-sm text-muted-foreground"
                   >
                     {item}
                   </span>
@@ -52,14 +52,14 @@ export default function Home() {
       </Section>
 
       <Section id="contact" label="contact">
-        <p className="max-w-xl leading-relaxed text-muted-foreground">
-          If you want to talk about any of the work above, my inbox is open.
+        <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
+          Want to talk about any of the work above? My inbox is always open.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <a
             href={`mailto:${profile.email}`}
-            className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-base font-medium text-background transition-opacity hover:opacity-90"
           >
             <Mail className="size-4" />
             {profile.email}
@@ -72,7 +72,7 @@ export default function Home() {
                 href={s.href}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm transition-colors hover:border-signal/40 hover:text-signal"
+                className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-base transition-colors hover:border-signal/40 hover:text-signal"
               >
                 <Icon className="size-4" />
                 {s.label}
@@ -81,7 +81,7 @@ export default function Home() {
           })}
         </div>
 
-        <p className="mt-8 font-mono text-[13px] text-muted-foreground">
+        <p className="mt-8 font-mono text-sm text-muted-foreground">
           {/* The shortcut hint is meaningless on a phone - there is no keyboard. */}
           <span className="hidden sm:inline">
             press{' '}

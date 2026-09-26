@@ -75,7 +75,8 @@ project its own social card. Two constraints worth knowing:
 
 Next emits metadata images as extensionless files, which GitHub Pages would serve as
 `application/octet-stream` and every crawler would reject. `scripts/fix-og.mjs` runs
-after each build to add `.png` and repoint the HTML. It anchors its rewrite to URL
+after each build to add `.png` and repoint the HTML, the RSC payloads (`.txt`, used on client-side
+navigation) and the web manifest. It anchors its rewrite to URL
 paths - matching the bare names anywhere in the HTML would turn `rel="icon"` into
 `rel="icon.png"`.
 
@@ -128,7 +129,10 @@ The nav bar shows a live visitor count (`components/site/visitor-count.tsx`), vi
 [countapi.mileshilliard.com](https://countapi.mileshilliard.com) - a free, no-signup,
 no-API-key hit counter. There's nothing secret involved (unlike Umami's stats API,
 which needs a paid Pro plan to expose even one number), so this is a plain
-client-side fetch with no server route behind it. It counts page loads, not unique
+client-side fetch with no server route behind it. To make it appear fast, the request
+starts from an inline `<head>` script (so it runs while the JS bundle downloads, not after
+hydration), the origin is preconnected, and the last value is cached in `localStorage` so
+repeat visitors see a number immediately. It counts page loads, not unique
 visitors, and ad blockers sometimes flag counter services as trackers and block the
 request - both accepted tradeoffs of the free option, same as any GitHub-README
 visitor badge.

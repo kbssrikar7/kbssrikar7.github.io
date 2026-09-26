@@ -42,7 +42,7 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
 
       <div className="mt-4 flex flex-col gap-2">
         <div className="flex items-start justify-between gap-4">
-          <h3 className="text-base font-medium tracking-tight">
+          <h3 className="text-lg font-medium tracking-tight">
             <Link
               href={`/projects/${project.slug}`}
               className="rounded-sm hover:text-signal focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none after:absolute after:inset-0 after:content-['']"
@@ -59,7 +59,7 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
               aria-label={`${project.title} source on GitHub`}
               className="text-muted-foreground transition-colors hover:text-foreground"
             >
-              <GithubIcon className="size-4" />
+              <GithubIcon className="size-[18px]" />
             </a>
             {project.liveUrl && (
               <a
@@ -69,13 +69,13 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
                 aria-label={`${project.title} live demo`}
                 className="text-muted-foreground transition-colors hover:text-signal"
               >
-                <ArrowUpRight className="size-4" />
+                <ArrowUpRight className="size-[18px]" />
               </a>
             )}
           </div>
         </div>
 
-        <p className="text-sm leading-relaxed text-muted-foreground">{project.blurb}</p>
+        <p className="text-[15px] leading-relaxed text-muted-foreground">{project.blurb}</p>
 
         <div className="flex flex-wrap gap-x-3 gap-y-1">
           {project.tech.slice(0, 5).map((t) => (

@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Nav } from '@/components/site/nav';
 import { Footer } from '@/components/site/footer';
 import { CommandPalette } from '@/components/site/command-palette';
+import { COUNTER_BOOTSTRAP, COUNTER_ORIGIN } from '@/components/site/visitor-count-config';
 import { allProjects } from '@/lib/projects';
 import './globals.css';
 
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
     template: '%s - K.B.S Srikar',
   },
   description:
-    'K.B.S Srikar. Full-stack engineering, applied ML, and embedded IoT. Kubernetes for maritime fleets, RAG systems, CNNs, and cross-platform audio tooling.',
+    'K.B.S Srikar is a software engineer working across full-stack development, applied ML, and embedded IoT: Kubernetes for maritime fleets, RAG systems, CNNs, and cross-platform audio tooling.',
   // GitHub Pages is canonical (see profile.siteUrl) - the Vercel mirror must
   // point back at it, or search engines see two copies of the same site.
   alternates: { canonical: profile.siteUrl },
@@ -45,6 +46,12 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       )}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href={COUNTER_ORIGIN} crossOrigin="anonymous" />
+        {/* Starts the visitor-count request as the HTML parses, rather than
+            after the bundle hydrates - see visitor-count.tsx. */}
+        <script dangerouslySetInnerHTML={{ __html: COUNTER_BOOTSTRAP }} />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <a
           href="#main"

@@ -6,14 +6,14 @@ const YEAR = new Date().getFullYear();
 
 function ColumnHeading({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-mono text-[13px] tracking-[0.18em] text-muted-foreground uppercase">
+    <p className="font-mono text-sm tracking-[0.18em] text-muted-foreground uppercase">
       {children}
     </p>
   );
 }
 
 const linkClass =
-  'font-mono text-sm text-muted-foreground transition-colors hover:text-foreground';
+  'font-mono text-[15px] text-muted-foreground transition-colors hover:text-foreground';
 
 export function Footer() {
   return (
@@ -26,7 +26,7 @@ export function Footer() {
                 actually want out of a footer. */}
             <a
               href={`mailto:${profile.email}`}
-              className="mt-4 inline-block text-base text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
+              className="mt-4 inline-block text-lg text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
             >
               {profile.email}
             </a>

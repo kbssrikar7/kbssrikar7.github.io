@@ -45,7 +45,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <article className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
       <Link
         href="/projects"
-        className="group inline-flex items-center gap-1.5 font-mono text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+        className="group inline-flex items-center gap-1.5 font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
         projects
@@ -55,8 +55,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         <p className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
           {BUCKET_LABELS[project.bucket]}
         </p>
-        <h1 className="mt-4 text-3xl tracking-tight sm:text-4xl">{project.title}</h1>
-        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+        <h1 className="mt-4 text-4xl tracking-tight sm:text-5xl">{project.title}</h1>
+        <p className="mt-4 max-w-2xl text-xl leading-relaxed text-muted-foreground">
           {project.blurb}
         </p>
 
@@ -66,7 +66,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               href={project.liveUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-base font-medium text-background transition-opacity hover:opacity-90"
             >
               live demo
               <ArrowUpRight className="size-4" />
@@ -76,7 +76,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             href={project.repoUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm transition-colors hover:border-signal/40 hover:text-signal"
+            className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-base transition-colors hover:border-signal/40 hover:text-signal"
           >
             <GithubIcon className="size-4" />
             source
@@ -108,13 +108,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <h2 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             about
           </h2>
-          <p className="mt-4 leading-relaxed text-muted-foreground">{project.detail}</p>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{project.detail}</p>
 
           {project.metrics && (
             <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3">
               {project.metrics.map((m) => (
                 <div key={m.label}>
-                  <p className="font-mono text-xl tracking-tight text-signal">{m.value}</p>
+                  <p className="font-mono text-2xl tracking-tight text-signal">{m.value}</p>
                   <p className="mt-1 font-mono text-[13px] tracking-wide text-muted-foreground uppercase">
                     {m.label}
                   </p>
@@ -132,7 +132,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             {project.tech.map((t) => (
               <li
                 key={t}
-                className="rounded-md border border-border/70 px-2 py-0.5 font-mono text-[13px] text-muted-foreground"
+                className="rounded-md border border-border/70 px-2.5 py-1 font-mono text-sm text-muted-foreground"
               >
                 {t}
               </li>

@@ -108,7 +108,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
             <CommandItem
               key={s.key}
               value={`${s.label} ${s.handle}`}
-              onSelect={() => window.open(s.href, '_blank')}
+              onSelect={() => window.open(s.href, '_blank', 'noopener,noreferrer')}
             >
               {s.label}
               <span className="ml-auto font-mono text-[13px] text-muted-foreground">@{s.handle}</span>

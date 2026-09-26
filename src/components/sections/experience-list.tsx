@@ -18,7 +18,7 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
           />
 
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h3 className="text-xl tracking-tight">
+            <h3 className="text-2xl tracking-tight">
               {job.companyUrl ? (
                 <a
                   href={job.companyUrl}
@@ -32,15 +32,15 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
                 job.company
               )}
             </h3>
-            <p className="font-mono text-[13px] text-muted-foreground">{job.period}</p>
+            <p className="font-mono text-sm text-muted-foreground">{job.period}</p>
           </div>
-          <p className="mt-2 text-base text-muted-foreground">{job.role}</p>
-          <p className="mt-2 font-mono text-[13px] text-muted-foreground">{job.location}</p>
+          <p className="mt-2 text-lg text-muted-foreground">{job.role}</p>
+          <p className="mt-2 font-mono text-sm text-muted-foreground">{job.location}</p>
 
           <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4">
             {job.metrics.map((m) => (
               <div key={m.label}>
-                <p className="font-mono text-2xl tracking-tight text-signal">{m.value}</p>
+                <p className="font-mono text-3xl tracking-tight text-signal">{m.value}</p>
                 <p className="mt-1 font-mono text-[13px] tracking-wide text-muted-foreground uppercase">
                   {m.label}
                 </p>
@@ -66,7 +66,7 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
               </div>
               <div className="flex items-center justify-between gap-4 border-t border-border/60 px-4 py-3">
                 <div className="min-w-0">
-                  <p className="text-sm">
+                  <p className="text-base">
                     {job.product.name}
                     <span className="ml-2 font-mono text-[13px] text-muted-foreground">
                       the product I worked on
@@ -83,14 +83,14 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
 
           {detailed && (
             <>
-              <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
                 {job.summary}
               </p>
               <ul className="mt-4 max-w-2xl space-y-2.5">
                 {job.bullets.map((b) => (
                   <li
                     key={b}
-                    className="relative pl-4 text-base leading-relaxed text-muted-foreground before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-muted-foreground/40"
+                    className="relative pl-4 text-lg leading-relaxed text-muted-foreground before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-muted-foreground/40"
                   >
                     {b}
                   </li>

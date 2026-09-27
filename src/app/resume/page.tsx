@@ -63,9 +63,9 @@ export default function ResumePage() {
 
       <div className="mt-12 space-y-12">
         <div>
-          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
+          <h2 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             experience
-          </h3>
+          </h2>
           {experience.map((job) => (
             <div key={job.company} className="mt-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4">
@@ -89,9 +89,9 @@ export default function ResumePage() {
         </div>
 
         <div>
-          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
+          <h2 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             education
-          </h3>
+          </h2>
           <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-4">
             <p className="text-lg tracking-tight">
               {education.degree}, {education.school}
@@ -104,9 +104,9 @@ export default function ResumePage() {
         </div>
 
         <div>
-          <h3 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
+          <h2 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             skills
-          </h3>
+          </h2>
           <dl className="mt-4 space-y-3">
             {stack.map((g) => (
               <div key={g.label} className="flex flex-wrap gap-x-3 text-base">

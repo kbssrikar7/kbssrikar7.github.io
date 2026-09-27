@@ -26,7 +26,7 @@ export default function WorkPage() {
   return (
     <>
       <Section label="work" title="Where I've shipped.">
-        <ExperienceList detailed />
+        <ExperienceList detailed headingLevel="h2" />
       </Section>
 
       <Section label="education">

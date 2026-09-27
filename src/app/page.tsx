@@ -7,10 +7,12 @@ import { ExperienceList } from '@/components/sections/experience-list';
 import { ProjectCard } from '@/components/project/project-card';
 import { featuredProjects } from '@/lib/projects';
 import { profile, socials, stack } from '@/data/profile';
+import { jsonLdString, personJsonLd } from '@/lib/structured-data';
 
 export default function Home() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(personJsonLd()) }} />
       <Hero />
 
       <Section id="work" label="experience" more={{ href: '/work', label: 'full history' }}>
@@ -24,27 +26,22 @@ export default function Home() {
       >
         <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2">
           {featuredProjects.map((p, i) => (
-            <ProjectCard key={p.slug} project={p} priority={i < 2} />
+            <ProjectCard key={p.slug} project={p} index={i} priority={i < 2} />
           ))}
         </div>
       </Section>
 
       <Section id="stack" label="stack">
-        <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
+        {/* Plain rows, not a wall of chips: 38 bordered tags read as a
+            keyword dump, a label and a line read as a spec sheet. */}
+        <dl className="-mt-4 divide-y divide-border/60 border-b border-border/60">
           {stack.map((group) => (
-            <div key={group.label}>
+            <div key={group.label} className="grid gap-x-8 gap-y-1 py-4 sm:grid-cols-[12rem_1fr]">
               <dt className="font-mono text-sm tracking-[0.16em] text-muted-foreground uppercase">
                 {group.label}
               </dt>
-              <dd className="mt-4 flex flex-wrap gap-x-2 gap-y-1.5">
-                {group.items.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-md border border-border/70 px-2.5 py-1 font-mono text-sm text-muted-foreground"
-                  >
-                    {item}
-                  </span>
-                ))}
+              <dd className="text-base leading-relaxed text-foreground/90">
+                {group.items.join(' · ')}
               </dd>
             </div>
           ))}

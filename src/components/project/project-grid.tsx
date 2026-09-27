@@ -48,7 +48,7 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
 
       <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2">
         {shown.map((p, i) => (
-          <ProjectCard key={p.slug} project={p} priority={i < 2} />
+          <ProjectCard key={p.slug} project={p} index={i} priority={i < 2} headingLevel="h2" />
         ))}
       </div>
     </>

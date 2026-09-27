@@ -1,8 +1,17 @@
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { experience } from '@/data/experience';
+import { thumbName } from '@/lib/preview-thumb';
 
-export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
+export function ExperienceList({
+  detailed = false,
+  headingLevel = 'h3',
+}: {
+  detailed?: boolean;
+  /** h3 under the home page's section h2; h2 directly under /work's page h1. */
+  headingLevel?: 'h2' | 'h3';
+}) {
+  const Heading = headingLevel;
   return (
     <div className="space-y-12">
       {experience.map((job) => (
@@ -18,7 +27,7 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
           />
 
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h3 className="text-2xl tracking-tight">
+            <Heading className="text-2xl tracking-tight">
               {job.companyUrl ? (
                 <a
                   href={job.companyUrl}
@@ -31,7 +40,7 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
               ) : (
                 job.company
               )}
-            </h3>
+            </Heading>
             <p className="font-mono text-sm text-muted-foreground">{job.period}</p>
           </div>
           <p className="mt-2 text-lg text-muted-foreground">{job.role}</p>
@@ -57,9 +66,12 @@ export function ExperienceList({ detailed = false }: { detailed?: boolean }) {
             >
               <div className="relative aspect-[1200/750] w-full">
                 <Image
-                  src={job.product.preview}
+                  src={thumbName(job.product.preview)}
                   alt={`${job.product.name} product page`}
                   fill
+                  // On /work (detailed) this is the page's largest element near
+                  // the top - lazy-loading it pushed LCP past 5s on a slow phone.
+                  priority={detailed}
                   sizes="(min-width: 640px) 42rem, 100vw"
                   className="object-cover object-top transition-transform duration-500 group-hover/product:scale-[1.02]"
                 />

@@ -16,7 +16,11 @@ const SIGNAL_GRADIENT = {
 
 // Each hero line fades up in turn on first paint. Pure CSS (tw-animate), so the
 // reduced-motion block in globals.css already neutralises it.
-const REVEAL = 'animate-in fade-in slide-in-from-bottom-3 duration-700 ease-out fill-mode-[both]';
+const REVEAL = 'animate-in fade-in slide-in-from-bottom-3 duration-1000 ease-out fill-mode-[both]';
+// The h1 slides in but never starts invisible: Chrome does not count text
+// painted at opacity 0 toward LCP, so a fade-in held the name (the home page's
+// LCP element) back until the next repaint - ~5s later on a throttled phone.
+const SLIDE = 'animate-in slide-in-from-bottom-3 duration-1000 ease-out fill-mode-[both]';
 
 export function Hero() {
   return (
@@ -28,27 +32,31 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto w-full max-w-5xl px-4 sm:px-6">
-        <h1
-          className={`font-pixel text-[clamp(3.5rem,14vw,8rem)] leading-[0.85] tracking-tight ${REVEAL}`}
-        >
-          kbs
+        {/* One h1 holding both the wordmark and the full name, so the page's
+            main heading - what search engines weigh most - carries the name
+            people actually search for, not just "kbs". Looks identical. */}
+        <h1>
+          <span
+            className={`block font-pixel text-[clamp(3.5rem,14vw,8rem)] leading-[0.85] tracking-tight ${SLIDE}`}
+          >
+            kbs
+          </span>
+          <span
+            className={`mt-5 block font-mono text-sm tracking-[0.2em] text-muted-foreground uppercase ${SLIDE} delay-150`}
+          >
+            <ScrambleText text={profile.fullName} delay={350} duration={1300} replayOnHover="self" />
+          </span>
         </h1>
-
-        <p
-          className={`mt-5 font-mono text-sm tracking-[0.2em] text-muted-foreground uppercase ${REVEAL} delay-100`}
-        >
-          <ScrambleText text={profile.fullName} delay={250} />
-        </p>
 
         {/* text-balance rather than whitespace-nowrap: at the larger size a
             forced single line overflowed the container between lg and xl. */}
         <p
-          className={`mt-6 max-w-3xl text-xl leading-relaxed text-balance text-muted-foreground sm:text-2xl ${REVEAL} delay-200`}
+          className={`mt-6 max-w-3xl text-xl leading-relaxed text-balance text-muted-foreground sm:text-2xl ${REVEAL} delay-300`}
         >
           {profile.bio}
         </p>
 
-        <div className={`mt-8 flex flex-wrap items-center gap-3 ${REVEAL} delay-300`}>
+        <div className={`mt-8 flex flex-wrap items-center gap-3 ${REVEAL} delay-[450ms]`}>
           <Link
             href="/resume"
             className="group inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-base font-medium text-background transition-opacity hover:opacity-90"
@@ -67,7 +75,7 @@ export function Hero() {
           <SocialLinks className="ml-1" />
         </div>
 
-        <p className={`mt-12 font-mono text-sm text-muted-foreground ${REVEAL} delay-[400ms]`}>
+        <p className={`mt-12 font-mono text-sm text-muted-foreground ${REVEAL} delay-[600ms]`}>
           {education.degree} · {education.school} · {education.period.split(' - ')[1]}
         </p>
       </div>

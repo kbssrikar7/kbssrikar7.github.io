@@ -2,11 +2,14 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ViewTransition } from 'react';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { GithubIcon } from '@/components/site/icons';
 import { GeneratedCover } from '@/components/project/generated-cover';
+import { ProjectWriteup } from '@/components/project/project-writeup';
 import { allProjects, getProject, BUCKET_LABELS } from '@/lib/projects';
 import { profile } from '@/data/profile';
+import { jsonLdString, projectJsonLd } from '@/lib/structured-data';
 
 export function generateStaticParams() {
   return allProjects.map((p) => ({ slug: p.slug }));
@@ -43,6 +46,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <article className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(projectJsonLd(project)) }} />
       <Link
         href="/projects"
         className="group inline-flex items-center gap-1.5 font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -88,6 +92,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         )}
       </header>
 
+      <ViewTransition name={`project-${project.slug}`} share="morph" default="none">
       <div className="relative mt-12 aspect-[1200/750] w-full overflow-hidden rounded-xl border border-border bg-card">
         {project.preview ? (
           <Image
@@ -102,6 +107,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <GeneratedCover project={project} />
         )}
       </div>
+      </ViewTransition>
 
       <div className="mt-12 grid gap-10 sm:grid-cols-3">
         <div className="sm:col-span-2">
@@ -140,6 +146,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           </ul>
         </div>
       </div>
+
+      {project.writeup && <ProjectWriteup writeup={project.writeup} />}
     </article>
   );
 }

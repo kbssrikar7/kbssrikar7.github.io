@@ -7,7 +7,7 @@ import { BUCKET_LABELS, type Project } from '@/lib/projects';
  *
  * `project.hue` is assigned once in lib/projects.ts and shared with the OG card.
  */
-export function GeneratedCover({ project }: { project: Project }) {
+export function GeneratedCover({ project, framed = false }: { project: Project; framed?: boolean }) {
   const hue = project.hue;
   const tint = `oklch(0.62 0.13 ${hue})`;
 
@@ -33,12 +33,18 @@ export function GeneratedCover({ project }: { project: Project }) {
         }}
       />
 
-      <div className="relative flex items-center justify-between">
-        <span className="font-mono text-[13px] uppercase tracking-[0.18em] text-white/80">
-          {BUCKET_LABELS[project.bucket]}
-        </span>
-        <span className="font-pixel text-sm text-white/60">kbs</span>
-      </div>
+      {/* Inside a card's browser frame the panel header already names the
+          bucket, so the cover drops its own label and mark. */}
+      {framed ? (
+        <span />
+      ) : (
+        <div className="relative flex items-center justify-between">
+          <span className="font-mono text-[13px] uppercase tracking-[0.18em] text-white/80">
+            {BUCKET_LABELS[project.bucket]}
+          </span>
+          <span className="font-pixel text-sm text-white/60">kbs</span>
+        </div>
+      )}
 
       <div className="relative">
         <h3

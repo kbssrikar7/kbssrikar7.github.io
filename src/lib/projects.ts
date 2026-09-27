@@ -1,6 +1,7 @@
 import { manualProjects, type ManualProject } from '@/data/projects.manual';
 import curated from '@/data/projects.curated.json';
 import previewManifest from '../../public/previews/manifest.json';
+import { thumbName } from './preview-thumb';
 
 export type Bucket = 'applied-ml' | 'full-stack' | 'embedded-iot' | 'systems-tooling';
 
@@ -12,6 +13,8 @@ export type Project = ManualProject & {
   featured: boolean;
   /** Captured screenshot, or null when the card renders a generated cover. */
   preview: string | null;
+  /** 1200px-wide copy of `preview` for cards. Null exactly when `preview` is. */
+  thumb: string | null;
   /** Decorative hue for the generated cover and the OG card. See assignHues. */
   hue: number;
 };
@@ -68,6 +71,7 @@ const merged: Project[] = manualProjects.map((m) => {
     demoable: Boolean(m.liveUrl) && (s?.demoable ?? false),
     featured: false,
     preview: previewFor(m.slug),
+    thumb: previews[m.slug] ? `/previews/${thumbName(previews[m.slug])}` : null,
     hue: 0,
   };
 });

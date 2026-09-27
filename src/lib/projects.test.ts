@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { manualProjects } from '@/data/projects.manual';
 import { allProjects, featuredProjects, getProject, BUCKET_LABELS } from './projects';
@@ -23,6 +25,13 @@ describe('projects', () => {
     expect(featuredProjects.length).toBeLessThanOrEqual(6);
     expect(featuredProjects.some((p) => p.slug === 'handwritten-equation-solver')).toBe(true);
     expect(featuredProjects.some((p) => p.slug === 'headphonesafety')).toBe(true);
+  });
+
+  it('ships a card-sized thumbnail beside every preview', () => {
+    for (const p of allProjects.filter((p) => p.preview)) {
+      expect(existsSync(join(process.cwd(), 'public', p.preview!))).toBe(true);
+      expect(existsSync(join(process.cwd(), 'public', p.thumb!))).toBe(true);
+    }
   });
 
   it('looks projects up by slug', () => {

@@ -49,14 +49,19 @@ Uses `puppeteer-core` against the system Chrome (no bundled browser download).
 Three tiers:
 
 1. **Live capture** for projects with a working demo. Handles Streamlit's
-   "app has gone to sleep" interstitial by clicking through and waiting.
+   "app has gone to sleep" interstitial by clicking through and waiting. Demos
+   that only show something after input have a `PREPARE` step in the script
+   (ask MediQuery a question, run a risk assessment, solve a sample, calculate
+   a cost) so the capture shows real output, not an empty form.
 2. **README pull** for repos that ship their own screenshots, letterboxed onto the
-   same canvas so the grid stays uniform.
+   same canvas so the grid stays uniform. Wins over a live capture when set -
+   used where the live app opens on a login screen.
 3. **Generated cover** for everything else - rendered in the DOM
-   (`components/project/generated-cover.tsx`), not as a file.
+   (`components/project/generated-cover.tsx`), not as a file. Demos behind a
+   login with no README screenshot are listed in `LOGIN_WALLED` and land here.
 
-Writes `public/previews/*.webp` plus a `manifest.json`. Anything missing from the
-manifest falls back to tier 3 automatically.
+Writes `public/previews/*.webp` plus a `manifest.json`. A demo that fails keeps
+its previous image; files nothing references any more are deleted.
 
 ### 3. OG images - automatic at build
 
@@ -141,3 +146,12 @@ Clicking the count opens the site's public Umami dashboard, if configured: in Um
 open this website's settings and enable **Share URL**, then set
 `NEXT_PUBLIC_UMAMI_SHARE_URL` (same three places as the analytics vars above). Without
 it, the count still shows, just isn't a link.
+
+## Search Console
+
+To verify ownership in Google Search Console, pick the **HTML tag** method and
+copy only the `content` token. Add it as `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
+to the build environment - a GitHub Actions repository variable for Pages, and a
+Vercel environment variable for the mirror - then redeploy. Once verified, submit
+`https://kbssrikar7.github.io/sitemap.xml`. The layout emits the meta tag only
+when the variable is set.

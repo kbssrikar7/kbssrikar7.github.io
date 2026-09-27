@@ -106,7 +106,57 @@
 }
 
 /* The whole design leans on motion; honour the OS setting. */
+/* ScrambleText 'mount': a real-text layer and a glyph layer stacked in one
+   grid cell. No JS: real text. JS: glyphs from first paint until the script
+   goes live (so the text is painted immediately - it is the home page's LCP);
+   if the script never arrives, the failsafe swaps to real text after 3s. */
+html:not(.js) [data-scramble-glyph],
+[data-scramble][data-live] [data-scramble-real],
+[data-scramble][data-static] [data-scramble-glyph] {
+  visibility: hidden;
+}
+.js [data-scramble]:not([data-live], [data-static]) [data-scramble-real] {
+  visibility: hidden;
+  animation: scramble-show 0s linear 3s forwards;
+}
+.js [data-scramble]:not([data-live], [data-static]) [data-scramble-glyph] {
+  animation: scramble-hide 0s linear 3s forwards;
+}
+[data-scramble][data-static] [data-scramble-real] {
+  visibility: visible;
+}
+/* Reduced motion: real text from the first frame, never a glyph. */
 @media (prefers-reduced-motion: reduce) {
+  [data-scramble]:not([data-live]) [data-scramble-real] {
+    visibility: visible !important;
+  }
+  [data-scramble]:not([data-live]) [data-scramble-glyph] {
+    visibility: hidden !important;
+  }
+}
+@keyframes scramble-show {
+  to {
+    visibility: visible;
+  }
+}
+@keyframes scramble-hide {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Project card screenshot -> project page hero (see <ViewTransition> in both). */
+::view-transition-group(.morph) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
   *,
   *::before,
   *::after {

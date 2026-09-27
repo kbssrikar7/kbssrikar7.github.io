@@ -1,11 +1,44 @@
-# kbssrikar7.github.io
+# K.B.S Srikar - Developer Portfolio
 
-Personal site for K.B.S Srikar. Next.js static export, deployed to GitHub Pages.
+The developer portfolio of **K.B.S Srikar**, a software engineer working across
+full-stack development, applied ML, and embedded IoT.
+
+**Live: [kbssrikar7.github.io](https://kbssrikar7.github.io)**
+
+![Portfolio home page: the kbs wordmark, name, and links](.github/assets/hero.png)
+
+## Features
+
+- **Project cards** - every project screenshot sits in the same browser frame on a
+  panel tinted with that project's colour, with its headline metric and a
+  cursor-following glow on hover.
+- **Real demo screenshots** - a Puppeteer script drives each live demo to real
+  output before capturing it (a RAG answer with its confidence score, a risk
+  assessment, a solved equation), instead of an empty form.
+- **Project write-ups** - how each system works, the engineering decisions behind
+  it, and its known limits, taken from the project's own repo.
+- **Scramble-decode name** in the hero, a command palette (<kbd>⌘K</kbd>), and
+  single-key navigation (`h` `w` `p` `r`).
+- **Page transitions** - the card screenshot morphs into the project page with the
+  View Transitions API.
+- **Fast and indexable** - static export, 0 layout shift, responsive images on a
+  host with no image optimizer, Person / project / breadcrumb structured data, and
+  per-page Open Graph cards. Lighthouse 100 on accessibility, best practices and SEO.
+
+![Selected projects grid with framed screenshots](.github/assets/projects.png)
+
+![A project write-up: pipeline, engineering notes, known limits](.github/assets/writeup.png)
 
 ## Stack
 
-Next.js 16 (App Router, `output: 'export'`) · React 19 · Tailwind v4 · shadcn/ui ·
-[Aceternity UI](https://ui.aceternity.com) · `motion` · Geist Sans / Mono / Pixel
+- **Framework** - [Next.js 16](https://nextjs.org) (App Router, static export) and React 19
+- **Styling** - [Tailwind CSS v4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com),
+  and [Aceternity UI](https://ui.aceternity.com) for the hero spotlight
+- **Motion** - [`motion`](https://motion.dev), CSS animations, View Transitions
+- **Type** - Geist Sans, Geist Mono, and Geist Pixel
+- **Tooling** - TypeScript, Vitest, Puppeteer, and [TypeSafe](https://typesafe.ai)
+  for build-time project ranking
+- **Hosting** - GitHub Pages (canonical), with a Vercel mirror
 
 ## Local
 
@@ -149,9 +182,16 @@ it, the count still shows, just isn't a link.
 
 ## Search Console
 
-To verify ownership in Google Search Console, pick the **HTML tag** method and
-copy only the `content` token. Add it as `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
-to the build environment - a GitHub Actions repository variable for Pages, and a
-Vercel environment variable for the mirror - then redeploy. Once verified, submit
-`https://kbssrikar7.github.io/sitemap.xml`. The layout emits the meta tag only
-when the variable is set.
+The site is verified in Google Search Console with the **HTML file** method:
+`public/google7a6345abb1345e2e.html` is served at the site root. Do not delete it,
+or the property loses its verified status. The sitemap
+(`https://kbssrikar7.github.io/sitemap.xml`) is submitted there.
+
+The layout can also emit a verification meta tag: set
+`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` (a GitHub Actions repository variable for
+Pages, a Vercel environment variable for the mirror) to the token from the
+**HTML tag** method. It is only needed if a second verification method is wanted.
+
+## License
+
+[MIT](LICENSE)

@@ -9,6 +9,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandShortcut,
 } from '@/components/ui/command';
 import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
@@ -88,7 +89,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
           {NAV.map((n) => (
             <CommandItem key={n.href} value={n.label} onSelect={() => go(n.href)}>
               {n.label}
-              <span className="ml-auto font-mono text-[13px] text-muted-foreground">{n.key}</span>
+              <CommandShortcut className="font-mono text-[13px] tracking-normal">{n.key}</CommandShortcut>
             </CommandItem>
           ))}
         </CommandGroup>
@@ -111,7 +112,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
               onSelect={() => window.open(s.href, '_blank', 'noopener,noreferrer')}
             >
               {s.label}
-              <span className="ml-auto font-mono text-[13px] text-muted-foreground">@{s.handle}</span>
+              <CommandShortcut className="font-mono text-[13px] tracking-normal">@{s.handle}</CommandShortcut>
             </CommandItem>
           ))}
           <CommandItem
@@ -123,17 +124,17 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
             }}
           >
             email
-            <span className="ml-auto font-mono text-[13px] text-muted-foreground">
+            <CommandShortcut className="font-mono text-[13px] tracking-normal">
               {profile.email}
-            </span>
+            </CommandShortcut>
           </CommandItem>
         </CommandGroup>
         <CommandGroup heading="Preferences">
           <CommandItem value="Toggle single-key shortcuts" onSelect={toggleSingleKeyNav}>
             {singleKeyNav ? 'disable' : 'enable'} single-key shortcuts
-            <span className="ml-auto font-mono text-[13px] text-muted-foreground">
+            <CommandShortcut className="font-mono text-[13px] tracking-normal">
               h w p r
-            </span>
+            </CommandShortcut>
           </CommandItem>
         </CommandGroup>
       </CommandList>

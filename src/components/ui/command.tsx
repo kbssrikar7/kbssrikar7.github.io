@@ -65,7 +65,11 @@ function CommandDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        {children}
+        {/* The <Command> root is required: cmdk's Input/List/Item read their
+            store from it. Without it, opening the palette threw
+            "Cannot read properties of undefined (reading 'subscribe')" and
+            took the whole page down. */}
+        <Command>{children}</Command>
       </DialogContent>
     </Dialog>
   )

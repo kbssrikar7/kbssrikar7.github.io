@@ -26,7 +26,9 @@ const nextConfig: NextConfig = {
   // GitHub Pages serves no image optimization endpoint, so its export must ship
   // raw images. Vercel runs Next's own image optimizer - only force it off on
   // the host that actually needs that.
-  images: { unoptimized: !isVercel },
+  images: isVercel
+    ? {}
+    : { loader: 'custom', loaderFile: './src/lib/image-loader.ts' },
 };
 
 export default nextConfig;

@@ -31,6 +31,7 @@ describe('projects', () => {
     for (const p of allProjects.filter((p) => p.preview)) {
       expect(existsSync(join(process.cwd(), 'public', p.preview!))).toBe(true);
       expect(existsSync(join(process.cwd(), 'public', p.thumb!))).toBe(true);
+      expect(existsSync(join(process.cwd(), 'public', p.preview!.replace(/\.webp$/, '-800.webp')))).toBe(true);
     }
   });
 

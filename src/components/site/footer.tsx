@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
+import { StarOnGitHub } from './star-on-github';
 
 const YEAR = new Date().getFullYear();
 
@@ -64,10 +65,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border/60 py-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-6">
           <p className="font-mono text-[13px] text-muted-foreground">
             © {YEAR} {profile.name}
           </p>
+          <StarOnGitHub />
         </div>
       </div>
 

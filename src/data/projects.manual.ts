@@ -23,6 +23,15 @@ export type ManualProject = {
   /** A screenshot from the repo's README. When set it wins over capturing liveUrl. */
   readmeImage?: string;
   /**
+   * GitHub repo name when it differs from the slug. `null` for a private repo
+   * (client work): no source link anywhere, since it would 404 for visitors.
+   */
+  repo?: string | null;
+  /** Text of the live-URL button; "live demo" unless the thing is a real site. */
+  liveLabel?: string;
+  /** Built for a client: shown under the "client work" category. */
+  clientWork?: boolean;
+  /**
    * The technical write-up on the project page, for engineers reading past the
    * card. Every claim here is taken from the project's own repo and README.
    */
@@ -34,6 +43,37 @@ export type ManualProject = {
 };
 
 export const manualProjects: ManualProject[] = [
+  {
+    slug: 'libraa-website',
+    title: 'Libraa Group',
+    repo: null,
+    clientWork: true,
+    blurb: 'Freelance project: the company website for Libraa Group, a ship-management and marine-services firm, covering its services, 16-vessel fleet, clients and certifications. Live at libraa.com.',
+    detail:
+      "Built and shipped as a freelance project for Libraa Group, a ship-management, crew-management and marine-services company operating since 2009 from Chennai, Kakinada and Port Blair. One static page covers its seven service lines, a sixteen-vessel fleet slider, thirty-one clients from the Indian Navy and Adani Ports to Reliance and JSW, its offices and operating ports, certifications, leadership and careers. Every name, flag, certificate number and address on the page comes from the company's verified records. It is served from Cloudflare Pages at www.libraa.com, with the old site's pages that still appear in search redirected to the new one.",
+    tech: ['Next.js', 'React', 'TypeScript', 'Cloudflare Pages', 'Puppeteer', 'Python'],
+    liveUrl: 'https://www.libraa.com',
+    liveLabel: 'visit site',
+    metrics: [
+      { value: '100', label: 'Lighthouse SEO' },
+      { value: '16', label: 'vessels in the fleet slider' },
+      { value: '31', label: 'clients listed' },
+    ],
+    writeup: {
+      pipeline: [
+        { step: 'Content', detail: "Every vessel, flag, certificate number, client and office on the page comes from the company's verified records, not from copywriting." },
+        { step: 'Photos', detail: 'A Python script encodes each photo to AVIF at several widths, choosing the lowest quality that keeps SSIM above a threshold, with a stricter one for photos of people. Each image loads at the width it is drawn; browsers without AVIF get the original.' },
+        { step: 'Build', detail: 'A Next.js static export: plain HTML, CSS and JavaScript, no server.' },
+        { step: 'Hosting', detail: 'Cloudflare Pages at www.libraa.com, with security headers, year-long caching for hashed build files and one-day caching for photos, which keep their names when replaced.' },
+        { step: 'Verification', detail: 'A Puppeteer script checks the built page before release: fleet slider behaviour, fonts, layout and screenshot sanity.' },
+      ],
+      notes: [
+        { title: 'Previews before photos', body: 'Each fleet photo ships with a tiny blurred preview inlined in the page, so a slide that comes into view before its photo has downloaded shows the ship softly instead of an empty box.' },
+        { title: 'Keeping old search results', body: "Two pages of the company's previous site were still showing in Google, so they redirect permanently to the new page instead of landing on a 404." },
+        { title: 'A company, not a star sign', body: 'Search engines read "Libraa" as a misspelling of "Libra". Organization structured data now states the company, its address and contacts, so it is read as a business.' },
+      ],
+    },
+  },
   {
     slug: 'healthcare-qa-chatbot',
     title: 'MediQuery',

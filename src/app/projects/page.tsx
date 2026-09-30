@@ -6,7 +6,7 @@ import { profile } from '@/data/profile';
 
 const title = 'Projects';
 const description =
-  'RAG systems, cardiac MRI pipelines, cross-platform audio tooling, ESP32 fleets, and a self-hosted UPI gateway.';
+  'Client work for a ship-management firm, RAG systems, cardiac MRI pipelines, cross-platform audio tooling, ESP32 fleets, and a self-hosted UPI gateway.';
 const url = `${profile.siteUrl}/projects/`;
 
 export const metadata: Metadata = {

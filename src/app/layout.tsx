@@ -93,6 +93,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           <Script
             src={process.env.NEXT_PUBLIC_UMAMI_SRC}
             data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            // Only the real hosts are tracked - without this, every localhost
+            // dev reload and test run was recorded as a page view.
+            data-domains={[...new Set([profile.siteUrl, profile.deployedUrl].map((u) => new URL(u).host))].join(',')}
             strategy="afterInteractive"
           />
         )}

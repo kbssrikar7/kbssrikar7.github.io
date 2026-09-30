@@ -111,21 +111,23 @@ export function ProjectCard({
           </Heading>
           {/* z-10 lifts these above the title link's stretched ::after overlay. */}
           <div className="relative z-10 flex shrink-0 items-center gap-2 pt-0.5">
-            <a
-              href={project.repoUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`${project.title} source on GitHub`}
-              className="text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <GithubIcon className="size-[18px]" />
-            </a>
+            {project.repoUrl && (
+              <a
+                href={project.repoUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${project.title} source on GitHub`}
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <GithubIcon className="size-[18px]" />
+              </a>
+            )}
             {project.liveUrl && (
               <a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`${project.title} live demo`}
+                aria-label={`${project.title} ${project.liveLabel ?? 'live demo'}`}
                 className="text-muted-foreground transition-colors hover:text-signal"
               >
                 <ArrowUpRight className="size-[18px]" />

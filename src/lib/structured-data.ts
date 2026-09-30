@@ -68,13 +68,21 @@ function breadcrumbs(title: string, url: string) {
 
 function projectSource(project: Project, url: string) {
   return {
-    '@type': 'SoftwareSourceCode',
+    // A project with no public repo (client work) is a published work, not
+    // source code anyone can read - claiming SoftwareSourceCode would be wrong.
+    '@type': project.repoUrl ? 'SoftwareSourceCode' : 'CreativeWork',
     name: project.title,
     description: project.blurb,
     url,
-    codeRepository: project.repoUrl,
+    ...(project.repoUrl ? { codeRepository: project.repoUrl } : {}),
     keywords: project.tech.join(', '),
-    ...(project.liveUrl ? { targetProduct: { '@type': 'SoftwareApplication', name: project.title, url: project.liveUrl } } : {}),
+    // targetProduct only exists on SoftwareSourceCode. For client work the live
+    // site IS the work, so it is the same thing at another URL.
+    ...(project.liveUrl
+      ? project.repoUrl
+        ? { targetProduct: { '@type': 'SoftwareApplication', name: project.title, url: project.liveUrl } }
+        : { sameAs: project.liveUrl }
+      : {}),
     author: { '@type': 'Person', '@id': PERSON_ID, name: profile.name, url: `${profile.siteUrl}/` },
   };
 }

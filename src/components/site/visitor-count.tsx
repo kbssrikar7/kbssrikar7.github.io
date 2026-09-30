@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 import { Eye } from 'lucide-react';
-import { COUNTER_URL, COUNTER_PROMISE } from './visitor-count-config';
+import { counterUrl, COUNTER_PROMISE } from './visitor-count-config';
 
 // Why the count used to show up late: the request only started in a
 // useEffect, i.e. after the whole JS bundle had downloaded and React had
@@ -53,7 +53,7 @@ function start() {
     | undefined;
   const request =
     early ??
-    fetch(COUNTER_URL, { signal: AbortSignal.timeout(8000) }).then((r) => r.json());
+    fetch(counterUrl(), { signal: AbortSignal.timeout(8000) }).then((r) => r.json());
 
   request
     .then((data) => {

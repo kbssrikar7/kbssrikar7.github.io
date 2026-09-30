@@ -3,10 +3,12 @@ import curated from '@/data/projects.curated.json';
 import previewManifest from '../../public/previews/manifest.json';
 import { thumbName } from './preview-thumb';
 
-export type Bucket = 'applied-ml' | 'full-stack' | 'embedded-iot' | 'systems-tooling';
+/** 'client-work' is set by hand (ManualProject.clientWork), never by the model. */
+export type Bucket = 'client-work' | 'applied-ml' | 'full-stack' | 'embedded-iot' | 'systems-tooling';
 
 export type Project = ManualProject & {
-  repoUrl: string;
+  /** Null for a private repo - no source link is shown. */
+  repoUrl: string | null;
   score: number;
   bucket: Bucket;
   demoable: boolean;
@@ -20,6 +22,7 @@ export type Project = ManualProject & {
 };
 
 export const BUCKET_LABELS: Record<Bucket, string> = {
+  'client-work': 'client work',
   'applied-ml': 'applied ml',
   'full-stack': 'full-stack',
   'embedded-iot': 'embedded + iot',
@@ -64,11 +67,13 @@ const merged: Project[] = manualProjects.map((m) => {
   const s = signals[m.slug];
   return {
     ...m,
-    repoUrl: `https://github.com/kbssrikar7/${m.slug}`,
+    repoUrl: m.repo === null ? null : `https://github.com/kbssrikar7/${m.repo ?? m.slug}`,
     score: s?.score ?? 0,
-    bucket: toBucket(s?.bucket),
-    // A dead hosted demo is still not demoable, whatever the model thinks.
-    demoable: Boolean(m.liveUrl) && (s?.demoable ?? false),
+    bucket: m.clientWork ? 'client-work' : toBucket(s?.bucket),
+    // A dead hosted demo is still not demoable, whatever the model thinks. A
+    // project the model never ranked (client work, no public repo) is judged
+    // on its live URL alone.
+    demoable: Boolean(m.liveUrl) && (s ? s.demoable : true),
     featured: false,
     preview: previewFor(m.slug),
     thumb: previews[m.slug] ? `/previews/${thumbName(previews[m.slug])}` : null,
@@ -76,7 +81,16 @@ const merged: Project[] = manualProjects.map((m) => {
   };
 });
 
-const ranked = [...merged].sort((a, b) => b.score - a.score);
+/**
+ * Shipped client work leads the list regardless of score: it is live in
+ * production for a real company, which the model's repo-based ranking cannot
+ * see (the repo is private). Hues are assigned before it is inserted, so the
+ * other cards keep their colours.
+ */
+const LEAD = 'libraa-website';
+const LEAD_HUE = 215; // sea blue
+
+const ranked = [...merged].filter((p) => p.slug !== LEAD).sort((a, b) => b.score - a.score);
 
 /**
  * Hue comes from rank position, not from hashing the slug. A slug hash collided
@@ -94,7 +108,14 @@ ranked.forEach((p, i) => {
   p.hue = Math.round((i * GOLDEN_ANGLE) % 360);
 });
 
-const featuredSlugs = new Set<string>(FEATURED_PINS);
+const lead = merged.find((p) => p.slug === LEAD);
+if (lead) {
+  lead.hue = LEAD_HUE;
+  ranked.unshift(lead);
+}
+
+// Only when it exists: a stale LEAD would otherwise hold a featured slot empty.
+const featuredSlugs = new Set<string>([...(lead ? [LEAD] : []), ...FEATURED_PINS]);
 for (const p of ranked) {
   if (featuredSlugs.size >= FEATURED_COUNT) break;
   featuredSlugs.add(p.slug);

@@ -72,19 +72,21 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-base font-medium text-background transition-opacity hover:opacity-90"
             >
-              live demo
+              {project.liveLabel ?? 'live demo'}
               <ArrowUpRight className="size-4" />
             </a>
           )}
-          <a
-            href={project.repoUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-base transition-colors hover:border-signal/40 hover:text-signal"
-          >
-            <GithubIcon className="size-4" />
-            source
-          </a>
+          {project.repoUrl && (
+            <a
+              href={project.repoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-3 text-base transition-colors hover:border-signal/40 hover:text-signal"
+            >
+              <GithubIcon className="size-4" />
+              source
+            </a>
+          )}
         </div>
 
         {project.liveNote && (

@@ -16,7 +16,7 @@ export default async function Image() {
       <OgCard
         eyebrow="projects"
         title={`Projects - ${profile.name}`}
-        description="RAG systems, cardiac MRI pipelines, cross-platform audio tooling, ESP32 fleets, and a self-hosted UPI gateway."
+        description="Client work for a ship-management firm, RAG systems, cardiac MRI pipelines, cross-platform audio tooling, ESP32 fleets, and a self-hosted UPI gateway."
       />
     ),
     { ...size, fonts: await ogFonts() }

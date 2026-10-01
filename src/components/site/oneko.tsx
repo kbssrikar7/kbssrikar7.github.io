@@ -7,11 +7,16 @@ import { useEffect } from 'react';
 // survives client-side navigation, with the fixes the original lacks: it
 // runs on requestAnimationFrame (so it stops in background tabs), never takes
 // clicks, adds a listener instead of overwriting document.onmousemove, and
-// stays off touch screens and for anyone who asked for reduced motion.
+// stays off for anyone who asked for reduced motion. Pointer events cover
+// mouse, pen and touch alike, so on a phone it runs to wherever you tap.
 
 const SPRITE = 32;
 const SPEED = 10;
 const TICK_MS = 100;
+// Just under the sticky nav (64px tall), in the left gutter - the original
+// started at (32, 32), on top of the "kbs" logo on phones.
+const START_X = 32;
+const START_Y = 96;
 
 type Frame = readonly [number, number];
 
@@ -33,12 +38,7 @@ const SPRITES: Record<string, readonly Frame[]> = {
 
 export function Oneko() {
   useEffect(() => {
-    if (
-      !matchMedia('(hover: hover) and (pointer: fine)').matches ||
-      matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return;
-    }
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const el = document.createElement('div');
     el.setAttribute('aria-hidden', 'true');
@@ -46,8 +46,8 @@ export function Oneko() {
       width: `${SPRITE}px`,
       height: `${SPRITE}px`,
       position: 'fixed',
-      left: '16px',
-      top: '16px',
+      left: `${START_X - SPRITE / 2}px`,
+      top: `${START_Y - SPRITE / 2}px`,
       // Above the sticky nav (z-40), below the ⌘K dialog (z-50).
       zIndex: '45',
       pointerEvents: 'none',
@@ -57,20 +57,24 @@ export function Oneko() {
     document.body.appendChild(el);
     setSprite('idle', 0);
 
-    let catX = 32;
-    let catY = 32;
-    let mouseX = 0;
-    let mouseY = 0;
+    let catX = START_X;
+    let catY = START_Y;
+    // Sits still until the first move or tap.
+    let mouseX = START_X;
+    let mouseY = START_Y;
     let frameCount = 0;
     let idleTime = 0;
     let idleAnimation: 'sleeping' | 'scratch' | null = null;
     let idleFrame = 0;
 
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
     };
-    document.addEventListener('mousemove', onMove);
+    // pointerdown for taps, which never fire a move; passive so scrolling
+    // is never held up.
+    document.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('pointerdown', onMove, { passive: true });
 
     function setSprite(name: string, n: number) {
       const [x, y] = SPRITES[name][n % SPRITES[name].length];
@@ -156,7 +160,8 @@ export function Oneko() {
 
     return () => {
       cancelAnimationFrame(raf);
-      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerdown', onMove);
       el.remove();
     };
   }, []);

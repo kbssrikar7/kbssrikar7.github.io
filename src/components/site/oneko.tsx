@@ -6,9 +6,11 @@ import { useEffect } from 'react';
 // Ported from the plain script so it mounts once in the root layout and
 // survives client-side navigation, with the fixes the original lacks: it
 // runs on requestAnimationFrame (so it stops in background tabs), never takes
-// clicks, adds a listener instead of overwriting document.onmousemove, and
-// stays off for anyone who asked for reduced motion. Pointer events cover
-// mouse, pen and touch alike, so on a phone it runs to wherever you tap.
+// clicks, and adds a listener instead of overwriting document.onmousemove.
+// Pointer events cover mouse, pen and touch alike, so on a phone it runs to
+// wherever you tap. It also shows with reduced motion on: it only moves in
+// response to the visitor's own input, and phone battery savers can turn that
+// setting on, which hid it on phones.
 
 const SPRITE = 32;
 const SPEED = 10;
@@ -38,8 +40,6 @@ const SPRITES: Record<string, readonly Frame[]> = {
 
 export function Oneko() {
   useEffect(() => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
     const el = document.createElement('div');
     el.setAttribute('aria-hidden', 'true');
     Object.assign(el.style, {

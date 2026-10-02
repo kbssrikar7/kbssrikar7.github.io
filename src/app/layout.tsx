@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
 import localFont from 'next/font/local';
 import { profile } from '@/data/profile';
 import { cn } from '@/lib/utils';
@@ -13,8 +11,30 @@ import { COUNTER_BOOTSTRAP, COUNTER_ORIGIN } from '@/components/site/visitor-cou
 import { allProjects } from '@/lib/projects';
 import './globals.css';
 
-// Not `geist/font/pixel`: that module declares all five pixel variants, and
-// Next preloads every one of them on every page. Only Square is used.
+// The Geist fonts are self-hosted and subset (see scripts/subset-fonts.py):
+// Latin only, weights 400-700. The packages' full variable files were ~70KB
+// each and shared a slow connection with the JS bundle, so the real fonts
+// landed seconds after first paint and the page visibly swapped.
+//
+// Pixel is not `geist/font/pixel` either: that module declares all five pixel
+// variants, and Next preloads every one of them on every page. Only Square is
+// used.
+const GeistSans = localFont({
+  src: '../fonts/GeistSans-Variable.woff2',
+  variable: '--font-geist-sans',
+  weight: '400 700',
+  fallback: ['system-ui', 'Arial', 'sans-serif'],
+  adjustFontFallback: 'Arial',
+});
+
+const GeistMono = localFont({
+  src: '../fonts/GeistMono-Variable.woff2',
+  variable: '--font-geist-mono',
+  weight: '400 700',
+  fallback: ['ui-monospace', 'monospace'],
+  adjustFontFallback: false,
+});
+
 const GeistPixelSquare = localFont({
   src: '../../node_modules/geist/dist/fonts/geist-pixel/GeistPixel-Square.woff2',
   variable: '--font-geist-pixel-square',

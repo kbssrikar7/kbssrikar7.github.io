@@ -4,6 +4,7 @@ import { SOCIAL_ICONS } from '@/components/site/social-links';
 import { Hero } from '@/components/sections/hero';
 import { Section } from '@/components/sections/section';
 import { ExperienceList } from '@/components/sections/experience-list';
+import { ContributionList } from '@/components/sections/contribution-list';
 import { ProjectCard } from '@/components/project/project-card';
 import { featuredProjects } from '@/lib/projects';
 import { profile, socials, stack } from '@/data/profile';
@@ -20,13 +21,21 @@ export default function Home() {
       </Section>
 
       <Section
+        id="open-source"
+        label="open source contribution"
+        more={{ href: '/open-source/', label: 'more details' }}
+      >
+        <ContributionList />
+      </Section>
+
+      <Section
         id="projects"
         label="selected projects"
         more={{ href: '/projects', label: 'all projects' }}
       >
         <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2">
           {featuredProjects.map((p, i) => (
-            <ProjectCard key={p.slug} project={p} index={i} priority={i < 2} />
+            <ProjectCard key={p.slug} project={p} index={i} />
           ))}
         </div>
       </Section>

@@ -8,7 +8,7 @@ export const dynamic = 'force-static';
 
 // Routes use trailing slashes to match `trailingSlash: true` in next.config.ts,
 // so the sitemap advertises the same URLs the site actually serves.
-const ROUTES = ['/', '/work/', '/projects/', '/resume/'];
+const ROUTES = ['/', '/work/', '/open-source/', '/projects/', '/resume/'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // A build-stable date rather than new Date(), so rebuilding an unchanged site

@@ -88,7 +88,10 @@ export function ProjectCard({
                   alt=""
                   fill
                   priority={priority}
-                  sizes="(min-width: 1024px) 40vw, 90vw"
+                  // The frame takes 86% of a card; the two-column grid is
+                  // capped at 976px. Report its actual size so wide desktops
+                  // don't download a 2400px preview for a ~406px frame.
+                  sizes="(min-width: 1024px) 406px, (min-width: 640px) calc(43vw - 35px), calc(86vw - 28px)"
                   className="object-cover object-top"
                 />
               ) : (

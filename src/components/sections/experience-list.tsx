@@ -72,7 +72,7 @@ export function ExperienceList({
                   // On /work (detailed) this is the page's largest element near
                   // the top - lazy-loading it pushed LCP past 5s on a slow phone.
                   priority={detailed}
-                  sizes="(min-width: 640px) 42rem, 100vw"
+                  sizes="(min-width: 640px) 576px, calc(100vw - 56px)"
                   className="object-cover object-top transition-transform duration-500 group-hover/product:scale-[1.02]"
                 />
               </div>

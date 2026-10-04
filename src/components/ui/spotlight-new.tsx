@@ -1,6 +1,4 @@
-"use client";
-import React from "react";
-import { motion, useReducedMotion } from "motion/react";
+import type { CSSProperties } from 'react';
 
 type SpotlightProps = {
   gradientFirst?: string;
@@ -29,39 +27,22 @@ export const Spotlight = ({
   // The registry puts z-40 on the beams, which lays them OVER the page
   // content and tints anything white (the hero's resume button went cyan).
   //
-  // These sweeps run through `motion` (JS/WAAPI), so the prefers-reduced-motion
-  // block in globals.css cannot stop them. Without this the gradients oscillate
-  // forever for vestibular-sensitive users.
-  const reduceMotion = useReducedMotion();
-  const sweep = (offset: number) =>
-    reduceMotion
-      ? {}
-      : {
-          animate: { x: [0, offset, 0] },
-          transition: {
-            duration,
-            repeat: Infinity,
-            repeatType: "reverse" as const,
-            ease: "easeInOut" as const,
-          },
-        };
+  // CSS keeps the same fade, sweep, and easing without shipping an animation
+  // library or hydrating this purely decorative component.
+  const sweepStyle = (offset: number) =>
+    ({
+      '--spotlight-offset': `${offset}px`,
+      '--spotlight-duration': `${duration}s`,
+    }) as CSSProperties;
 
   return (
-    <motion.div
-      initial={{
-        opacity: reduceMotion ? 1 : 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-      transition={{
-        duration: reduceMotion ? 0 : 1.5,
-      }}
-      className="pointer-events-none absolute inset-0 h-full w-full"
+    <div
+      aria-hidden="true"
+      className="spotlight-fade pointer-events-none absolute inset-0 h-full w-full"
     >
-      <motion.div
-        {...sweep(xOffset)}
-        className="absolute top-0 left-0 w-screen h-screen pointer-events-none"
+      <div
+        style={sweepStyle(xOffset)}
+        className="spotlight-sweep absolute top-0 left-0 w-screen h-screen pointer-events-none"
       >
         <div
           style={{
@@ -92,11 +73,11 @@ export const Spotlight = ({
           }}
           className={`absolute top-0 left-0 origin-top-left`}
         />
-      </motion.div>
+      </div>
 
-      <motion.div
-        {...sweep(-xOffset)}
-        className="absolute top-0 right-0 w-screen h-screen pointer-events-none"
+      <div
+        style={sweepStyle(-xOffset)}
+        className="spotlight-sweep absolute top-0 right-0 w-screen h-screen pointer-events-none"
       >
         <div
           style={{
@@ -127,7 +108,7 @@ export const Spotlight = ({
           }}
           className={`absolute top-0 right-0 origin-top-right`}
         />
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };

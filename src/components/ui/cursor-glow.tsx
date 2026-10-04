@@ -14,13 +14,25 @@ export function CursorGlow() {
     const glow = ref.current;
     const host = glow?.parentElement;
     if (!glow || !host || !window.matchMedia('(hover: hover)').matches) return;
-    const move = (e: PointerEvent) => {
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    const paint = () => {
+      frame = 0;
       const r = host.getBoundingClientRect();
-      glow.style.setProperty('--x', `${e.clientX - r.left}px`);
-      glow.style.setProperty('--y', `${e.clientY - r.top}px`);
+      glow.style.setProperty('--x', `${pointerX - r.left}px`);
+      glow.style.setProperty('--y', `${pointerY - r.top}px`);
     };
-    host.addEventListener('pointermove', move);
-    return () => host.removeEventListener('pointermove', move);
+    const move = (e: PointerEvent) => {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+    host.addEventListener('pointermove', move, { passive: true });
+    return () => {
+      host.removeEventListener('pointermove', move);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (

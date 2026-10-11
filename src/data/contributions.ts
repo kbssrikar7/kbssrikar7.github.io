@@ -3,6 +3,24 @@ export const contributions = [
   {
     project: 'Focuser',
     repositoryUrl: 'https://github.com/aadeshrao123/Focuser',
+    pullRequestUrl: 'https://github.com/aadeshrao123/Focuser/pull/42',
+    pullRequestNumber: 42,
+    mergedAt: '2026-10-06',
+    mergedLabel: 'October 6, 2026',
+    description: 'An open-source website and application blocker built in Rust.',
+    title: 'Hidden CLI password prompts',
+    summary:
+      'Stopped CLI password locks from exposing secrets in shell history and process listings. Enabling and unlocking protection now prompt for the password in the terminal without echoing it.',
+    stack: ['Rust', 'CLI', 'rpassword'],
+    details: [
+      'Prompted for a password and confirmation on enable, and stopped before changing protection on empty or mismatched input.',
+      'Wrote prompts to the terminal so JSON output stays clean, and failed clearly when a prompt is needed without an interactive terminal.',
+      'Kept explicit password arguments working, with eight regression tests covering confirmation, input errors, missing terminals, and conflicting unlock methods.',
+    ],
+  },
+  {
+    project: 'Focuser',
+    repositoryUrl: 'https://github.com/aadeshrao123/Focuser',
     pullRequestUrl: 'https://github.com/aadeshrao123/Focuser/pull/16',
     pullRequestNumber: 16,
     mergedAt: '2026-09-27',

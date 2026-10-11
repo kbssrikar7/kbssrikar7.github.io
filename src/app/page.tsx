@@ -22,7 +22,7 @@ export default function Home() {
 
       <Section
         id="open-source"
-        label="open source contribution"
+        label="open source contributions"
         more={{ href: '/open-source/', label: 'more details' }}
       >
         <ContributionList />

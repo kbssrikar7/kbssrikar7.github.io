@@ -3,9 +3,9 @@ import { Section } from '@/components/sections/section';
 import { ContributionList } from '@/components/sections/contribution-list';
 import { profile } from '@/data/profile';
 
-const title = 'Open source contribution';
+const title = 'Open source contributions';
 const description =
-  'K.B.S Srikar’s merged contribution to Focuser: password and random-text unlocking across the Rust backend, CLI, and desktop UI.';
+  'K.B.S Srikar’s merged contributions to Focuser: password and random-text unlocking across the Rust backend, CLI, and desktop UI, and hidden CLI password prompts.';
 const url = `${profile.siteUrl}/open-source/`;
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function OpenSourcePage() {
   return (
-    <Section label="open source" title="Open source contribution">
+    <Section label="open source" title="Open source contributions">
       <ContributionList detailed headingLevel="h2" />
     </Section>
   );

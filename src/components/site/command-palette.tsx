@@ -18,7 +18,7 @@ type Entry = { slug: string; title: string };
 
 const SHORTCUTS_KEY = 'kbs:single-key-nav';
 
-export function CommandPalette({ projects }: { projects: Entry[] }) {
+export function CommandPalette({ projects, posts }: { projects: Entry[]; posts: Entry[] }) {
   const [open, setOpen] = useState(false);
   // WCAG 2.1.4: a single letter with no modifier must be possible to turn off,
   // for anyone on speech-input or switch-access software. Cmd/Ctrl+K keeps a
@@ -82,7 +82,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen} title="Search" description="Jump to anything">
-      <CommandInput placeholder="Jump to a page or project..." />
+      <CommandInput placeholder="Jump to a page, project, or post..." />
       <CommandList>
         <CommandEmpty>Nothing found.</CommandEmpty>
         <CommandGroup heading="Pages">
@@ -100,6 +100,13 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
               value={p.title}
               onSelect={() => go(`/projects/${p.slug}`)}
             >
+              {p.title}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+        <CommandGroup heading="Posts">
+          {posts.map((p) => (
+            <CommandItem key={p.slug} value={p.title} onSelect={() => go(`/blog/${p.slug}`)}>
               {p.title}
             </CommandItem>
           ))}
@@ -133,7 +140,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
           <CommandItem value="Toggle single-key shortcuts" onSelect={toggleSingleKeyNav}>
             {singleKeyNav ? 'disable' : 'enable'} single-key shortcuts
             <CommandShortcut className="font-mono text-[13px] tracking-normal">
-              h w p r
+              {NAV.map((n) => n.key).join(' ')}
             </CommandShortcut>
           </CommandItem>
         </CommandGroup>

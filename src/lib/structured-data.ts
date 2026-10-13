@@ -1,5 +1,6 @@
 import { education, profile, socials, stack } from '@/data/profile';
 import type { Project } from '@/lib/projects';
+import type { Post } from '@/lib/posts';
 
 /**
  * schema.org JSON-LD. Search engines use it to tie this site to the person:
@@ -51,16 +52,38 @@ export function projectJsonLd(project: Project) {
   const url = `${profile.siteUrl}/projects/${project.slug}/`;
   return {
     '@context': 'https://schema.org',
-    '@graph': [projectSource(project, url), breadcrumbs(project.title, url)],
+    '@graph': [projectSource(project, url), breadcrumbs('Projects', '/projects/', project.title, url)],
   };
 }
 
-function breadcrumbs(title: string, url: string) {
+export function postJsonLd(post: Post) {
+  const url = `${profile.siteUrl}/blog/${post.slug}/`;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.description,
+        url,
+        mainEntityOfPage: url,
+        datePublished: post.publishedAt,
+        image: `${profile.siteUrl}/blog/${post.slug}/opengraph-image.png`,
+        keywords: post.tags.join(', '),
+        ...(post.originalUrl ? { sameAs: post.originalUrl } : {}),
+        author: { '@type': 'Person', '@id': PERSON_ID, name: profile.name, url: `${profile.siteUrl}/` },
+      },
+      breadcrumbs('Blog', '/blog/', post.title, url),
+    ],
+  };
+}
+
+function breadcrumbs(section: string, sectionPath: string, title: string, url: string) {
   return {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${profile.siteUrl}/` },
-      { '@type': 'ListItem', position: 2, name: 'Projects', item: `${profile.siteUrl}/projects/` },
+      { '@type': 'ListItem', position: 2, name: section, item: `${profile.siteUrl}${sectionPath}` },
       { '@type': 'ListItem', position: 3, name: title, item: url },
     ],
   };

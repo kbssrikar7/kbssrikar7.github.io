@@ -32,7 +32,9 @@ export function Nav() {
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group flex items-center gap-1.5 rounded-md px-1 py-1.5 font-mono text-[13px] transition-colors sm:px-2.5 sm:text-sm',
+                      // One size down below 360px: four words plus the visitor
+                      // count overflow a 320px screen by a few pixels at 13px.
+                      'group flex items-center gap-1.5 rounded-md px-1 py-1.5 font-mono text-[13px] transition-colors max-[359px]:text-xs sm:px-2.5 sm:text-sm',
                       active
                         ? 'text-foreground'
                         : 'text-muted-foreground hover:text-foreground'

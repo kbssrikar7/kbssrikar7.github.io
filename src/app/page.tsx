@@ -6,7 +6,9 @@ import { Section } from '@/components/sections/section';
 import { ExperienceList } from '@/components/sections/experience-list';
 import { ContributionList } from '@/components/sections/contribution-list';
 import { ProjectCard } from '@/components/project/project-card';
+import { PostList } from '@/components/blog/post-list';
 import { featuredProjects } from '@/lib/projects';
+import { allPosts } from '@/lib/posts';
 import { profile, socials, stack } from '@/data/profile';
 import { jsonLdString, personJsonLd } from '@/lib/structured-data';
 
@@ -38,6 +40,10 @@ export default function Home() {
             <ProjectCard key={p.slug} project={p} index={i} />
           ))}
         </div>
+      </Section>
+
+      <Section id="blog" label="blog" more={{ href: '/blog', label: 'all posts' }}>
+        <PostList posts={allPosts.slice(0, 3)} />
       </Section>
 
       <Section id="stack" label="stack">

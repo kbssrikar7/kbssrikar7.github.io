@@ -9,6 +9,7 @@ import { CommandPalette } from '@/components/site/command-palette';
 import { Oneko } from '@/components/site/oneko';
 import { COUNTER_BOOTSTRAP, COUNTER_ORIGIN } from '@/components/site/visitor-count-config';
 import { allProjects } from '@/lib/projects';
+import { posts } from '@/data/posts';
 import './globals.css';
 
 // The Geist fonts are self-hosted and subset (see scripts/subset-fonts.py):
@@ -108,6 +109,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <Footer />
         <CommandPalette
           projects={allProjects.map((p) => ({ slug: p.slug, title: p.title }))}
+          posts={posts.map((p) => ({ slug: p.slug, title: p.title }))}
         />
         <Oneko />
         {/* No-op until NEXT_PUBLIC_UMAMI_SRC/WEBSITE_ID are set - see README. */}

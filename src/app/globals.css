@@ -194,3 +194,125 @@ html:not(.js) [data-scramble-glyph],
 @utility font-pixel {
   font-family: var(--font-geist-pixel-square), ui-monospace, monospace;
 }
+
+/* Blog post body: HTML rendered from markdown (see lib/posts.ts), so it is
+   styled by element rather than by utility class. Long-form reading, so the
+   text is larger and brighter than the muted copy elsewhere on the site. */
+.post-body {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: color-mix(in oklch, var(--foreground) 82%, transparent);
+}
+.post-body > * + * {
+  margin-top: 1.25em;
+}
+.post-body h2 {
+  margin-top: 2.5em;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  text-wrap: balance;
+}
+.post-body h3 {
+  margin-top: 2em;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+.post-body h2 + *,
+.post-body h3 + * {
+  margin-top: 0.75em;
+}
+.post-body h2,
+.post-body h3 {
+  scroll-margin-top: 5rem;
+}
+.post-body strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+/* Some headings are bolded in the source; keep every heading one weight. */
+.post-body :is(h2, h3) strong {
+  font-weight: inherit;
+}
+.post-body p a,
+.post-body li a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border);
+  transition: color 150ms, text-decoration-color 150ms;
+}
+.post-body p a:hover,
+.post-body li a:hover {
+  color: var(--signal);
+  text-decoration-color: var(--signal);
+}
+.post-body ul,
+.post-body ol {
+  padding-left: 1.4em;
+}
+.post-body ul {
+  list-style: disc;
+}
+.post-body ol {
+  list-style: decimal;
+}
+.post-body li + li {
+  margin-top: 0.4em;
+}
+.post-body li::marker {
+  color: var(--muted-foreground);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+.post-body code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  padding: 0.15em 0.4em;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 0.6);
+  background: var(--card);
+  color: var(--foreground);
+}
+.post-body pre {
+  overflow-x: auto;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.4);
+  background: var(--card);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.post-body pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+}
+.post-body hr {
+  margin: 3em 0 2.5em;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+/* Text holds a ~75-character measure (rem, not ch: Geist's "0" is wide, and
+   ch would shrink the smaller-type code blocks); figures take the full
+   content width, since wide diagrams have small labels. */
+.post-body > :not(figure) {
+  max-width: 42rem;
+}
+.post-body > :first-child,
+.post-body hr + * {
+  margin-top: 0;
+}
+.post-body figure a {
+  display: block;
+}
+.post-body img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.4);
+}

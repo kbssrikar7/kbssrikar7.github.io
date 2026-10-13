@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { allProjects, curatedMeta } from '@/lib/projects';
+import { posts } from '@/data/posts';
 import { profile } from '@/data/profile';
 
 // Same requirement as opengraph-image: this is a Route Handler, and a static
@@ -8,7 +9,7 @@ export const dynamic = 'force-static';
 
 // Routes use trailing slashes to match `trailingSlash: true` in next.config.ts,
 // so the sitemap advertises the same URLs the site actually serves.
-const ROUTES = ['/', '/work/', '/open-source/', '/projects/', '/resume/'];
+const ROUTES = ['/', '/work/', '/open-source/', '/projects/', '/blog/', '/resume/'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // A build-stable date rather than new Date(), so rebuilding an unchanged site
@@ -27,6 +28,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: 'yearly' as const,
       priority: p.featured ? 0.7 : 0.5,
+    })),
+    ...posts.map((p) => ({
+      url: `${profile.siteUrl}/blog/${p.slug}/`,
+      lastModified: p.publishedAt,
+      changeFrequency: 'yearly' as const,
+      priority: 0.6,
     })),
   ];
 }

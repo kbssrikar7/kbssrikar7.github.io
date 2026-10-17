@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
 import { StarOnGitHub } from './star-on-github';
+import { VisitorCount } from './visitor-count';
 
 const YEAR = new Date().getFullYear();
 
@@ -13,12 +14,14 @@ function ColumnHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
+// py-1 with no gap between items: the same rhythm as 8px gaps, but each link
+// is a 27px-tall tap target instead of a 19px one.
 const linkClass =
-  'font-mono text-[15px] text-muted-foreground transition-colors hover:text-foreground';
+  'inline-block py-1 font-mono text-[15px] text-muted-foreground transition-colors hover:text-foreground';
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-border/60">
+    <footer className="mt-12 border-t border-border/60 sm:mt-16">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
         <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16 sm:grid-cols-4">
           <div className="col-span-2">
@@ -38,7 +41,7 @@ export function Footer() {
 
           <nav aria-label="Footer">
             <ColumnHeading>navigate</ColumnHeading>
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-3">
               {NAV.map((n) => (
                 <li key={n.href}>
                   <Link href={n.href} className={linkClass}>
@@ -53,7 +56,7 @@ export function Footer() {
             <ColumnHeading>elsewhere</ColumnHeading>
             {/* Only real external links get target="_blank" - the old list
                 included the mailto, which opens a stray blank tab. */}
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-3">
               {socials.map((s) => (
                 <li key={s.key}>
                   <a href={s.href} target="_blank" rel="noreferrer" className={linkClass}>
@@ -69,7 +72,10 @@ export function Footer() {
           <p className="font-mono text-[13px] text-muted-foreground">
             © {YEAR} {profile.name}
           </p>
-          <StarOnGitHub />
+          <div className="flex items-center gap-3">
+            <VisitorCount href={process.env.NEXT_PUBLIC_UMAMI_SHARE_URL} />
+            <StarOnGitHub />
+          </div>
         </div>
       </div>
 

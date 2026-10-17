@@ -34,11 +34,11 @@ full-stack development, applied ML, and embedded IoT.
 - **Framework** - [Next.js 16](https://nextjs.org) (App Router, static export) and React 19
 - **Styling** - [Tailwind CSS v4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com),
   and [Aceternity UI](https://ui.aceternity.com) for the hero spotlight
-- **Motion** - [`motion`](https://motion.dev), CSS animations, View Transitions
+- **Motion** - CSS animations, the Web Animations API, and View Transitions
 - **Type** - Geist Sans, Geist Mono, and Geist Pixel
 - **Tooling** - TypeScript, Vitest, Puppeteer, and [TypeSafe](https://typesafe.ai)
   for build-time project ranking
-- **Hosting** - GitHub Pages (canonical), with a Vercel mirror
+- **Hosting** - GitHub Pages
 
 ## Local
 
@@ -53,7 +53,7 @@ npm run test
 
 ## Content pipeline
 
-Three things are generated ahead of time and **committed**, so CI needs no secrets
+Generated content is produced ahead of time and **committed**, so CI needs no secrets
 and no network access to third-party demo sites.
 
 ### 1. Project ranking - `npm run curate`
@@ -118,7 +118,16 @@ navigation) and the web manifest. It anchors its rewrite to URL
 paths - matching the bare names anywhere in the HTML would turn `rel="icon"` into
 `rel="icon.png"`.
 
-### 4. Favicon - `npm run favicon`
+### 4. GitHub data - automatic at build (`npm run snapshot` to run alone)
+
+`scripts/snapshot-github.mjs` runs before every build and writes
+`src/data/github.json`: the contribution calendar and repo star counts. The activity
+graph renders it on first paint and swaps in the live calendar from the browser when
+that request lands; star counts on project cards come only from it. If GitHub is
+unreachable the previous snapshot is kept, so a build never fails on it. The deploy
+workflow also rebuilds daily at 02:30 UTC, which keeps it at most a day old.
+
+### 5. Favicon - `npm run favicon`
 
 `app/icon.tsx` covers modern browsers via `<link rel="icon">`. Some older crawlers
 request `/favicon.ico` regardless, so `scripts/make-favicon.py` converts the rendered
@@ -137,18 +146,6 @@ at it.
 **One-time manual step:** repo Settings → Pages → Source → **GitHub Actions**.
 Without it the deploy fails with an unhelpful error.
 
-### Vercel mirror
-
-The same repo is also connected to Vercel (auto-deploys on push via its GitHub
-integration; `vercel.json` just pins the build command and framework).
-`next.config.ts` branches on `process.env.VERCEL`
-so each host gets the mode it needs: GitHub Pages gets `output: 'export'` plus
-`trailingSlash: true` and unoptimized images; Vercel gets Next's normal SSR/ISR build
-with real image optimization. `profile.deployedUrl` resolves to whichever host actually
-served the current build, so OG images and metadata are always self-consistent - but
-`alternates.canonical` always points back at the GitHub Pages URL regardless of which
-host is serving, since that's the one URL meant to be indexed.
-
 ## Analytics
 
 Optional, via [Umami](https://umami.is). The `<Script>` tag in `layout.tsx` no-ops
@@ -159,11 +156,10 @@ until `NEXT_PUBLIC_UMAMI_SRC` and `NEXT_PUBLIC_UMAMI_WEBSITE_ID` are set (see
    its tracking script URL and website ID.
 2. GitHub Pages build: repo Settings → Secrets and variables → Actions → **Variables**
    → add both as repo variables (they're public analytics IDs, not secrets).
-3. Vercel build: add both as a Project → Settings → Environment Variables.
 
 ### Visitor count
 
-The nav bar shows a live visitor count (`components/site/visitor-count.tsx`), via
+The footer shows a live visitor count (`components/site/visitor-count.tsx`), via
 [countapi.mileshilliard.com](https://countapi.mileshilliard.com) - a free, no-signup,
 no-API-key hit counter. There's nothing secret involved (unlike Umami's stats API,
 which needs a paid Pro plan to expose even one number), so this is a plain
@@ -177,7 +173,7 @@ visitor badge.
 
 Clicking the count opens the site's public Umami dashboard, if configured: in Umami,
 open this website's settings and enable **Share URL**, then set
-`NEXT_PUBLIC_UMAMI_SHARE_URL` (same three places as the analytics vars above). Without
+`NEXT_PUBLIC_UMAMI_SHARE_URL` (same place as the analytics vars above). Without
 it, the count still shows, just isn't a link.
 
 ## Search Console
@@ -188,8 +184,8 @@ or the property loses its verified status. The sitemap
 (`https://kbssrikar7.github.io/sitemap.xml`) is submitted there.
 
 The layout can also emit a verification meta tag: set
-`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` (a GitHub Actions repository variable for
-Pages, a Vercel environment variable for the mirror) to the token from the
+`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` (a GitHub Actions repository variable) to
+the token from the
 **HTML tag** method. It is only needed if a second verification method is wanted.
 
 ## License

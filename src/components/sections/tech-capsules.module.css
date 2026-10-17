@@ -1,0 +1,60 @@
+.row {
+  overflow: hidden;
+  /* Capsules fade in and out at the edges rather than being cut off. Narrow
+     on a phone, where a wide fade would hide half of every row. */
+  --fade: 2rem;
+  mask-image: linear-gradient(to right, transparent, black var(--fade), black calc(100% - var(--fade)), transparent);
+}
+
+@media (min-width: 640px) {
+  .row {
+    --fade: 6rem;
+  }
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: drift var(--duration) linear infinite;
+}
+
+.reverse .track {
+  animation-direction: reverse;
+}
+
+.row:hover .track {
+  animation-play-state: paused;
+}
+
+/* Two identical copies side by side; the track moves by exactly one copy, so
+   the loop has no seam. The trailing padding equals the gap between capsules. */
+.copy {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    mask-image: none;
+  }
+  .track {
+    width: auto;
+    animation: none;
+  }
+  .copy {
+    flex-wrap: wrap;
+    flex-shrink: 1;
+    padding-right: 0;
+  }
+  .copy + .copy {
+    display: none;
+  }
+}

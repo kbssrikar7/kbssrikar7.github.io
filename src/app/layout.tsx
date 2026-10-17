@@ -7,9 +7,9 @@ import { Nav } from '@/components/site/nav';
 import { Footer } from '@/components/site/footer';
 import { CommandPalette } from '@/components/site/command-palette';
 import { Oneko } from '@/components/site/oneko';
+import { ProgressiveBlur } from '@/components/ui/progressive-blur';
 import { COUNTER_BOOTSTRAP, COUNTER_ORIGIN } from '@/components/site/visitor-count-config';
 import { allProjects } from '@/lib/projects';
-import { posts } from '@/data/posts';
 import './globals.css';
 
 // The Geist fonts are self-hosted and subset (see scripts/subset-fonts.py):
@@ -45,7 +45,7 @@ const GeistPixelSquare = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(profile.deployedUrl),
+  metadataBase: new URL(profile.siteUrl),
   // The name carries the title rather than the tagline: this page needs to be
   // the top hit for someone searching "K.B.S Srikar" after reading a CV.
   title: {
@@ -53,15 +53,14 @@ export const metadata: Metadata = {
     template: '%s - K.B.S Srikar',
   },
   description:
-    'K.B.S Srikar (Kasilanka Bhoopesh Siva Srikar) is a software engineer working across full-stack development, applied ML, and embedded IoT: Kubernetes for maritime fleets, RAG systems, CNNs, and cross-platform audio tooling.',
-  // GitHub Pages is canonical (see profile.siteUrl) - the Vercel mirror must
-  // point back at it, or search engines see two copies of the same site.
+    // Under ~155 characters, or Google cuts it off mid-sentence in results.
+    'K.B.S Srikar (Kasilanka Bhoopesh Siva Srikar) is a software engineer working across full-stack development, applied ML, and embedded IoT.',
   alternates: { canonical: profile.siteUrl },
   openGraph: {
     type: 'website',
     siteName: 'kbs',
     locale: 'en_US',
-    url: profile.deployedUrl,
+    url: profile.siteUrl,
   },
   twitter: { card: 'summary_large_image', creator: '@kbss0000' },
   authors: [{ name: profile.name, url: profile.siteUrl }],
@@ -109,17 +108,17 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <Footer />
         <CommandPalette
           projects={allProjects.map((p) => ({ slug: p.slug, title: p.title }))}
-          posts={posts.map((p) => ({ slug: p.slug, title: p.title }))}
         />
         <Oneko />
+        <ProgressiveBlur />
         {/* No-op until NEXT_PUBLIC_UMAMI_SRC/WEBSITE_ID are set - see README. */}
         {process.env.NEXT_PUBLIC_UMAMI_SRC && process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
           <Script
             src={process.env.NEXT_PUBLIC_UMAMI_SRC}
             data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
-            // Only the real hosts are tracked - without this, every localhost
+            // Only the real host is tracked - without this, every localhost
             // dev reload and test run was recorded as a page view.
-            data-domains={[...new Set([profile.siteUrl, profile.deployedUrl].map((u) => new URL(u).host))].join(',')}
+            data-domains={new URL(profile.siteUrl).host}
             strategy="afterInteractive"
           />
         )}

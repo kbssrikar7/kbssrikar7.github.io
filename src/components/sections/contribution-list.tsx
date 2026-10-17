@@ -1,6 +1,16 @@
 import { ArrowUpRight, GitMerge } from 'lucide-react';
 import { contributions } from '@/data/contributions';
 
+type Contribution = (typeof contributions)[number];
+
+/** One card per project, newest PR first: two PRs to the same repo used to be
+    two near-identical cards repeating the project name and description. */
+function byProject(list: readonly Contribution[]) {
+  const groups = new Map<string, Contribution[]>();
+  for (const c of list) groups.set(c.project, [...(groups.get(c.project) ?? []), c]);
+  return [...groups.values()].map((prs) => [...prs].sort((a, b) => b.mergedAt.localeCompare(a.mergedAt)));
+}
+
 export function ContributionList({
   detailed = false,
   headingLevel = 'h3',
@@ -9,72 +19,72 @@ export function ContributionList({
   headingLevel?: 'h2' | 'h3';
 }) {
   const Heading = headingLevel;
-  const FeatureHeading = headingLevel === 'h2' ? 'h3' : 'h4';
+  const PrHeading = headingLevel === 'h2' ? 'h3' : 'h4';
   return (
     <div className="space-y-8">
-      {contributions.map((contribution) => (
-        <article
-          key={contribution.pullRequestUrl}
-          className="rounded-xl border border-border bg-card p-5 sm:p-8"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <Heading className="text-2xl tracking-tight">
-              <a
-                href={contribution.repositoryUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="transition-colors hover:text-signal"
-              >
-                {contribution.project}
-              </a>
-            </Heading>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-signal/20 bg-signal/5 px-3 py-1 font-mono text-[13px] text-signal">
-              <GitMerge aria-hidden="true" className="size-3.5" />
-              merged · PR #{contribution.pullRequestNumber}
-            </span>
-          </div>
-          <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-            {contribution.description}
-          </p>
+      {byProject(contributions).map((prs) => {
+        const { project, repositoryUrl, description } = prs[0];
+        return (
+          <article key={project} className="rounded-xl border border-border bg-card p-5 sm:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <Heading className="text-2xl tracking-tight">
+                <a href={repositoryUrl} target="_blank" rel="noreferrer" className="transition-colors hover:text-signal">
+                  {project}
+                </a>
+              </Heading>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-signal/20 bg-signal/5 px-3 py-1 font-mono text-[13px] text-signal">
+                <GitMerge aria-hidden="true" className="size-3.5" />
+                {prs.length} merged PR{prs.length === 1 ? '' : 's'}
+              </span>
+            </div>
+            <p className="mt-2 text-base leading-relaxed text-muted-foreground">{description}</p>
 
-          <FeatureHeading className="mt-6 text-xl tracking-tight">{contribution.title}</FeatureHeading>
-          <p className="mt-2 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            {contribution.summary}
-          </p>
+            <ol className="mt-6 divide-y divide-border/60 border-t border-border/60">
+              {prs.map((pr) => (
+                <li key={pr.pullRequestUrl} className="py-6 last:pb-0">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <PrHeading className="text-xl tracking-tight">{pr.title}</PrHeading>
+                    <p className="font-mono text-[13px] text-muted-foreground">
+                      PR #{pr.pullRequestNumber} · merged <time dateTime={pr.mergedAt}>{pr.mergedLabel}</time>
+                    </p>
+                  </div>
+                  <p className="mt-2 max-w-2xl text-lg leading-relaxed text-muted-foreground">{pr.summary}</p>
 
-          {detailed && (
-            <ul className="mt-4 max-w-2xl space-y-2.5">
-              {contribution.details.map((detail) => (
-                <li
-                  key={detail}
-                  className="relative pl-4 text-base leading-relaxed text-muted-foreground before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-signal/50"
-                >
-                  {detail}
+                  {detailed && (
+                    <ul className="mt-4 max-w-2xl space-y-2.5">
+                      {pr.details.map((detail) => (
+                        <li
+                          key={detail}
+                          className="relative pl-4 text-base leading-relaxed text-muted-foreground before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-signal/50"
+                        >
+                          {detail}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                    <p className="font-mono text-[13px] text-muted-foreground">{pr.stack.join(' · ')}</p>
+                    <a
+                      href={pr.pullRequestUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`view contribution: ${project} pull request #${pr.pullRequestNumber}`}
+                      className="group inline-flex items-center gap-1.5 font-mono text-sm text-signal transition-opacity hover:opacity-80"
+                    >
+                      view contribution
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </a>
+                  </div>
                 </li>
               ))}
-            </ul>
-          )}
-
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-4 border-t border-border/60 pt-4">
-            <div className="font-mono text-[13px] leading-relaxed text-muted-foreground">
-              <p>{contribution.stack.join(' · ')}</p>
-              <p className="mt-1">
-                merged <time dateTime={contribution.mergedAt}>{contribution.mergedLabel}</time>
-              </p>
-            </div>
-            <a
-              href={contribution.pullRequestUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`View ${contribution.project} pull request #${contribution.pullRequestNumber}`}
-              className="group inline-flex items-center gap-1.5 font-mono text-sm text-signal transition-opacity hover:opacity-80"
-            >
-              view contribution
-              <ArrowUpRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
-          </div>
-        </article>
-      ))}
+            </ol>
+          </article>
+        );
+      })}
     </div>
   );
 }

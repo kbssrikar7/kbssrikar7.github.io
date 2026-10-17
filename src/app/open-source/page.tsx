@@ -5,7 +5,7 @@ import { profile } from '@/data/profile';
 
 const title = 'Open source contributions';
 const description =
-  'K.B.S Srikar’s merged contributions to Focuser: password and random-text unlocking across the Rust backend, CLI, and desktop UI, and hidden CLI password prompts.';
+  'K.B.S Srikar’s merged contributions to Focuser, a Rust app blocker: password and random-text unlocking, and hidden CLI password prompts.';
 const url = `${profile.siteUrl}/open-source/`;
 
 export const metadata: Metadata = {

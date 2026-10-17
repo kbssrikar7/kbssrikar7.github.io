@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Search } from 'lucide-react';
 import { NAV } from './nav-items';
-import { VisitorCount } from './visitor-count';
+import { OPEN_PALETTE_EVENT } from './command-palette';
 
 export function Nav() {
   const pathname = usePathname();
@@ -26,7 +27,7 @@ export function Nav() {
                 item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
               return (
                 // The "kbs" wordmark already links home, and on a phone the
-                // extra item plus the visitor count overflows a 360px screen.
+                // extra item overflows a 360px screen.
                 <li key={item.href} className={item.href === '/' ? 'hidden sm:block' : undefined}>
                   <Link
                     href={item.href}
@@ -52,7 +53,18 @@ export function Nav() {
               );
             })}
           </ul>
-          <VisitorCount href={process.env.NEXT_PUBLIC_UMAMI_SHARE_URL} />
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+            title="Search (⌘K)"
+            className="ml-1 flex items-center gap-1.5 rounded-md border border-border px-2 py-1.5 font-mono text-[13px] text-muted-foreground transition-colors hover:border-signal/40 hover:text-signal sm:ml-2 sm:px-2.5"
+          >
+            <Search aria-hidden className="size-3.5" />
+            {/* Named by text, not aria-label, so the name contains the visible
+                "⌘K" - voice control users say what they see. */}
+            <span className="sr-only">Search</span>
+            <kbd className="hidden font-mono sm:inline">⌘K</kbd>
+          </button>
         </div>
       </nav>
     </header>

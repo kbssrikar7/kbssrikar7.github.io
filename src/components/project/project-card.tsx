@@ -40,7 +40,7 @@ export function ProjectCard({
   const named = project.tech.slice(0, 5).filter((t) => !techIcon(t)).slice(0, 3);
 
   return (
-    <article className="group relative flex flex-col">
+    <article data-reveal suppressHydrationWarning className="group relative flex flex-col">
       {/* Not a link: the title below carries the single card-wide link, stretched
           over this with ::after. Two anchors to the same slug meant every card
           was announced twice and took two tab stops.
@@ -51,7 +51,7 @@ export function ProjectCard({
       <div
         className="relative aspect-[16/11] overflow-hidden rounded-xl border border-border transition-colors duration-500 group-hover:border-foreground/20"
         style={{
-          background: `radial-gradient(ellipse 90% 75% at 50% 0%, oklch(0.62 0.13 ${project.hue} / 0.22), transparent 70%), oklch(0.17 0 0)`,
+          background: `radial-gradient(ellipse 90% 75% at 50% 0%, oklch(0.62 0.13 ${project.hue} / 0.22), transparent 70%), var(--panel)`,
         }}
       >
         <CursorGlow />
@@ -74,12 +74,12 @@ export function ProjectCard({
         </div>
 
         {/* The frame: inset from the sides, cropped by the panel's bottom edge. */}
-        <div className="absolute inset-x-[7%] top-14 overflow-hidden rounded-lg border border-white/10 bg-background shadow-[0_24px_60px_-20px_rgb(0_0_0/0.8)] transition-transform duration-500 ease-out group-hover:-translate-y-1.5">
-          <div className="flex h-7 items-center gap-2 border-b border-white/10 bg-white/[0.03] px-3">
+        <div className="absolute inset-x-[7%] top-14 overflow-hidden rounded-lg border border-[var(--frame-border)] bg-background shadow-[0_24px_60px_-20px_var(--frame-shadow)] transition-transform duration-500 ease-out group-hover:-translate-y-1.5">
+          <div className="flex h-7 items-center gap-2 border-b border-[var(--frame-border)] bg-[var(--frame-bar)] px-3">
             <span className="flex gap-1" aria-hidden>
-              <span className="size-2 rounded-full bg-white/15" />
-              <span className="size-2 rounded-full bg-white/15" />
-              <span className="size-2 rounded-full bg-white/15" />
+              <span className="size-2 rounded-full bg-[var(--frame-dot)]" />
+              <span className="size-2 rounded-full bg-[var(--frame-dot)]" />
+              <span className="size-2 rounded-full bg-[var(--frame-dot)]" />
             </span>
             <span className="truncate font-mono text-[11px] text-muted-foreground">
               {addressFor(project)}

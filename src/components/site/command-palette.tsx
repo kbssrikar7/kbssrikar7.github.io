@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/command';
 import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
+import { TOGGLE_THEME_EVENT } from './theme';
 
 type Entry = { slug: string; title: string };
 
@@ -66,6 +67,12 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
         return;
       }
       if (!singleKeyNav || typing || open || e.metaKey || e.ctrlKey || e.altKey) return;
+
+      if (e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        window.dispatchEvent(new Event(TOGGLE_THEME_EVENT));
+        return;
+      }
 
       // Single-key navigation, the pawann.dev move - but routing, not scrolling.
       const hit = NAV.find((n) => n.key === e.key.toLowerCase());

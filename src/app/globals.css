@@ -60,7 +60,9 @@
   --font-pixel: var(--font-geist-pixel-square);
 }
 
-/* Dark-only site: no toggle, so the dark palette is the root palette. */
+/* Dark is the root palette (and what no-JS visitors get). Light swaps the
+   same tokens; the inline script in layout.tsx picks one before first paint,
+   from the visitor's saved choice or else their system setting. */
 :root {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -85,12 +87,57 @@
 
   /* The one accent. Reserved for liveness and availability - nothing else. */
   --signal: oklch(0.82 0.14 195);
+
+  /* Project card panels and the browser frames inside them. */
+  --panel: oklch(0.17 0 0);
+  --frame-border: oklch(1 0 0 / 10%);
+  --frame-bar: oklch(1 0 0 / 3%);
+  --frame-dot: oklch(1 0 0 / 15%);
+  --frame-shadow: rgb(0 0 0 / 0.8);
+  /* The hero spotlight's beam colour, and how strongly it shows. */
+  --spot: hsl(190 100% 85%);
+  --spot-strength: 1;
+}
+
+:root[data-theme='light'] {
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.18 0 0);
+  --card: oklch(0.97 0 0);
+  --card-foreground: oklch(0.18 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0 0);
+  --primary: oklch(0.18 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.18 0 0);
+  --muted: oklch(0.93 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.18 0 0);
+  --border: oklch(0 0 0 / 10%);
+  --input: oklch(0 0 0 / 14%);
+  --ring: oklch(0.52 0.1 205);
+  /* Darker than the dark theme's cyan: small cyan text on white needs 4.5:1. */
+  --signal: oklch(0.52 0.1 205);
+
+  --panel: oklch(0.95 0 0);
+  --frame-border: oklch(0 0 0 / 10%);
+  --frame-bar: oklch(0 0 0 / 3%);
+  --frame-dot: oklch(0 0 0 / 15%);
+  --frame-shadow: rgb(0 0 0 / 0.18);
+  --spot: hsl(195 90% 42%);
+  /* Pale beams vanish on white; light mode needs them several times denser
+     to read as the same sweep. */
+  --spot-strength: 3.2;
 }
 
 @layer base {
   html {
     color-scheme: dark;
     scrollbar-gutter: stable;
+  }
+  html[data-theme='light'] {
+    color-scheme: light;
   }
   body {
     background-image: radial-gradient(
@@ -102,6 +149,66 @@
   }
   ::selection {
     background: color-mix(in oklch, var(--signal) 30%, transparent);
+  }
+}
+
+/* Theme switch: the new theme is revealed as a growing circle (animated
+   from theme-toggle.tsx), so the default crossfade is switched off - but only
+   while .theme-switch is set, leaving page transitions alone. */
+html.theme-switch::view-transition-old(root),
+html.theme-switch::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Scroll-driven motion, all CSS (no scroll listeners): items rise into place
+   as they enter, a progress line fills under the nav, and the hero drifts
+   up and fades as it leaves. Browsers without scroll timelines (Firefox
+   today) and reduced-motion visitors simply get the static page. */
+.scroll-progress {
+  display: none;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      animation: reveal linear both;
+      animation-timeline: view();
+      /* A fixed 260px of scroll from the moment the top edge appears, so a
+         tall card finishes as soon as a short one does. */
+      animation-range: entry 0% entry 260px;
+    }
+    /* On screen when the page appeared: no reveal (see reveal.tsx). */
+    [data-reveal][data-revealed] {
+      animation: none;
+    }
+    .scroll-progress {
+      display: block;
+      transform-origin: left;
+      animation: scroll-progress linear both;
+      animation-timeline: scroll(root);
+    }
+    [data-hero-drift] {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 80vh;
+    }
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.985);
+  }
+}
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes hero-drift {
+  to {
+    opacity: 0.2;
+    transform: translateY(-56px);
   }
 }
 

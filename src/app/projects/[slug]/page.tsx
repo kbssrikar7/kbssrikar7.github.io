@@ -36,7 +36,7 @@ export async function generateMetadata({
       title: project.title,
       description,
       url,
-      siteName: 'kbs',
+      siteName: profile.name,
       type: 'website',
       locale: 'en_US',
     },

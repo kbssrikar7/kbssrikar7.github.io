@@ -6,8 +6,6 @@ import type { Project } from '@/lib/projects';
  * every spelling of the name, the degree, and the profiles in `sameAs` - so a
  * search for "K.B.S Srikar" or the full name lands here, and the GitHub /
  * LinkedIn / X results are understood as the same person.
- *
- * Always uses the canonical GitHub Pages URL, never the Vercel mirror.
  */
 const PERSON_ID = `${profile.siteUrl}/#person`;
 
@@ -37,11 +35,24 @@ export function personJsonLd() {
         sameAs: socials.map((s) => s.href),
       },
       {
+        // Google reads the site name in results from here; the alternates are
+        // how people search for it ("srikar portfolio").
         '@type': 'WebSite',
         '@id': `${profile.siteUrl}/#website`,
         url: `${profile.siteUrl}/`,
         name: profile.name,
+        alternateName: [`${profile.name} Portfolio`, 'Srikar Portfolio', 'KBS Srikar Portfolio', profile.handle],
         publisher: { '@id': PERSON_ID },
+      },
+      {
+        // The home page is a profile page about one person - the structured
+        // data type Google supports for personal sites.
+        '@type': 'ProfilePage',
+        '@id': `${profile.siteUrl}/#profile`,
+        url: `${profile.siteUrl}/`,
+        name: `${profile.name} - Software Engineer Portfolio`,
+        mainEntity: { '@id': PERSON_ID },
+        isPartOf: { '@id': `${profile.siteUrl}/#website` },
       },
     ],
   };

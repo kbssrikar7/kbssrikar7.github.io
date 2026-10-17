@@ -48,6 +48,7 @@ export function TechCapsules() {
         {ROWS.map((items, i) => (
           <div
             key={i}
+            data-reveal suppressHydrationWarning
             className={cn(styles.row, i % 2 === 1 && styles.reverse)}
             // Duration scales with length, so every row moves at the same speed.
             style={{ '--duration': `${items.length * 3.2}s` } as CSSProperties}

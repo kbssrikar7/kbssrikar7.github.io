@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import { NAV } from './nav-items';
 import { OPEN_PALETTE_EVENT } from './command-palette';
+import { ThemeToggle } from './theme-toggle';
 
 export function Nav() {
   const pathname = usePathname();
@@ -65,8 +66,13 @@ export function Nav() {
             <span className="sr-only">Search</span>
             <kbd className="hidden font-mono sm:inline">⌘K</kbd>
           </button>
+          <div className="ml-1.5 sm:ml-2">
+            <ThemeToggle />
+          </div>
         </div>
       </nav>
+      {/* Fills as the page scrolls; CSS scroll timeline (globals.css). */}
+      <div aria-hidden className="scroll-progress absolute inset-x-0 -bottom-px h-px bg-signal" />
     </header>
   );
 }

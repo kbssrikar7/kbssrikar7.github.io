@@ -25,7 +25,7 @@ export function ContributionList({
       {byProject(contributions).map((prs) => {
         const { project, repositoryUrl, description } = prs[0];
         return (
-          <article key={project} className="rounded-xl border border-border bg-card p-5 sm:p-8">
+          <article key={project} data-reveal suppressHydrationWarning className="rounded-xl border border-border bg-card p-5 sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <Heading className="text-2xl tracking-tight">
                 <a href={repositoryUrl} target="_blank" rel="noreferrer" className="transition-colors hover:text-signal">

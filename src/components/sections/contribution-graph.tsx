@@ -158,7 +158,7 @@ export function ContributionGraph() {
   }
 
   return (
-    <div>
+    <div data-reveal suppressHydrationWarning>
       <div role="group" aria-label="Graph view" className="inline-flex rounded-md border border-border p-0.5 font-mono text-sm">
         {MODES.map((m) => (
           <button

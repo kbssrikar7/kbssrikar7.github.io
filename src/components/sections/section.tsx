@@ -22,7 +22,7 @@ export function Section({
   // desktop. The hero and footer are sized to match (see hero.tsx, footer.tsx).
   return (
     <section id={id} className={cn('mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16', className)}>
-      <div className="mb-8 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
+      <div data-reveal suppressHydrationWarning className="mb-8 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
         <div>
           {/* With a title, that title is the page's h1 (search engines read the
               main heading first) and the label is an eyebrow above it. Without

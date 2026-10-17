@@ -15,7 +15,7 @@ export function ExperienceList({
   return (
     <div className="space-y-12">
       {experience.map((job) => (
-        <article key={job.company} className="relative pl-5 sm:pl-6">
+        <article key={job.company} data-reveal suppressHydrationWarning className="relative pl-5 sm:pl-6">
           {/* Single hairline rail - with one role, a heavy timeline looks thin. */}
           <span
             aria-hidden

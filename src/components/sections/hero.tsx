@@ -5,13 +5,14 @@ import { Spotlight } from '@/components/ui/spotlight-new';
 import { ScrambleText } from '@/components/ui/scramble-text';
 import { profile, education } from '@/data/profile';
 
+// Beams in the theme's --spot colour and strength, so they read on both
+// backgrounds: pale cyan light on dark, a denser teal shade on light.
+const beam = (pct: number) =>
+  `color-mix(in oklch, var(--spot) calc(${pct}% * var(--spot-strength)), transparent)`;
 const SIGNAL_GRADIENT = {
-  gradientFirst:
-    'radial-gradient(68.5% 68.7% at 55% 31.5%, hsla(190, 100%, 85%, .10) 0, hsla(190, 100%, 55%, .03) 50%, transparent 80%)',
-  gradientSecond:
-    'radial-gradient(50% 50% at 50% 50%, hsla(190, 100%, 85%, .07) 0, hsla(190, 100%, 55%, .02) 80%, transparent 100%)',
-  gradientThird:
-    'radial-gradient(50% 50% at 50% 50%, hsla(190, 100%, 85%, .05) 0, hsla(190, 100%, 45%, .02) 80%, transparent 100%)',
+  gradientFirst: `radial-gradient(68.5% 68.7% at 55% 31.5%, ${beam(10)} 0, ${beam(3)} 50%, transparent 80%)`,
+  gradientSecond: `radial-gradient(50% 50% at 50% 50%, ${beam(7)} 0, ${beam(2)} 80%, transparent 100%)`,
+  gradientThird: `radial-gradient(50% 50% at 50% 50%, ${beam(5)} 0, ${beam(2)} 80%, transparent 100%)`,
 };
 
 // Each hero line fades up in turn on first paint. Pure CSS (tw-animate), so the
@@ -31,7 +32,7 @@ export function Hero() {
         <Spotlight {...SIGNAL_GRADIENT} />
       </div>
 
-      <div className="relative mx-auto w-full max-w-5xl px-4 sm:px-6">
+      <div data-hero-drift className="relative mx-auto w-full max-w-5xl px-4 sm:px-6">
         {/* One h1 holding both the wordmark and the full name, so the page's
             main heading - what search engines weigh most - carries the name
             people actually search for, not just "kbs". Looks identical. */}

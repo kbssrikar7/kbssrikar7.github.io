@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title,
     description,
     url,
-    siteName: 'kbs',
+    siteName: profile.name,
     type: 'website',
     locale: 'en_US',
   },

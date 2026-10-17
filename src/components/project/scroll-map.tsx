@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { scrollToElement } from '@/components/site/smooth-scroll';
 
 type Section = { id: string; label: string };
 
@@ -53,8 +54,8 @@ export function ScrollMap({ sections }: { sections: Section[] }) {
   const overall = visible ? Math.min(1, pos / sections.length) : 0;
 
   function go(id: string) {
-    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.getElementById(id)?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+    const el = document.getElementById(id);
+    if (el) scrollToElement(el);
   }
 
   const next = sections[active + 1];

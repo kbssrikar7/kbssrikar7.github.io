@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import localFont from 'next/font/local';
 import { profile } from '@/data/profile';
@@ -8,7 +8,10 @@ import { Footer } from '@/components/site/footer';
 import { CommandPalette } from '@/components/site/command-palette';
 import { Oneko } from '@/components/site/oneko';
 import { ProgressiveBlur } from '@/components/ui/progressive-blur';
+import { SmoothScroll } from '@/components/site/smooth-scroll';
+import { REVEAL_BOOTSTRAP, RevealInView } from '@/components/site/reveal';
 import { COUNTER_BOOTSTRAP, COUNTER_ORIGIN } from '@/components/site/visitor-count-config';
+import { THEME_BOOTSTRAP } from '@/components/site/theme';
 import { allProjects } from '@/lib/projects';
 import './globals.css';
 
@@ -49,16 +52,16 @@ export const metadata: Metadata = {
   // The name carries the title rather than the tagline: this page needs to be
   // the top hit for someone searching "K.B.S Srikar" after reading a CV.
   title: {
-    default: 'K.B.S Srikar - Software Engineer',
+    default: 'K.B.S Srikar - Software Engineer Portfolio',
     template: '%s - K.B.S Srikar',
   },
   description:
     // Under ~155 characters, or Google cuts it off mid-sentence in results.
-    'K.B.S Srikar (Kasilanka Bhoopesh Siva Srikar) is a software engineer working across full-stack development, applied ML, and embedded IoT.',
+    'Portfolio of K.B.S Srikar (Kasilanka Bhoopesh Siva Srikar), a software engineer working across full-stack development, applied ML, and embedded IoT.',
   alternates: { canonical: profile.siteUrl },
   openGraph: {
     type: 'website',
-    siteName: 'kbs',
+    siteName: profile.name,
     locale: 'en_US',
     url: profile.siteUrl,
   },
@@ -70,6 +73,14 @@ export const metadata: Metadata = {
   ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
     : {}),
+};
+
+// Tints the mobile browser's address bar to match, per system theme.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+    { media: '(prefers-color-scheme: light)', color: '#fcfcfc' },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
@@ -85,6 +96,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       suppressHydrationWarning
     >
       <head>
+        {/* First in <head>: picks light or dark before anything paints. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
         <link rel="preconnect" href={COUNTER_ORIGIN} crossOrigin="anonymous" />
         {/* Starts the visitor-count request as the HTML parses, rather than
             after the bundle hydrates - see visitor-count.tsx. */}
@@ -105,12 +118,15 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <main id="main" className="flex-1">
           {children}
         </main>
+        <script dangerouslySetInnerHTML={{ __html: REVEAL_BOOTSTRAP }} />
         <Footer />
         <CommandPalette
           projects={allProjects.map((p) => ({ slug: p.slug, title: p.title }))}
         />
         <Oneko />
         <ProgressiveBlur />
+        <SmoothScroll />
+        <RevealInView />
         {/* No-op until NEXT_PUBLIC_UMAMI_SRC/WEBSITE_ID are set - see README. */}
         {process.env.NEXT_PUBLIC_UMAMI_SRC && process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
           <Script

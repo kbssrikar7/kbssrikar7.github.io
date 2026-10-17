@@ -3,10 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ViewTransition } from 'react';
-import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Star } from 'lucide-react';
 import { GithubIcon } from '@/components/site/icons';
+import { starsFor } from '@/lib/github';
+import { techIcon } from '@/lib/tech-icons';
 import { GeneratedCover } from '@/components/project/generated-cover';
 import { ProjectWriteup } from '@/components/project/project-writeup';
+import { ScrollMap } from '@/components/project/scroll-map';
 import { allProjects, getProject, BUCKET_LABELS } from '@/lib/projects';
 import { profile } from '@/data/profile';
 import { jsonLdString, projectJsonLd } from '@/lib/structured-data';
@@ -24,13 +27,14 @@ export async function generateMetadata({
   const project = getProject(slug);
   if (!project) return {};
   const url = `${profile.siteUrl}/projects/${slug}/`;
+  const description = project.metaDescription ?? project.blurb;
   return {
     title: project.title,
-    description: project.blurb,
+    description,
     alternates: { canonical: url },
     openGraph: {
       title: project.title,
-      description: project.blurb,
+      description,
       url,
       siteName: 'kbs',
       type: 'website',
@@ -45,7 +49,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
 
   return (
-    <article className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+    <article className="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(projectJsonLd(project)) }} />
       <Link
         href="/projects"
@@ -85,6 +89,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             >
               <GithubIcon className="size-4" />
               source
+              {starsFor(project.repoUrl) > 0 && (
+                <span className="flex items-center gap-1 font-mono text-sm text-muted-foreground tabular-nums">
+                  <Star aria-hidden className="size-3.5" />
+                  {starsFor(project.repoUrl)}
+                </span>
+              )}
             </a>
           )}
         </div>
@@ -111,7 +121,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       </div>
       </ViewTransition>
 
-      <div className="mt-12 grid gap-10 sm:grid-cols-3">
+      <div id="about" className="mt-12 grid scroll-mt-24 gap-10 sm:grid-cols-3">
         <div className="sm:col-span-2">
           <h2 className="font-mono text-[13px] tracking-[0.2em] text-muted-foreground uppercase">
             about
@@ -140,8 +150,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             {project.tech.map((t) => (
               <li
                 key={t}
-                className="rounded-md border border-border/70 px-2.5 py-1 font-mono text-sm text-muted-foreground"
+                className={`flex items-center gap-2 rounded-md border border-border/70 py-1 font-mono text-sm text-muted-foreground ${techIcon(t) ? 'pr-2.5 pl-1.5' : 'px-2.5'}`}
               >
+                {techIcon(t) && (
+                  <Image src={techIcon(t)!} alt="" width={20} height={20} unoptimized className="size-5" />
+                )}
                 {t}
               </li>
             ))}
@@ -149,7 +162,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
       </div>
 
-      {project.writeup && <ProjectWriteup writeup={project.writeup} />}
+      {project.writeup && (
+        <>
+          <ProjectWriteup writeup={project.writeup} />
+          <ScrollMap
+            sections={[
+              { id: 'about', label: 'about' },
+              { id: 'how-it-works', label: 'how it works' },
+              { id: 'notes', label: 'engineering notes' },
+              ...(project.writeup.limits?.length ? [{ id: 'limits', label: 'known limits' }] : []),
+            ]}
+          />
+        </>
+      )}
     </article>
   );
 }

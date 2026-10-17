@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily rebuild so the GitHub snapshot (contribution graph fallback, star
+  # counts - scripts/snapshot-github.mjs) never drifts far behind.
+  schedule:
+    - cron: '30 2 * * *'
 
 permissions:
   contents: read

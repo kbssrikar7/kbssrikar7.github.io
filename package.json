@@ -4,14 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/fix-og.mjs",
+    "build": "node scripts/snapshot-github.mjs && next build && node scripts/fix-og.mjs",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "curate": ".venv/bin/python scripts/curate.py",
     "shots": "node scripts/shots.ts",
-    "favicon": ".venv/bin/python scripts/make-favicon.py"
+    "favicon": ".venv/bin/python scripts/make-favicon.py",
+    "snapshot": "node scripts/snapshot-github.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -19,8 +20,6 @@
     "cn": "^0.3.1",
     "geist": "^1.7.2",
     "lucide-react": "^1.47.0",
-    "marked": "^18.1.1",
-    "motion": "^13.4.0",
     "next": "16.3.5",
     "radix-ui": "^1.6.7",
     "react": "19.2.8",

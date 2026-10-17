@@ -18,7 +18,7 @@ function Label({ children }: { children: React.ReactNode }) {
 export function ProjectWriteup({ writeup }: { writeup: Writeup }) {
   return (
     <div className="mt-20 space-y-20">
-      <section>
+      <section id="how-it-works" className="scroll-mt-24">
         <Label>how it works</Label>
         {/* A pipeline, drawn like a trace: numbered stages on a single rail. */}
         <ol className="relative mt-8 space-y-8 border-l border-border pl-8">
@@ -34,7 +34,7 @@ export function ProjectWriteup({ writeup }: { writeup: Writeup }) {
         </ol>
       </section>
 
-      <section>
+      <section id="notes" className="scroll-mt-24">
         <Label>engineering notes</Label>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {writeup.notes.map((n) => (
@@ -47,7 +47,7 @@ export function ProjectWriteup({ writeup }: { writeup: Writeup }) {
       </section>
 
       {writeup.limits && writeup.limits.length > 0 && (
-        <section>
+        <section id="limits" className="scroll-mt-24">
           <Label>known limits</Label>
           <ul className="mt-6 max-w-2xl space-y-3">
             {writeup.limits.map((l) => (

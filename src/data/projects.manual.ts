@@ -14,6 +14,9 @@ export type ManualProject = {
   slug: string;
   title: string;
   blurb: string;
+  /** Search-result snippet, when the blurb runs past the ~155 characters
+      Google shows. Defaults to the blurb. */
+  metaDescription?: string;
   detail: string;
   tech: string[];
   liveUrl?: string;
@@ -54,6 +57,8 @@ export const manualProjects: ManualProject[] = [
     tech: ['Next.js', 'React', 'TypeScript', 'Cloudflare Pages', 'Puppeteer', 'Python'],
     liveUrl: 'https://www.libraa.com',
     liveLabel: 'visit site',
+    metaDescription:
+      'The company website for Libraa Group, a ship-management and marine-services firm: its services, 16-vessel fleet, clients and certifications.',
     metrics: [
       { value: '100', label: 'Lighthouse SEO' },
       { value: '16', label: 'vessels in the fleet slider' },

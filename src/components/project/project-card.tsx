@@ -1,12 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ViewTransition } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Star } from 'lucide-react';
 import { GithubIcon } from '@/components/site/icons';
 import { GeneratedCover } from './generated-cover';
 import { CursorGlow } from '@/components/ui/cursor-glow';
 import { ScrambleText } from '@/components/ui/scramble-text';
 import { BUCKET_LABELS, type Project } from '@/lib/projects';
+import { starsFor } from '@/lib/github';
+import { techIcon } from '@/lib/tech-icons';
 
 /** What the frame's address bar shows: the live host, else the repo path. */
 function addressFor(project: Project): string {
@@ -31,6 +33,11 @@ export function ProjectCard({
   // The headline number. Some metrics are words ("multi-modal"); those stay
   // on the project page rather than posing as a figure here.
   const metric = project.metrics?.find((m) => /^[<>~]?\d/.test(m.value));
+  const stars = starsFor(project.repoUrl);
+  // Logos for every tech that has one; the top techs without a logo follow
+  // as text, so a project built on U-Net and SHAP still says so.
+  const logos = project.tech.filter((t) => techIcon(t)).slice(0, 6);
+  const named = project.tech.slice(0, 5).filter((t) => !techIcon(t)).slice(0, 3);
 
   return (
     <article className="group relative flex flex-col">
@@ -112,16 +119,24 @@ export function ProjectCard({
               {project.title}
             </Link>
           </Heading>
-          {/* z-10 lifts these above the title link's stretched ::after overlay. */}
+          {/* z-10 lifts these above the title link's stretched ::after overlay.
+              The icons are 18px; p-1.5/-m-1.5 grows each tap area to 30px
+              (a thumb needs at least 24) without moving anything visually. */}
           <div className="relative z-10 flex shrink-0 items-center gap-2 pt-0.5">
             {project.repoUrl && (
               <a
                 href={project.repoUrl}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={`${project.title} source on GitHub`}
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label={`${project.title} source on GitHub${stars ? `, ${stars} star${stars === 1 ? '' : 's'}` : ''}`}
+                className="-m-1.5 flex items-center gap-2 p-1.5 text-muted-foreground transition-colors hover:text-foreground"
               >
+                {stars > 0 && (
+                  <span className="flex items-center gap-1 font-mono text-[13px] tabular-nums">
+                    <Star aria-hidden className="size-3.5" />
+                    {stars}
+                  </span>
+                )}
                 <GithubIcon className="size-[18px]" />
               </a>
             )}
@@ -131,7 +146,7 @@ export function ProjectCard({
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${project.title} ${project.liveLabel ?? 'live demo'}`}
-                className="text-muted-foreground transition-colors hover:text-signal"
+                className="-m-1.5 p-1.5 text-muted-foreground transition-colors hover:text-signal"
               >
                 <ArrowUpRight className="size-[18px]" />
               </a>
@@ -150,8 +165,33 @@ export function ProjectCard({
 
         <p className="text-[15px] leading-relaxed text-muted-foreground">{project.blurb}</p>
 
-        <div className="flex flex-wrap gap-x-3 gap-y-1">
-          {project.tech.slice(0, 5).map((t, i) => (
+        {/* z-10 so each logo can show its name on hover above the title
+            link's overlay. Dimmed at rest and full strength while the card
+            is hovered, so six rows of logos do not shout over the screenshots. */}
+        <div className="relative z-10 mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+          {logos.length > 0 && (
+            <ul className="flex flex-wrap items-center gap-1.5">
+              {logos.map((t) => (
+                <li key={t} className="group/tech relative">
+                  <Image
+                    src={techIcon(t)!}
+                    alt={t}
+                    width={26}
+                    height={26}
+                    unoptimized
+                    className="size-[26px] opacity-75 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 translate-y-1 rounded-md border border-border bg-background px-2 py-1 font-mono text-xs whitespace-nowrap text-foreground opacity-0 transition duration-150 group-hover/tech:translate-y-0 group-hover/tech:opacity-100"
+                  >
+                    {t}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {named.map((t, i) => (
             <ScrambleText
               key={t}
               text={t}

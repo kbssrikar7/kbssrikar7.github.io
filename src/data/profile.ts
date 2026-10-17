@@ -16,12 +16,6 @@ export const profile = {
   siteUrl: 'https://kbssrikar7.github.io',
   /** This site's own source, linked from the footer's star button. */
   sourceRepo: 'kbssrikar7/kbssrikar7.github.io',
-  // Where THIS build is served from. GitHub Pages is the canonical home, but the
-  // Vercel mirror has to advertise its own URLs or its OG images resolve to
-  // github.io paths that do not exist there.
-  deployedUrl: process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : 'https://kbssrikar7.github.io',
   resume: '/kbs-srikar-resume.pdf',
 } as const;
 

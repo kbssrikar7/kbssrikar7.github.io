@@ -24,7 +24,7 @@ const SLIDE = 'animate-in slide-in-from-bottom-3 duration-1000 ease-out fill-mod
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-20 pb-16 sm:pt-28 sm:pb-24">
+    <section className="relative overflow-hidden pt-20 pb-12 sm:pt-28 sm:pb-16">
       {/* Faded out at the bottom: overflow-hidden used to cut the beams off in
           a hard horizontal line just under the education row. */}
       <div className="pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black_55%,transparent)]">

@@ -18,7 +18,10 @@ type Entry = { slug: string; title: string };
 
 const SHORTCUTS_KEY = 'kbs:single-key-nav';
 
-export function CommandPalette({ projects, posts }: { projects: Entry[]; posts: Entry[] }) {
+/** Fired by the nav's search button: touch screens have no ⌘K to press. */
+export const OPEN_PALETTE_EVENT = 'kbs:open-palette';
+
+export function CommandPalette({ projects }: { projects: Entry[] }) {
   const [open, setOpen] = useState(false);
   // WCAG 2.1.4: a single letter with no modifier must be possible to turn off,
   // for anyone on speech-input or switch-access software. Cmd/Ctrl+K keeps a
@@ -75,6 +78,12 @@ export function CommandPalette({ projects, posts }: { projects: Entry[]; posts: 
     return () => window.removeEventListener('keydown', onKey);
   }, [open, router, singleKeyNav]);
 
+  useEffect(() => {
+    const show = () => setOpen(true);
+    window.addEventListener(OPEN_PALETTE_EVENT, show);
+    return () => window.removeEventListener(OPEN_PALETTE_EVENT, show);
+  }, []);
+
   function go(href: string) {
     setOpen(false);
     router.push(href);
@@ -82,7 +91,7 @@ export function CommandPalette({ projects, posts }: { projects: Entry[]; posts: 
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen} title="Search" description="Jump to anything">
-      <CommandInput placeholder="Jump to a page, project, or post..." />
+      <CommandInput placeholder="Jump to a page or project..." />
       <CommandList>
         <CommandEmpty>Nothing found.</CommandEmpty>
         <CommandGroup heading="Pages">
@@ -100,13 +109,6 @@ export function CommandPalette({ projects, posts }: { projects: Entry[]; posts: 
               value={p.title}
               onSelect={() => go(`/projects/${p.slug}`)}
             >
-              {p.title}
-            </CommandItem>
-          ))}
-        </CommandGroup>
-        <CommandGroup heading="Posts">
-          {posts.map((p) => (
-            <CommandItem key={p.slug} value={p.title} onSelect={() => go(`/blog/${p.slug}`)}>
               {p.title}
             </CommandItem>
           ))}

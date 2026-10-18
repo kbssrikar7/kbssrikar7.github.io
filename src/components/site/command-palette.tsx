@@ -1,22 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandShortcut,
-} from '@/components/ui/command';
-import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
 import { TOGGLE_THEME_EVENT } from './theme';
 import { isCurrentPage, scrollToTop } from './smooth-scroll';
 
 type Entry = { slug: string; title: string };
+
+const loadDialog = () => import('./palette-dialog');
+// Out of the page bundle; see palette-dialog.tsx.
+const PaletteDialog = dynamic(loadDialog, { ssr: false });
 
 const SHORTCUTS_KEY = 'kbs:single-key-nav';
 
@@ -31,6 +26,9 @@ function navigate(router: ReturnType<typeof useRouter>, href: string) {
 
 export function CommandPalette({ projects }: { projects: Entry[] }) {
   const [open, setOpen] = useState(false);
+  // Mounted on first open, then kept, so closing and reopening is instant.
+  const [loaded, setLoaded] = useState(false);
+  if (open && !loaded) setLoaded(true);
   // WCAG 2.1.4: a single letter with no modifier must be possible to turn off,
   // for anyone on speech-input or switch-access software. Cmd/Ctrl+K keeps a
   // modifier, so it is exempt and stays on regardless.
@@ -92,6 +90,16 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [open, router, singleKeyNav]);
 
+  // Fetch the dialog's code once the page is idle, after it has loaded and
+  // painted, so the first open does not wait on the network either.
+  useEffect(() => {
+    const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 2000));
+    const prefetch = () => idle(() => void loadDialog());
+    if (document.readyState === 'complete') prefetch();
+    else window.addEventListener('load', prefetch, { once: true });
+    return () => window.removeEventListener('load', prefetch);
+  }, []);
+
   useEffect(() => {
     const show = () => setOpen(true);
     window.addEventListener(OPEN_PALETTE_EVENT, show);
@@ -104,63 +112,15 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
   }
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} title="Search" description="Jump to anything">
-      <CommandInput placeholder="Jump to a page or project..." />
-      <CommandList>
-        <CommandEmpty>Nothing found.</CommandEmpty>
-        <CommandGroup heading="Pages">
-          {NAV.map((n) => (
-            <CommandItem key={n.href} value={n.label} onSelect={() => go(n.href)}>
-              {n.label}
-              <CommandShortcut className="font-mono text-[13px] tracking-normal">{n.key}</CommandShortcut>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-        <CommandGroup heading="Projects">
-          {projects.map((p) => (
-            <CommandItem
-              key={p.slug}
-              value={p.title}
-              onSelect={() => go(`/projects/${p.slug}`)}
-            >
-              {p.title}
-            </CommandItem>
-          ))}
-        </CommandGroup>
-        <CommandGroup heading="Elsewhere">
-          {socials.map((s) => (
-            <CommandItem
-              key={s.key}
-              value={`${s.label} ${s.handle}`}
-              onSelect={() => window.open(s.href, '_blank', 'noopener,noreferrer')}
-            >
-              {s.label}
-              <CommandShortcut className="font-mono text-[13px] tracking-normal">@{s.handle}</CommandShortcut>
-            </CommandItem>
-          ))}
-          <CommandItem
-            value="Email"
-            onSelect={() => {
-              // mailto: must not go through window.open('_blank') - it leaves a
-              // stray empty tab behind. See the same fix in footer.tsx.
-              window.location.href = `mailto:${profile.email}`;
-            }}
-          >
-            email
-            <CommandShortcut className="font-mono text-[13px] tracking-normal">
-              {profile.email}
-            </CommandShortcut>
-          </CommandItem>
-        </CommandGroup>
-        <CommandGroup heading="Preferences">
-          <CommandItem value="Toggle single-key shortcuts" onSelect={toggleSingleKeyNav}>
-            {singleKeyNav ? 'disable' : 'enable'} single-key shortcuts
-            <CommandShortcut className="font-mono text-[13px] tracking-normal">
-              {NAV.map((n) => n.key).join(' ')}
-            </CommandShortcut>
-          </CommandItem>
-        </CommandGroup>
-      </CommandList>
-    </CommandDialog>
+    loaded && (
+      <PaletteDialog
+        open={open}
+        setOpen={setOpen}
+        projects={projects}
+        go={go}
+        singleKeyNav={singleKeyNav}
+        toggleSingleKeyNav={toggleSingleKeyNav}
+      />
+    )
   );
 }

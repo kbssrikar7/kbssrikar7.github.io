@@ -110,7 +110,8 @@ const LOGIN_WALLED = new Set(['led_control_deploy']);
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /**
- * Writes <slug>.webp (2400px), <slug>-1200.webp and <slug>-800.webp: the same
+ * Writes <slug>.webp (2400px), <slug>-1200.webp, <slug>-800.webp and
+ * <slug>-640.webp: the same
  * frame re-rendered at a lower device scale, not resampled. GitHub Pages has
  * no image optimizer, so src/lib/image-loader.ts serves the browser whichever
  * of these covers the width it needs.
@@ -118,7 +119,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function shoot(page: Page, slug: string): Promise<string> {
   const file = `${slug}.webp`;
   await page.screenshot({ path: join(OUT, file), type: 'webp', quality: 82 });
-  for (const [width, scale] of [[1200, 1], [800, 2 / 3]] as const) {
+  for (const [width, scale] of [[1200, 1], [800, 2 / 3], [640, 640 / 1200]] as const) {
     await page.setViewport({ width: WIDTH, height: HEIGHT, deviceScaleFactor: scale });
     await sleep(300);
     await page.screenshot({ path: join(OUT, variantName(file, width)), type: 'webp', quality: 82 });
@@ -311,7 +312,9 @@ await writeFile(
 
 // Drop images nothing points at any more (a project moved to a generated
 // cover), or they ship forever.
-const keep = new Set(Object.values(manifest).flatMap((f) => [f, thumbName(f), variantName(f, 800)]));
+const keep = new Set(
+  Object.values(manifest).flatMap((f) => [f, thumbName(f), variantName(f, 800), variantName(f, 640)])
+);
 for (const f of await readdir(OUT)) {
   if (f.endsWith('.webp') && !keep.has(f)) {
     await rm(join(OUT, f));

@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
+import { SubliminalTyler } from './fight-club-eggs';
+import { FooterFight } from './footer-fight';
 import { StarOnGitHub } from './star-on-github';
 import { VisitorCount } from './visitor-count';
 
@@ -21,7 +23,7 @@ const linkClass =
 
 export function Footer() {
   return (
-    <footer className="mt-12 border-t border-border/60 sm:mt-16">
+    <footer className="relative mt-12 border-t border-border/60 sm:mt-16">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
         <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16 sm:grid-cols-4">
           <div className="col-span-2">
@@ -68,6 +70,8 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Two screen pixels per sprite pixel, standing on the rule below. */}
+        <FooterFight className="mx-auto -mt-6 block w-[320px]" />
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-6">
           <p className="font-mono text-[13px] text-muted-foreground">
             © {YEAR} {profile.name}
@@ -78,6 +82,9 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      {/* One frame of Tyler, every so often, in the empty space by the name. */}
+      <SubliminalTyler className="top-14 right-6 sm:top-20 sm:right-auto sm:left-[42%]" />
 
       {/* Decorative wordmark, clipped by the viewport edge. */}
       <div className="relative overflow-hidden" aria-hidden>

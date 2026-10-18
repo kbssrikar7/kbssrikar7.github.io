@@ -14,6 +14,7 @@ import {
 import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
 import { TOGGLE_THEME_EVENT } from './theme';
+import { isCurrentPage, scrollToTop } from './smooth-scroll';
 
 type Entry = { slug: string; title: string };
 
@@ -21,6 +22,12 @@ const SHORTCUTS_KEY = 'kbs:single-key-nav';
 
 /** Fired by the nav's search button: touch screens have no ⌘K to press. */
 export const OPEN_PALETTE_EVENT = 'kbs:open-palette';
+
+// Asking for the page you are already on means "take me to the top".
+function navigate(router: ReturnType<typeof useRouter>, href: string) {
+  if (isCurrentPage(href)) scrollToTop();
+  else router.push(href);
+}
 
 export function CommandPalette({ projects }: { projects: Entry[] }) {
   const [open, setOpen] = useState(false);
@@ -78,7 +85,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
       const hit = NAV.find((n) => n.key === e.key.toLowerCase());
       if (hit) {
         e.preventDefault();
-        router.push(hit.href);
+        navigate(router, hit.href);
       }
     }
     window.addEventListener('keydown', onKey);
@@ -93,7 +100,7 @@ export function CommandPalette({ projects }: { projects: Entry[] }) {
 
   function go(href: string) {
     setOpen(false);
-    router.push(href);
+    navigate(router, href);
   }
 
   return (

@@ -23,7 +23,19 @@ function Capsule({ name }: { name: string }) {
   return (
     <li className="flex shrink-0 items-center gap-2.5 rounded-full border border-border bg-card/60 py-1.5 pr-4 pl-1.5 transition-colors hover:border-signal/40">
       {icon ? (
-        <Image src={icon} alt="" width={28} height={28} unoptimized className="size-7 rounded-full" />
+        // Eager, at low priority: a lazy image clipped by the moving row only
+        // starts loading once it slides into view, so on a slow phone the
+        // capsules arrived with empty circles. Both copies share each file.
+        <Image
+          src={icon}
+          alt=""
+          width={28}
+          height={28}
+          unoptimized
+          loading="eager"
+          fetchPriority="low"
+          className="size-7 rounded-full"
+        />
       ) : (
         <span className="flex size-7 items-center justify-center rounded-full bg-muted text-signal">
           <Glyph aria-hidden className="size-4" />

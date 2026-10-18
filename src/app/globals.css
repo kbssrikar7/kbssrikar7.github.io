@@ -276,10 +276,10 @@ html.theme-fade *::after {
   }
 }
 
-/* Same 1.5s entrance and seven-second mirrored sweeps as the hero originally
-   used, rendered by CSS rather than a hydrated animation library. */
+/* A 0.8s entrance (it was 1.5s) and seven-second mirrored sweeps, as the hero
+   originally used, rendered by CSS rather than a hydrated animation library. */
 .spotlight-fade {
-  animation: spotlight-fade 1.5s ease-out both;
+  animation: spotlight-fade 0.8s ease-out both;
 }
 .spotlight-sweep {
   animation: spotlight-sweep var(--spotlight-duration) ease-in-out infinite;

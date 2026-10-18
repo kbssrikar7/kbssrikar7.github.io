@@ -16,12 +16,14 @@ const SIGNAL_GRADIENT = {
 };
 
 // Each hero line fades up in turn on first paint. Pure CSS (tw-animate), so the
-// reduced-motion block in globals.css already neutralises it.
-const REVEAL = 'animate-in fade-in slide-in-from-bottom-3 duration-1000 ease-out fill-mode-[both]';
+// reduced-motion block in globals.css already neutralises it. Half a second
+// each, 75ms apart: the whole intro settles in ~0.8s (it was 1.6s, and
+// PageSpeed's Speed Index counted every frame of it as still loading).
+const REVEAL = 'animate-in fade-in slide-in-from-bottom-3 duration-500 ease-out fill-mode-[both]';
 // The h1 slides in but never starts invisible: Chrome does not count text
 // painted at opacity 0 toward LCP, so a fade-in held the name (the home page's
 // LCP element) back until the next repaint - ~5s later on a throttled phone.
-const SLIDE = 'animate-in slide-in-from-bottom-3 duration-1000 ease-out fill-mode-[both]';
+const SLIDE = 'animate-in slide-in-from-bottom-3 duration-500 ease-out fill-mode-[both]';
 
 export function Hero() {
   return (
@@ -43,21 +45,21 @@ export function Hero() {
             kbs
           </span>
           <span
-            className={`mt-5 block font-mono text-sm tracking-[0.2em] text-muted-foreground uppercase ${SLIDE} delay-150`}
+            className={`mt-5 block font-mono text-sm tracking-[0.2em] text-muted-foreground uppercase ${SLIDE} delay-75`}
           >
-            <ScrambleText text={profile.fullName} delay={350} duration={1300} replayOnHover="self" />
+            <ScrambleText text={profile.fullName} delay={175} duration={700} replayOnHover="self" />
           </span>
         </h1>
 
         {/* text-balance rather than whitespace-nowrap: at the larger size a
             forced single line overflowed the container between lg and xl. */}
         <p
-          className={`mt-6 max-w-3xl text-xl leading-relaxed text-balance text-muted-foreground sm:text-2xl ${REVEAL} delay-300`}
+          className={`mt-6 max-w-3xl text-xl leading-relaxed text-balance text-muted-foreground sm:text-2xl ${REVEAL} delay-150`}
         >
           {profile.bio}
         </p>
 
-        <div className={`mt-8 flex flex-wrap items-center gap-3 ${REVEAL} delay-[450ms]`}>
+        <div className={`mt-8 flex flex-wrap items-center gap-3 ${REVEAL} delay-[225ms]`}>
           <Link
             href="/resume"
             className="group inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-base font-medium text-background transition-opacity hover:opacity-90"
@@ -76,7 +78,7 @@ export function Hero() {
           <SocialLinks className="ml-1" />
         </div>
 
-        <p className={`mt-12 font-mono text-sm text-muted-foreground ${REVEAL} delay-[600ms]`}>
+        <p className={`mt-12 font-mono text-sm text-muted-foreground ${REVEAL} delay-300`}>
           {education.degree} · {education.school} · {education.period.split(' - ')[1]}
         </p>
       </div>

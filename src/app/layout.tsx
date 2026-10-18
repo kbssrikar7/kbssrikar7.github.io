@@ -46,6 +46,10 @@ const GeistPixelSquare = localFont({
   adjustFontFallback: false,
 });
 
+// A scroll counts only once the page has actually moved: the framework fires
+// one at y=0 while loading, which is not a person.
+const ENGAGED_BOOTSTRAP = `(function(){var e=['pointermove','pointerdown','scroll','keydown','touchstart'];function on(ev){if(ev.type==='scroll'&&!scrollY)return;document.documentElement.classList.add('engaged');e.forEach(function(t){removeEventListener(t,on,true)})}e.forEach(function(t){addEventListener(t,on,{capture:true,passive:true})})})()`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
   // The name carries the title rather than the tagline: this page needs to be
@@ -101,6 +105,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             script is about to animate in (see [data-scramble] in globals.css) without
             hiding them from no-JS visitors. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* The hero's beams start sweeping on the first sign of a person (see
+            .spotlight-sweep in globals.css). */}
+        <script dangerouslySetInnerHTML={{ __html: ENGAGED_BOOTSTRAP }} />
       </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <a

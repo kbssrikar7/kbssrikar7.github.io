@@ -3,7 +3,7 @@ general punctuation, a few arrows and the command key. Weight axis is limited
 to 400-700 (the site never asks for anything else). Output is committed to
 src/fonts so the build does not depend on this script; rerun it only if the
 site starts using characters outside this set (anything else falls back to the
-system font)."""
+system font). Geist Pixel is cut much harder: see the end of the file."""
 from fontTools import subset
 import io
 from fontTools.ttLib import TTFont
@@ -30,3 +30,18 @@ for name, path in [('GeistSans', 'geist-sans/Geist-Variable.woff2'), ('GeistMono
     font.flavor = 'woff2'
     font.save(out)
     print(out)
+
+# Geist Pixel Square only ever renders the "kbs" wordmark and the 404 page's
+# digits, so it keeps lowercase letters and digits: 28KB down to a few KB,
+# and it is preloaded on every page.
+PIXEL_UNICODES = [0x20] + list(range(0x30, 0x3A)) + list(range(0x61, 0x7B))
+font = TTFont(SRC + 'geist-pixel/GeistPixel-Square.woff2')
+opts = subset.Options()
+opts.flavor = 'woff2'
+opts.notdef_outline = True
+s = subset.Subsetter(opts)
+s.populate(unicodes=PIXEL_UNICODES)
+s.subset(font)
+font.flavor = 'woff2'
+font.save('src/fonts/GeistPixel-Square.woff2')
+print('src/fonts/GeistPixel-Square.woff2')

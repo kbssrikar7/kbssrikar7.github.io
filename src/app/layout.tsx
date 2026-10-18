@@ -21,7 +21,8 @@ import './globals.css';
 //
 // Pixel is not `geist/font/pixel` either: that module declares all five pixel
 // variants, and Next preloads every one of them on every page. Only Square is
-// used.
+// used, and only for "kbs" and "404", so it is subset to a-z and 0-9 (28KB to
+// 7KB; scripts/subset-fonts.py).
 const GeistSans = localFont({
   src: '../fonts/GeistSans-Variable.woff2',
   variable: '--font-geist-sans',
@@ -39,7 +40,7 @@ const GeistMono = localFont({
 });
 
 const GeistPixelSquare = localFont({
-  src: '../../node_modules/geist/dist/fonts/geist-pixel/GeistPixel-Square.woff2',
+  src: '../fonts/GeistPixel-Square.woff2',
   variable: '--font-geist-pixel-square',
   weight: '500',
   fallback: ['Geist Mono', 'ui-monospace', 'monospace'],

@@ -6,9 +6,8 @@ import { cn } from '@/lib/utils';
 import { Nav } from '@/components/site/nav';
 import { Footer } from '@/components/site/footer';
 import { CommandPalette } from '@/components/site/command-palette';
-import { Oneko } from '@/components/site/oneko';
 import { ProgressiveBlur } from '@/components/ui/progressive-blur';
-import { SmoothScroll } from '@/components/site/smooth-scroll';
+import { SamePageLinks } from '@/components/site/smooth-scroll';
 import { REVEAL_BOOTSTRAP, RevealInView } from '@/components/site/reveal';
 import { COUNTER_BOOTSTRAP, COUNTER_ORIGIN } from '@/components/site/visitor-count-config';
 import { THEME_BOOTSTRAP } from '@/components/site/theme';
@@ -123,9 +122,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <CommandPalette
           projects={allProjects.map((p) => ({ slug: p.slug, title: p.title }))}
         />
-        <Oneko />
         <ProgressiveBlur />
-        <SmoothScroll />
+        <SamePageLinks />
         <RevealInView />
         {/* No-op until NEXT_PUBLIC_UMAMI_SRC/WEBSITE_ID are set - see README. */}
         {process.env.NEXT_PUBLIC_UMAMI_SRC && process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (

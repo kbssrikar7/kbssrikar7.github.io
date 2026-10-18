@@ -1,29 +1,37 @@
 'use client';
 
 import { useEffect } from 'react';
-import Lenis from 'lenis';
-import 'lenis/dist/lenis.css';
 
-let lenis: Lenis | null = null;
-let topPending = false;
+// Native scrolling only. Lenis (JS smooth scrolling) was here, and it moved
+// every scroll frame onto the main thread: measured scrolling through the
+// stack at 4x CPU throttle, layer updates took 2.2s with it and 0.08s
+// without, and frames dropped. The browser's own smooth scrolling runs on
+// the compositor and stays smooth however busy the page is.
 
-/** Scroll to an element through Lenis when it is running, so a programmatic
-    jump glides with the same easing as the wheel instead of fighting it. */
+const NAV_OFFSET = 88;
+
+const smooth = () => !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/** Glide to an element, leaving room for the sticky nav. */
 export function scrollToElement(el: HTMLElement) {
-  if (lenis) lenis.scrollTo(el, { offset: -88 });
-  else {
-    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
-  }
+  window.scrollTo({
+    top: el.getBoundingClientRect().top + window.scrollY - NAV_OFFSET,
+    behavior: smooth() ? 'smooth' : 'auto',
+  });
 }
 
-/** Back to the top, gliding like scrollToElement. */
+/** Back to the top. Picked from the search palette, the page is still
+    scroll-locked behind the closing dialog, so wait for the lock to lift. */
 export function scrollToTop() {
-  // Picked from the search palette, Lenis is still stopped behind the
-  // dialog, and restarting it would cancel the scroll: wait for the restart.
-  if (lenis?.isStopped) topPending = true;
-  else if (lenis) lenis.scrollTo(0);
-  else window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  const go = () => window.scrollTo({ top: 0, behavior: smooth() ? 'smooth' : 'auto' });
+  const body = document.body;
+  if (!body.hasAttribute('data-scroll-locked')) return go();
+  const observer = new MutationObserver(() => {
+    if (body.hasAttribute('data-scroll-locked')) return;
+    observer.disconnect();
+    go();
+  });
+  observer.observe(body, { attributes: true, attributeFilter: ['data-scroll-locked'] });
 }
 
 const trim = (path: string) => path.replace(/\/+$/, '') || '/';
@@ -36,40 +44,12 @@ export function isCurrentPage(href: string) {
 }
 
 /**
- * Eased, inertial wheel scrolling. Touch scrolling stays native (phones
- * already have momentum, and fighting it feels wrong), and Lenis switches
- * itself off under prefers-reduced-motion.
+ * A link to the page you are on (the wordmark or "home" on the homepage,
+ * "work" on /work/) takes you back to the top, as a full page load would;
+ * Next treats it as a no-op and the page stays where it was.
  */
-export function SmoothScroll() {
+export function SamePageLinks() {
   useEffect(() => {
-    lenis = new Lenis({
-      autoRaf: true,
-      lerp: 0.09,
-      anchors: { offset: -88 },
-      allowNestedScroll: true,
-      stopInertiaOnNavigate: true,
-      // The search palette scrolls its own list; leave dialogs alone.
-      prevent: (node) => node.closest('[role="dialog"]') !== null,
-    });
-
-    // Radix locks the page behind an open dialog with data-scroll-locked on
-    // <body>; Lenis drives scrolling itself, so it has to stop too, or the
-    // page scrolls underneath the palette.
-    const body = document.body;
-    const sync = () => {
-      if (body.hasAttribute('data-scroll-locked')) return lenis?.stop();
-      lenis?.start();
-      if (topPending) {
-        topPending = false;
-        lenis?.scrollTo(0);
-      }
-    };
-    const observer = new MutationObserver(sync);
-    observer.observe(body, { attributes: true, attributeFilter: ['data-scroll-locked'] });
-
-    // A link to the page you are on (the wordmark or "home" on the homepage,
-    // "work" on /work/) should take you back to the top, as a full page load
-    // would; Next treats it as a no-op and the page stays where it was.
     const onClick = (e: MouseEvent) => {
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const link = (e.target as Element).closest?.('a[href]');
@@ -78,14 +58,7 @@ export function SmoothScroll() {
     };
     // Capture phase: next/link cancels the click before it bubbles up here.
     document.addEventListener('click', onClick, true);
-
-    return () => {
-      document.removeEventListener('click', onClick, true);
-      observer.disconnect();
-      lenis?.destroy();
-      lenis = null;
-    };
+    return () => document.removeEventListener('click', onClick, true);
   }, []);
-
   return null;
 }

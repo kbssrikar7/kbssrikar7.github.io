@@ -198,6 +198,33 @@ html.theme-fade *::after {
   }
 }
 
+/* Fight Club, hidden in the footer (fight-club-eggs.tsx): Tyler, spliced in
+   for 160ms every 15 seconds, the way he flickers into the film before he is
+   introduced. Rare enough to feel hidden, long enough to actually catch. */
+.subliminal {
+  position: absolute;
+  width: 32px;
+  opacity: 0;
+  pointer-events: none;
+  animation: subliminal 15s step-end infinite;
+}
+@keyframes subliminal {
+  0% {
+    opacity: 0;
+  }
+  96% {
+    opacity: 1;
+  }
+  97.07% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .subliminal {
+    display: none;
+  }
+}
+
 /* Scroll-driven motion, all CSS (no scroll listeners): items rise into place
    as they enter, a progress line fills under the nav, and the hero drifts
    up and fades as it leaves. Browsers without scroll timelines (Firefox

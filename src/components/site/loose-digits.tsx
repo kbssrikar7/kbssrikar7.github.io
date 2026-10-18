@@ -8,8 +8,7 @@ type Pos = { x: number; y: number; tilt: number };
 const HOME: Pos = { x: 0, y: 0, tilt: 0 };
 
 /**
- * The 404's digits, loose: each one can be picked up and dropped anywhere
- * (and the oneko cat, which follows the pointer, chases whichever is held).
+ * The 404's digits, loose: each one can be picked up and dropped anywhere.
  * Decorative - the page's real heading is the h1 below.
  */
 export function LooseDigits({ text }: { text: string }) {

@@ -283,6 +283,15 @@ html.theme-fade *::after {
 }
 .spotlight-sweep {
   animation: spotlight-sweep var(--spotlight-duration) ease-in-out infinite;
+  /* Held until the visitor first moves, scrolls, touches or types (the
+     inline script in layout.tsx sets html.engaged). A sweep running from
+     first paint meant the screen never settled: Speed Index ran to the end
+     of PageSpeed's recording, ~5.5s on mobile. People see no difference -
+     they move within a second - and an untouched tab stops repainting. */
+  animation-play-state: paused;
+}
+.engaged .spotlight-sweep {
+  animation-play-state: running;
 }
 @keyframes spotlight-fade {
   from {

@@ -1,9 +1,9 @@
-import Image from 'next/image';
 import { GitFork, Network } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { stack } from '@/data/profile';
 import { techIcon } from '@/lib/tech-icons';
 import { cn } from '@/lib/utils';
+import { StackIconLoader } from './stack-icon-loader';
 import styles from './tech-capsules.module.css';
 
 // The six stack groups, paired into three rows that drift in alternating
@@ -23,19 +23,9 @@ function Capsule({ name }: { name: string }) {
   return (
     <li className="flex shrink-0 items-center gap-2.5 rounded-full border border-border bg-card/60 py-1.5 pr-4 pl-1.5 transition-colors hover:border-signal/40">
       {icon ? (
-        // Eager, at low priority: a lazy image clipped by the moving row only
-        // starts loading once it slides into view, so on a slow phone the
-        // capsules arrived with empty circles. Both copies share each file.
-        <Image
-          src={icon}
-          alt=""
-          width={28}
-          height={28}
-          unoptimized
-          loading="eager"
-          fetchPriority="low"
-          className="size-7 rounded-full"
-        />
+        // No src yet: StackIconLoader fills it in as the section approaches.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img data-src={icon} alt="" width={28} height={28} decoding="async" className="size-7 rounded-full" />
       ) : (
         <span className="flex size-7 items-center justify-center rounded-full bg-muted text-signal">
           <Glyph aria-hidden className="size-4" />
@@ -56,7 +46,7 @@ export function TechCapsules() {
         ))}
       </ul>
 
-      <div aria-hidden className="space-y-3">
+      <div id="stack-rows" aria-hidden className="space-y-3">
         {ROWS.map((items, i) => (
           <div
             key={i}
@@ -77,6 +67,7 @@ export function TechCapsules() {
           </div>
         ))}
       </div>
+      <StackIconLoader target="stack-rows" />
     </>
   );
 }

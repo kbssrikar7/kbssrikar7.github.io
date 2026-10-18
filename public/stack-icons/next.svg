@@ -1,10 +1,1 @@
-<svg width="48" height="48" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0, 0)"><svg width="256" height="256" title="Next.js" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" id="i0-nextjs">
-<style>
-#i0-nextjs {
-    rect {fill: #15191C}
-    path {fill: #F4F2ED}
-}
-</style>
-<rect width="256" height="256" rx="40" fill="#15191C"/>
-<path d="M177.099 201.256C163.194 210.568 146.474 216 128.5 216C80.2073 216 41 176.793 41 128.5C41 80.2073 80.2073 41 128.5 41C176.793 41 216 80.2073 216 128.5C216 154.626 204.523 178.091 186.345 194.132L108.222 93.5H93.5V163.471H105.276V108.455L177.099 201.256ZM152.803 139.036L164.47 154.065V93.5H152.803V139.036Z" fill="#F4F2ED"/>
-</svg></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 256 256"><svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256"><rect width="256" height="256" fill="#15191C" rx="40"/><path fill="#F4F2ED" d="M177.1 201.26A87 87 0 0 1 128.5 216C80.2 216 41 176.8 41 128.5S80.2 41 128.5 41 216 80.2 216 128.5a87.3 87.3 0 0 1-29.65 65.63L108.22 93.5H93.5v69.97h11.78v-55.01zm-24.3-62.22 11.67 15.03V93.5H152.8z"/></svg></svg>

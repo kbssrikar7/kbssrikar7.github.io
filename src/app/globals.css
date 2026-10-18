@@ -152,13 +152,50 @@
   }
 }
 
-/* Theme switch: the new theme is revealed as a growing circle (animated
-   from theme-toggle.tsx), so the default crossfade is switched off - but only
-   while .theme-switch is set, leaving page transitions alone. */
+/* Theme switch: the new theme is revealed as a growing, soft-edged circle
+   (animated from theme-toggle.tsx), so the default crossfade is switched off -
+   but only while .theme-switch is set, leaving page transitions alone. */
 html.theme-switch::view-transition-old(root),
 html.theme-switch::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
+}
+/* 140px soft edge: keep in step with FEATHER in theme-toggle.tsx. Size 0
+   until the animation starts, so the new theme never flashes in whole. */
+html.theme-switch::view-transition-new(root) {
+  mask-image: radial-gradient(closest-side, #000 calc(100% - 140px), transparent);
+  mask-repeat: no-repeat;
+  mask-size: 0 0;
+}
+/* The new theme must land fully painted: hover colour transitions would
+   otherwise replay inside the reveal and lag a beat behind it. */
+html.theme-switch *,
+html.theme-switch *::before,
+html.theme-switch *::after {
+  transition: none !important;
+}
+/* Browsers without view transitions get a short colour crossfade instead of
+   a hard cut. */
+html.theme-fade,
+html.theme-fade *,
+html.theme-fade *::before,
+html.theme-fade *::after {
+  transition:
+    background-color 320ms ease,
+    border-color 320ms ease,
+    color 320ms ease,
+    fill 320ms ease,
+    stroke 320ms ease !important;
+}
+/* The icon swap spins in, only on a switch (not on page load). */
+:is(.theme-switch, .theme-fade) .theme-icon {
+  animation: theme-icon-in 420ms cubic-bezier(0.2, 0, 0, 1);
+}
+@keyframes theme-icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
 }
 
 /* Scroll-driven motion, all CSS (no scroll listeners): items rise into place
@@ -221,12 +258,21 @@ html.theme-switch::view-transition-new(root) {
   animation: spotlight-sweep var(--spotlight-duration) ease-in-out infinite;
 }
 @keyframes spotlight-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes spotlight-sweep {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(var(--spotlight-offset)); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(var(--spotlight-offset));
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .spotlight-fade,

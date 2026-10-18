@@ -4,6 +4,9 @@ import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { THEME_KEY, TOGGLE_THEME_EVENT, type Theme } from './theme';
 
+// Width of the soft band at the edge of the reveal (the mask in globals.css).
+const FEATHER = 140;
+
 const read = (): Theme => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
 
 function subscribe(onChange: () => void) {
@@ -59,22 +62,42 @@ export function ThemeToggle() {
       document.documentElement.dataset.theme = next;
     };
     const root = document.documentElement;
-    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
       apply();
+      return;
+    }
+    if (!document.startViewTransition) {
+      root.classList.add('theme-fade');
+      apply();
+      setTimeout(() => root.classList.remove('theme-fade'), 360);
       return;
     }
     const { left, top, width, height } = button.current!.getBoundingClientRect();
     const x = left + width / 2;
     const y = top + height / 2;
-    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    // A radial-gradient mask rather than a clip-path circle, so the edge of
+    // the reveal is a soft band instead of a hard line. The mask grows from
+    // the button until its solid centre covers the farthest corner.
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + FEATHER;
+    const at = (size: number) => ({
+      maskSize: `${size}px ${size}px`,
+      maskPosition: `${x - size / 2}px ${y - size / 2}px`,
+    });
     // The class scopes the custom view-transition CSS to theme switches, so
     // the project-card morph keeps the browser's default crossfade.
     root.classList.add('theme-switch');
     const transition = document.startViewTransition(apply);
     transition.ready.then(() => {
       root.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-        { duration: 550, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+        [at(0), at(radius * 2)],
+        // Ease in and out: the circle's area grows with the square of its
+        // radius, so a fast start would flood most of the screen at once.
+        {
+          duration: 700,
+          easing: 'cubic-bezier(0.65, 0, 0.35, 1)',
+          fill: 'forwards',
+          pseudoElement: '::view-transition-new(root)',
+        },
       );
     });
     transition.finished.finally(() => root.classList.remove('theme-switch'));
@@ -92,7 +115,11 @@ export function ThemeToggle() {
       title={`${label} (t)`}
       className="flex size-[30px] items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-signal/40 hover:text-signal"
     >
-      {target === 'dark' ? <Moon aria-hidden className="size-4" /> : <Sun aria-hidden className="size-4" />}
+      {target === 'dark' ? (
+        <Moon key="moon" aria-hidden className="theme-icon size-4" />
+      ) : (
+        <Sun key="sun" aria-hidden className="theme-icon size-4" />
+      )}
     </button>
   );
 }

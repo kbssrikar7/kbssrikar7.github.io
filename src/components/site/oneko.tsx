@@ -54,6 +54,12 @@ export function Oneko() {
       backgroundImage: "url('/oneko.gif')",
       imageRendering: 'pixelated',
     });
+    // With no mouse to follow (phones), a cat parked at its start point just
+    // covers whatever scrolls under it, the STACK heading for one. There it
+    // stays hidden until the first tap (a click, so a swipe to scroll does not
+    // count), then runs to it as usual.
+    let hidden = matchMedia('(any-hover: none)').matches;
+    if (hidden) el.style.display = 'none';
     document.body.appendChild(el);
     setSprite('idle', 0);
 
@@ -67,7 +73,12 @@ export function Oneko() {
     let idleAnimation: 'sleeping' | 'scratch' | null = null;
     let idleFrame = 0;
 
-    const onMove = (e: PointerEvent) => {
+    const onMove = (e: PointerEvent | MouseEvent) => {
+      if (hidden) {
+        if (e.type !== 'click') return;
+        hidden = false;
+        el.style.display = '';
+      }
       mouseX = e.clientX;
       mouseY = e.clientY;
     };
@@ -75,6 +86,7 @@ export function Oneko() {
     // is never held up.
     document.addEventListener('pointermove', onMove, { passive: true });
     document.addEventListener('pointerdown', onMove, { passive: true });
+    document.addEventListener('click', onMove, { passive: true });
 
     function setSprite(name: string, n: number) {
       const [x, y] = SPRITES[name][n % SPRITES[name].length];
@@ -162,6 +174,7 @@ export function Oneko() {
       cancelAnimationFrame(raf);
       document.removeEventListener('pointermove', onMove);
       document.removeEventListener('pointerdown', onMove);
+      document.removeEventListener('click', onMove);
       el.remove();
     };
   }, []);

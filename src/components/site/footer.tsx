@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { profile, socials } from '@/data/profile';
 import { NAV } from './nav-items';
-import { SubliminalTyler } from './fight-club-eggs';
-import { FooterFight } from './footer-fight';
+import { LazyFooterFight, LazySubliminalTyler } from './footer-fight-lazy';
 import { StarOnGitHub } from './star-on-github';
 import { VisitorCount } from './visitor-count';
 
@@ -71,7 +70,7 @@ export function Footer() {
         </div>
 
         {/* Two screen pixels per sprite pixel, standing on the rule below. */}
-        <FooterFight className="mx-auto -mt-6 block w-[320px]" />
+        <LazyFooterFight className="mx-auto -mt-6 block w-[320px]" />
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border/60 py-6">
           <p className="font-mono text-[13px] text-muted-foreground">
             © {YEAR} {profile.name}
@@ -84,7 +83,7 @@ export function Footer() {
       </div>
 
       {/* One frame of Tyler, every so often, in the empty space by the name. */}
-      <SubliminalTyler className="top-14 right-6 sm:top-20 sm:right-auto sm:left-[42%]" />
+      <LazySubliminalTyler className="top-14 right-6 sm:top-20 sm:right-auto sm:left-[42%]" />
 
       {/* Decorative wordmark, clipped by the viewport edge. */}
       <div className="relative overflow-hidden" aria-hidden>

@@ -9,7 +9,6 @@ import { CommandPalette } from '@/components/site/command-palette';
 import { ProgressiveBlur } from '@/components/ui/progressive-blur';
 import { SamePageLinks } from '@/components/site/smooth-scroll';
 import { REVEAL_BOOTSTRAP, RevealInView } from '@/components/site/reveal';
-import { COUNTER_BOOTSTRAP, COUNTER_ORIGIN } from '@/components/site/visitor-count-config';
 import { THEME_BOOTSTRAP } from '@/components/site/theme';
 import { allProjects } from '@/lib/projects';
 import './globals.css';
@@ -98,10 +97,6 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <head>
         {/* First in <head>: picks light or dark before anything paints. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
-        <link rel="preconnect" href={COUNTER_ORIGIN} crossOrigin="anonymous" />
-        {/* Starts the visitor-count request as the HTML parses, rather than
-            after the bundle hydrates - see visitor-count.tsx. */}
-        <script dangerouslySetInnerHTML={{ __html: COUNTER_BOOTSTRAP }} />
         {/* Marks JS as available before first paint, so CSS can hide things a
             script is about to animate in (see [data-scramble] in globals.css) without
             hiding them from no-JS visitors. */}
@@ -134,7 +129,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
             // Only the real host is tracked - without this, every localhost
             // dev reload and test run was recorded as a page view.
             data-domains={new URL(profile.siteUrl).host}
-            strategy="afterInteractive"
+            // After the page has fully loaded: analytics never competes with
+            // the page's own CSS, fonts and scripts on a slow connection.
+            strategy="lazyOnload"
           />
         )}
       </body>

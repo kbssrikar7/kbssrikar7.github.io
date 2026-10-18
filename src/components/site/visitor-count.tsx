@@ -2,19 +2,15 @@
 
 import { useSyncExternalStore } from 'react';
 import { Eye } from 'lucide-react';
-import { counterUrl, COUNTER_PROMISE } from './visitor-count-config';
+import { counterUrl } from './visitor-count-config';
 
-// Why the count used to show up late: the request only started in a
-// useEffect, i.e. after the whole JS bundle had downloaded and React had
-// hydrated, and then it still had to wait ~300-500ms for the counter API.
-// Three things fix that:
-//
-// 1. The request starts from an inline <head> script (see layout.tsx), in
-//    parallel with the bundle download instead of after it.
-// 2. The last value seen is cached in localStorage, so repeat visitors see a
-//    number on the very first client render and it just ticks up.
-// 3. A fixed-width placeholder holds the space meanwhile, so the nav never
-//    jumps when the number arrives.
+// The count lives in the footer, so its request waits until the page is up:
+// it used to start from an inline <head> script (back when the count sat in
+// the nav), which put a third-party call with ~800ms server latency on the
+// critical path of every page load. The last value seen is cached in
+// localStorage, so repeat visitors see a number on the first client render,
+// and a fixed-width placeholder holds the space so nothing shifts when it
+// lands.
 
 const CACHE_KEY = 'kbs:visitor-count';
 
@@ -48,14 +44,8 @@ function start() {
   const cached = readCache();
   if (cached !== null) state = cached;
 
-  const early = (window as unknown as Record<string, unknown>)[COUNTER_PROMISE] as
-    | Promise<unknown>
-    | undefined;
-  const request =
-    early ??
-    fetch(counterUrl(), { signal: AbortSignal.timeout(8000) }).then((r) => r.json());
-
-  request
+  fetch(counterUrl(), { signal: AbortSignal.timeout(8000) })
+    .then((r) => r.json())
     .then((data) => {
       const value = Number((data as { value?: unknown } | null)?.value);
       if (!Number.isFinite(value)) throw new Error('bad counter response');

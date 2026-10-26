@@ -23,9 +23,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -44,7 +44,7 @@ jobs:
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       # No secrets needed: the TypeSafe ranking and the preview screenshots are
       # generated locally and committed, so CI only ever builds static output.
@@ -59,7 +59,13 @@ jobs:
           NEXT_PUBLIC_UMAMI_SHARE_URL: ${{ vars.NEXT_PUBLIC_UMAMI_SHARE_URL }}
           NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }}
 
-      - uses: actions/upload-pages-artifact@v3
+      # Loads the built site in Chrome (preinstalled on the runner): every
+      # page, scroll-to-top, search, stack logos, the footer fight. A failure
+      # here stops the deploy, so the live site keeps its last good build.
+      - name: Browser tests
+        run: npm run test:e2e
+
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: ./out
 
@@ -71,4 +77,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

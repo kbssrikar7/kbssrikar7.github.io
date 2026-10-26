@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "curate": ".venv/bin/python scripts/curate.py",
     "shots": "node scripts/shots.ts",
     "favicon": ".venv/bin/python scripts/make-favicon.py",

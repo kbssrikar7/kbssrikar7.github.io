@@ -48,7 +48,8 @@ npm run dev
 npm run build     # -> out/ , then fixes OG image extensions
 npm run lint
 npm run typecheck
-npm run test
+npm run test      # unit tests
+npm run test:e2e  # browser tests against out/ (build first); needs Chrome
 ```
 
 ## Content pipeline
@@ -139,7 +140,8 @@ Nothing detects drift, so re-run it if the mark in `app/icon.tsx` changes.
 ## Deploying
 
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which lints, typechecks,
-tests, then builds and publishes the static export to GitHub Pages. **This is the
+tests, builds, runs the browser tests against the build, then publishes the static
+export to GitHub Pages; a failing browser test stops the deploy. **This is the
 canonical deployment** - `profile.siteUrl` and every `alternates.canonical` tag point
 at it.
 

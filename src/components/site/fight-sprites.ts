@@ -13,6 +13,8 @@
 // every K takes the dark shade of the part it borders, so the red jacket is
 // edged in dark red, the hair in dark gold, and so on.
 
+import { STAGE_H } from './fight-stage';
+
 type Grid = readonly string[];
 
 const HEADS = {
@@ -115,7 +117,13 @@ const FACES = {
 export type Face = keyof typeof FACES;
 
 /** A body pose: the grid below the neck, and where the head sits on it. */
-type Body = { grid: Grid; head: [number, number] };
+type Body = {
+  grid: Grid;
+  head: [number, number];
+  /** Painted after the head, at [x, y] from the body's top row: for a fist
+      that has to land on the face rather than disappear behind it. */
+  over?: { grid: Grid; at: [number, number] };
+};
 
 const BODIES = {
   // Fists up: the front one by the chin, the back one at the ribs.
@@ -226,6 +234,29 @@ const BODIES = {
       '.KBbK....KBbK...',
       '.KBBBK...KBBBK..',
     ],
+  },
+  // The twist: his own fist driven into his own cheek, head snapped back
+  // from it. Only ever seen on the Narrator, in place of "Tyler" hitting him.
+  selfpunch: {
+    head: [-1, 1],
+    grid: [
+      '...KKTJCCJKKjK..',
+      '..KTJJCcJJjKKjK.',
+      '.KTJJJCcJJjjjjK.',
+      '.KJJjJCcJJjKKK..',
+      '.KJKjJCcJJjK....',
+      '.KSSKJCcJjjK....',
+      '.KSsKjjjjjjK....',
+      '..KKKPPPpPPK....',
+      '...KPPPKKPpK....',
+      '..KPPpK..KPpK...',
+      '..KBbK...KBbK...',
+      '.KBBBK..KBBBBK..',
+    ],
+    over: {
+      at: [7, -3],
+      grid: ['.KKKK.', 'KSSSSK', 'KSsSSK', '.KKjK.'],
+    },
   },
   // Down on one knee, a hand on it, getting up.
   rise: {
@@ -446,7 +477,7 @@ export type PoseName = Exclude<keyof typeof BODIES, 'flat'> | 'ko';
 type Pixels = (string | null)[][];
 
 export const SPRITE_W = 16;
-export const SPRITE_H = 24;
+export const SPRITE_H = STAGE_H;
 
 function paint(target: string[][], grid: Grid, x: number, y: number) {
   grid.forEach((row, r) => {
@@ -472,6 +503,7 @@ function letters(who: Character, pose: keyof typeof BODIES, face?: Face) {
   const rows: Record<number, string> = (face && (FACES[face] as Partial<Record<Character, Record<number, string>>>)[who]) || {};
   const head = HEADS[who].map((row, i) => rows[i] ?? row);
   paint(out, head, body.head[0], top - head.length + 1 + body.head[1]);
+  if ('over' in body && body.over) paint(out, body.over.grid, body.over.at[0], top + body.over.at[1]);
   return out;
 }
 

@@ -2,10 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { FX, SPRITE_H, SPRITE_W, fx, sprite, toPaths, type Character, type Face, type PoseName } from './fight-sprites';
-
-const STAGE_W = 160;
-/** Rows of headroom above the fighters, for the crowd's raised fists. */
-const HEADROOM = 3;
+import { STAGE_VIEWBOX, STAGE_W } from './fight-stage';
 /** Where the ring starts: the fighters' own coordinates are offset by this. */
 const RING_X = 50;
 
@@ -98,11 +95,7 @@ const SCRIPT: Beat[] = [
   { ms: 140, t: t('idle', 10), n: n('bob', 29) },
 ];
 
-/** Who is drawn in Tyler's place: Tyler, or - the twist - the Narrator,
-    who was fighting himself all along. */
-type Cast = Character | 'twin';
-
-const spriteId = (who: Cast, f: Fig) => `ff-${who}-${f.pose}${f.flash ? '-flash' : ''}${f.face ? `-${f.face}` : ''}`;
+const spriteId = (who: Character, f: Fig) => `ff-${who}-${f.pose}${f.flash ? '-flash' : ''}${f.face ? `-${f.face}` : ''}`;
 
 /** Every sprite the script uses, drawn once for <defs>. */
 function buildSprites() {
@@ -114,10 +107,11 @@ function buildSprites() {
     ] as const) {
       const id = spriteId(who, f);
       if (!defs.has(id)) defs.set(id, toPaths(sprite(who, f.pose, f.flash, f.face), who === 'narrator'));
-      // The twist: the Narrator in every one of Tyler's poses.
-      const twin = spriteId('twin', beat.t);
-      if (!defs.has(twin)) defs.set(twin, toPaths(sprite('narrator', beat.t.pose, beat.t.flash, beat.t.face), false));
     }
+    // The Narrator as the twist draws him, punching himself.
+    const lone = alone(beat).n;
+    const loneId = spriteId('narrator', lone);
+    if (!defs.has(loneId)) defs.set(loneId, toPaths(sprite('narrator', lone.pose, lone.flash, lone.face), true));
     for (const e of beat.fx ?? []) if (!defs.has(`ff-fx-${e.name}`)) defs.set(`ff-fx-${e.name}`, fx(e.name));
   }
   for (const c of CROWD)
@@ -194,9 +188,34 @@ const CSS = (() => {
   );
 })();
 
+/**
+ * A beat as the twist shows it: there is no Tyler. Wherever his punch lands,
+ * it is the Narrator's own fist in his own face (eyes screwed shut), with the
+ * spark on it. Anything that only exists because of Tyler goes: the speed
+ * lines trailing his arm, and the spark where the Narrator's punch lands on
+ * him - those punches hit empty air. He still goes down and gets up alone,
+ * and the crowd keeps cheering.
+ */
+function alone(beat: Beat): { n: Fig; fx?: Effect[] } {
+  const selfHit = beat.t.pose === 'punch' && beat.n.pose === 'hurt' && !beat.n.lift;
+  const n: Fig = selfHit ? { ...beat.n, pose: 'selfpunch', face: 'blink' } : beat.n;
+  const fx = beat.fx
+    ?.filter(
+      (e) =>
+        !(e.name === 'speed' && beat.t.pose === 'punch') && !(e.name.startsWith('spark') && beat.n.pose === 'punch')
+    )
+    // On his own fist, 3-8px into his (mirrored) sprite at rows 9-12 - and
+    // still on him as the blow knocks him into the air, not where Tyler's
+    // fist would have been.
+    .map((e) =>
+      e.name.startsWith('spark') && beat.t.pose === 'punch' ? { ...e, x: n.x + 3, y: 6 - (n.lift ?? 0) } : e
+    );
+  return { n, fx };
+}
+
 function Scene({ twist }: { twist: boolean }) {
   const [sprites] = useState(buildSprites);
-  const place = (who: Cast, f: Fig) => <use href={`#${spriteId(who, f)}`} x={f.x} y={-(f.lift ?? 0)} />;
+  const place = (who: Character, f: Fig) => <use href={`#${spriteId(who, f)}`} x={f.x} y={-(f.lift ?? 0)} />;
   // A contact shadow on the floor under each man's feet - it stays down when
   // he is knocked into the air, which is what sells the height.
   const shadow = (who: Character, f: Fig) => {
@@ -235,11 +254,20 @@ function Scene({ twist }: { twist: boolean }) {
               ))}
             </g>
             <g transform={`translate(${RING_X} 0)`}>
-              {shadow('tyler', beat.t)}
-              {shadow('narrator', beat.n)}
-              {place(twist ? 'twin' : 'tyler', beat.t)}
-              {place('narrator', beat.n)}
-              {beat.fx?.map((e, j) => (
+              {twist ? (
+                <>
+                  {shadow('narrator', alone(beat).n)}
+                  {place('narrator', alone(beat).n)}
+                </>
+              ) : (
+                <>
+                  {shadow('tyler', beat.t)}
+                  {shadow('narrator', beat.n)}
+                  {place('tyler', beat.t)}
+                  {place('narrator', beat.n)}
+                </>
+              )}
+              {(twist ? alone(beat).fx : beat.fx)?.map((e, j) => (
                 <use key={j} href={`#ff-fx-${e.name}`} x={e.x} y={e.y} />
               ))}
             </g>
@@ -256,14 +284,28 @@ let greeted = false;
  * Tyler Durden and the Narrator as little pixel sprites, going at it on the
  * footer rule: a jab, a counter, a knockout with stars, and Tyler helping him
  * up for the next round. Hover it (or tap it) for the film's twist: there is
- * no Tyler - the Narrator has been fighting himself. Built only once the footer scrolls into view,
- * so it adds nothing to the page's HTML.
+ * no Tyler - the Narrator has been fighting himself. Built only once the
+ * footer scrolls into view, so it adds nothing to the page's HTML.
  */
 export function FooterFight({ className }: { className?: string }) {
   const ref = useRef<SVGSVGElement>(null);
   const [seen, setSeen] = useState(false);
   const [inView, setInView] = useState(false);
-  const [twist, setTwist] = useState(false);
+  // Tyler gone (the twist), and where the visitor has asked it to end up.
+  const [twist, setTwistNow] = useState(false);
+  const wanted = useRef(false);
+  const cuts = useRef<number[]>([]);
+
+  // He does not just vanish: a few single-frame cuts first, the way he
+  // flickers into the film before anyone has met him. Same on the way back.
+  function setTwist(on: boolean) {
+    wanted.current = on;
+    cuts.current.forEach(clearTimeout);
+    cuts.current = [];
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return setTwistNow(on);
+    [on, !on, on, !on, on].forEach((v, i) => cuts.current.push(window.setTimeout(() => setTwistNow(v), i * 45)));
+  }
+  useEffect(() => () => cuts.current.forEach(clearTimeout), []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -286,14 +328,14 @@ export function FooterFight({ className }: { className?: string }) {
     <svg
       ref={ref}
       aria-hidden
-      viewBox={`0 ${-HEADROOM} ${STAGE_W} ${SPRITE_H + HEADROOM}`}
+      viewBox={STAGE_VIEWBOX}
       shapeRendering="crispEdges"
       data-playing={inView || undefined}
       className={`footer-fight ${className ?? ''}`}
       onPointerEnter={(e) => isMouse(e) && setTwist(true)}
       onPointerLeave={(e) => isMouse(e) && setTwist(false)}
       // Touch has no hover: a tap flips it instead.
-      onClick={(e) => !isMouse(e) && setTwist((v) => !v)}
+      onClick={(e) => !isMouse(e) && setTwist(!wanted.current)}
     >
       <title>you do not talk about this footer</title>
       {seen && <Scene twist={twist} />}

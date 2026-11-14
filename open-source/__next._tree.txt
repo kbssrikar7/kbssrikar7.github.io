@@ -1,0 +1,5 @@
+:HL["/_next/static/chunks/1u59v49ukx1jx.css","style"]
+:HL["/_next/static/media/GeistMono_Variable.p.293e-dxb0b-2w.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/GeistPixel_Square.p.2d8pgrwar_u_d.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/GeistSans_Variable-s.p.0wh-o44jsik8h.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"tree":{"name":"","param":null,"prefetchHints":4112,"slots":{"children":{"name":"open-source","param":null,"prefetchHints":4160,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"7TPnwYUQtAFZAnRli5-Yw"}
